@@ -11,7 +11,7 @@
             </li>
             @if (Model.Admin) {
                 <li>
-                    @Html.ActionLink("Administratörsverktyg", "Index", "AdminTool", new { Model.Admin }, null);
+                    @Html.ActionLink("Administratörsverktyg", "Index", "AdminTool", new { Model }, null);
                 </li>
             }
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>

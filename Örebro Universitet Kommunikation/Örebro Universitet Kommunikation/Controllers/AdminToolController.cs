@@ -9,10 +9,18 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 {
     public class AdminToolController : Controller
     {
+        public ApplicationDbContext Ctx { get; set; }
+
+        public AdminToolController() {
+            Ctx = new ApplicationDbContext();
+        }
         // GET: AdminTool
-        public ActionResult Index(bool admin)
+        public ActionResult Index(ApplicationUser user)
         {
-            if (admin) {
+            var admins = (from a in Ctx.Users
+                          where a.Admin == true
+                          select a).ToList();
+            if (admins.Contains(user)) {
                 return View();
             }
             return RedirectToAction("Index", "Home");
