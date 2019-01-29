@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Örebro_Universitet_Kommunikation.Models;
 using System;
 using System.Diagnostics;
@@ -11,11 +12,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
 
         public ApplicationDbContext Ctx { get; set; }
+        public UserManager<ApplicationUser> UserManager { get; set; }
 
 
         public FormalBlogController(){
             Ctx = new ApplicationDbContext();
-
+            UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
 
         public ActionResult Index() {
@@ -32,20 +34,24 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             });
         }
+        public ActionResult CreateEntry() {
+
+            return View();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateEntry(FormalBlogEntry model) {
+            var user = UserManager.FindById(User.Identity.GetUserId());
             Ctx.FormalBlogEntreis.Add(new FormalBlogEntry {
                 AttachedFile = null,
                 Category = null,
-                CreatorUserId  = User.Identity.GetUserId(),
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,
                 Content = model.Content,
-                
-
+                Creator = user
             }
-                )
+            );
+            Ctx.SaveChanges();
 
             return View();
         }
