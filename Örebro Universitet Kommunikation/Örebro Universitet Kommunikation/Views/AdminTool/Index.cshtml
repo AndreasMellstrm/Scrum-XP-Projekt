@@ -2,6 +2,12 @@
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Hej! Vill du gå och titta på raukar med mig? //Admin</h2>
+<div class="container">
+    <h2 class="formal-blog-header"> Administratörsverktyg</h2>
+    <div class="well">
+        <div class="btn">
+                @Html.ActionLink("Skapa ny användare", "CreateUser", "AdminTool", new { @class = "btn btn-primary" })
+        </div>
+    </div>
+</div>
 
