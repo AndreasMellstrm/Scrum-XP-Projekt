@@ -19,8 +19,13 @@ namespace Örebro_Universitet_Kommunikation.Models {
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
+        public DbSet<FormalBlogEntry> FormalBlogEntreis { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
+
+
+            
         }
 
         public static ApplicationDbContext Create() {
