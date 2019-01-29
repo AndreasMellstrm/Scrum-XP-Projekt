@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -8,6 +9,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser {
 
+        [DefaultValue(false)]
         public bool Admin { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {
@@ -19,8 +21,13 @@ namespace Örebro_Universitet_Kommunikation.Models {
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
+        public DbSet<FormalBlogEntry> FormalBlogEntreis { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
+
+
+            
         }
 
         public static ApplicationDbContext Create() {
