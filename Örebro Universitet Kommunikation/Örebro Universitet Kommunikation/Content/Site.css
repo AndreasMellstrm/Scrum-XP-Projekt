@@ -24,9 +24,10 @@ textarea {
 }
 
 
-.well{
-    height: 500px;
+
+.blog-text-area{
+    width: 1200px;
+    min-width: 800px;
+    height: 75px;
 }
-blog_text_area textarea{
-    cols: 100;
-}
+
