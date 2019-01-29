@@ -1,4 +1,5 @@
-﻿using Örebro_Universitet_Kommunikation.Models;
+﻿using Microsoft.AspNet.Identity;
+using Örebro_Universitet_Kommunikation.Models;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -31,7 +32,23 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             });
         }
-        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateEntry(FormalBlogEntry model) {
+            Ctx.FormalBlogEntreis.Add(new FormalBlogEntry {
+                AttachedFile = null,
+                Category = null,
+                CreatorUserId  = User.Identity.GetUserId(),
+                BlogEntryTime = DateTime.Now,
+                Title = model.Title,
+                Content = model.Content,
+                
+
+            }
+                )
+
+            return View();
+        }
         public string FileUpload(HttpPostedFileBase File)
         {
 
