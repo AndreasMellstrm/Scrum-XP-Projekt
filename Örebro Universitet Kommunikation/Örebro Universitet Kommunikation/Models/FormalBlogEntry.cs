@@ -8,14 +8,17 @@ namespace Örebro_Universitet_Kommunikation.Models {
     public class FormalBlogEntry {
 
         [Key]
-        public int EntryId { get; set; }
-        public int CreatorUserId { get; set; }
-        public string CreatorName { get; set; }
+        public int Id { get; set; }
+        public ApplicationUser Creator { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
+        [Display(Name = "Titel")]
         public string Title { get; set; }
+        [Required]
+        [Display(Name = "Inlägg")]
         public string Content { get; set; }
         public DateTime BlogEntryTime { get; set; }
         public string Category { get; set; }
         public string AttachedFile { get; set; }
-
     }
 }
