@@ -22,3 +22,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
+.well{
+    height: 500px;
+}
+blog_text_area textarea{
+    cols: 100;
+}
