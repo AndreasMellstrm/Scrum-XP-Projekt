@@ -10,6 +10,16 @@
     @Html.AntiForgeryToken()
     <h4>Skapa ett nytt användarkonto.</h4>
     <hr />
+    if (Model.ErrorMessage == "") {
+        <label class="hidden" role="alert">@Model.ErrorMessage</label>
+    }
+    else if (Model.ErrorMessage.StartsWith("Användare")) {
+        <label class="alert alert-success" role="alert">@Model.ErrorMessage</label>
+    }
+    else {
+        <label class="alert alert-danger" role="alert">@Model.ErrorMessage</label>
+    }
+
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
