@@ -45,5 +45,21 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [Required]
         [Display(Name = "Administratör")]
         public bool Admin { get; set; }
+
+        public string ErrorMessage { get; set; }
+    }
+
+    public class CreateCategoryViewModel {
+
+        [Required]
+        [RegularExpression("([a-öA-Ö0-9/s.&'-]+)", ErrorMessage = "Vänligen använd endast giltiga tecken")]
+        [Display(Name = "Namn")]
+        public string CategoryName { get; set; }
+
+        [Required]
+        [Display(Name = "Typ")]
+        public string CategoryType { get; set; }
+
+
     }
 }
