@@ -11,7 +11,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
 
         [DefaultValue(false)]
         public bool Admin { get; set; }
-
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Position { get; set; }
@@ -26,7 +25,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
-        public DbSet<FormalBlogEntry> FormalBlogEntreis { get; set; }
+        public DbSet<FormalBlogEntry> FormalBlogEntries { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
 
         public ApplicationDbContext()

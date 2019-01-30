@@ -8,8 +8,5 @@ namespace Örebro_Universitet_Kommunikation.Models {
     public class FormalBlogViewModel {
 
         public List<FormalBlogEntry> FormalBlogEntries { get; set; }
-
-
-
     }
 }
