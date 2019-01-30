@@ -285,6 +285,7 @@
     <Content Include="Views\AdminTool\Index.cshtml" />
     <Content Include="Views\AdminTool\CreateUser.cshtml" />
     <Content Include="Views\FormalBlog\CreateEntry.cshtml" />
+    <Content Include="Views\FormalBlog\EditEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

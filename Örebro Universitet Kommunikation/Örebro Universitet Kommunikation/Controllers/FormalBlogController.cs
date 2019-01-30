@@ -2,11 +2,15 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Örebro_Universitet_Kommunikation.Models;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Async;
+using Örebro_Universitet_Kommunikation.Models;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
@@ -20,20 +24,46 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
 
-        public ActionResult Index() {
+        public async Task<ActionResult> Index() {
 
             Ctx = new ApplicationDbContext();
+
+            var profileList = Ctx.Users.ToList();
+
 
             var BlogEntries = (from BE in Ctx.FormalBlogEntries
                                select BE).ToList();
 
+            List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
+            UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
 
-            return View(new FormalBlogViewModel {
+            foreach (var item in BlogEntries) {
+                var user = await UserManager.FindByIdAsync(item.CreatorId);
 
-                FormalBlogEntries = BlogEntries
+                var blogItem = new FormalBlogItem {
 
-            });
+                    Id = item.Id,
+                    CreatorId = item.CreatorId,
+                    CreatorFirstName = user.FirstName,
+                    CreatorLastName = user.LastName,
+                    AttachedFile = item.AttachedFile,
+                    Comments = 0,
+                    Date = item.BlogEntryTime,
+                    Content = item.Content,
+                    Category = item.Category,
+                    Title = item.Title
+
+            };
+
+                FormalBlogItemList.Add(blogItem);
+            };
+
+            return View(FormalBlogItemList);
         }
+
+
+
+
         public ActionResult CreateEntry() {
 
             return View();
@@ -57,26 +87,43 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditEntry(FormalBlogEntry model, HttpPostedFileBase File) {
 
-        public ActionResult EditEntry(FormalBlogEntry fbg) {
 
+            FormalBlogEntry BlogEntry = Ctx.FormalBlogEntries.Find();
 
-            FormalBlogEntry BlogEntry = Ctx.FormalBlogEntries.Find(2);
             
 
 
             return View();
         }
 
+        public ActionResult DeleteEntry(int EntryId, ApplicationUser Creator) {
 
 
-        
-        
-        public ActionResult DeleteEntry(int id) {
-            FormalBlogEntry blogEntry =  Ctx.FormalBlogEntries.Find(id);
-            Ctx.FormalBlogEntries.Remove(blogEntry);
-            Ctx.SaveChanges();
-            return RedirectToAction("Index", "FormalBlog");
+            //var entry = Ctx.FormalBlogEntries.Where(m => m.Id == EntryId);
+
+           
+
+            FormalBlogEntry blogEntry =  Ctx.FormalBlogEntries.Find(EntryId);
+            
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+
+            if (Creator.Equals(currentUser)) {
+
+
+
+
+                Ctx.FormalBlogEntries.Remove(blogEntry);
+                Ctx.SaveChanges();
+                return RedirectToAction("Index", "FormalBlog");
+            } else {
+                return View();
+            }
+
+            
         }
 
 
@@ -114,6 +161,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             Debug.WriteLine(fileString);
             return View();
         }
+        
 
 
        

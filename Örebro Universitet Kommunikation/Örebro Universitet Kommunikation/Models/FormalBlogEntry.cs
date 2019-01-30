@@ -8,7 +8,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
     public class FormalBlogEntry {
         [Key]
         public int Id { get; set; }
-        public ApplicationUser Creator { get; set; }
+        public string CreatorId { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
         [Display(Name = "Titel")]

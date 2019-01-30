@@ -11,10 +11,34 @@
         @Html.ActionLink("Nytt Inlägg", "CreateEntry", "FormalBlog")
 
     </div>
-    
+
+    @foreach (var item in Model.FormalBlogItems) {
+        <div class="well">
+            <div class="media">
+                <div class="media-body">
+                    <h4 class="media-heading">@item.CreatorFirstName @item.CreatorLastName</h4>
 
 
-    @foreach(var item in Model.FormalBlogEntries){
-        Html.RenderPartial("_BlogEntryPartial", item);
+
+                    <p>@item.Content</p>
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-user"></i> Användrarnamn <i>(user@oru.se)</i> </span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-folder-open"></i> @item.Category </span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-comment"></i> @item.Comments </span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href=""> Ladda ned fil </a></li>
+                        <li>|</li>
+                        <li> @Html.ActionLink("Ta bort", "DeleteEntry", "FormalBlog", new { EntryID = item.Id, Creator = item.CreatorId }, null) </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
     }
+
+
 </div>

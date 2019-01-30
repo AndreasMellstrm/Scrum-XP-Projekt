@@ -1,28 +1,3 @@
-﻿@model Örebro_Universitet_Kommunikation.Models.FormalBlogEntry
+﻿@model Örebro_Universitet_Kommunikation.Models.FormalBlogViewModel
 
 
-<div class="well">
-    <div class="media">
-        <div class="media-body">
-            <h4 class="media-heading">@Model.Title</h4>
-
-            
-            
-            <p>@Model.Content</p>
-            <ul class="list-inline list-unstyled">
-                <li><span><i class="glyphicon glyphicon-user"></i> @Model.Creator <i>(user@oru.se)</i> </span></li>
-                <li>|</li>
-                <li><span><i class="glyphicon glyphicon-calendar"></i> @Model.BlogEntryTime</span></li>
-                <li>|</li>
-                <li><span><i class="glyphicon glyphicon-folder-open"></i> @Model.Category </span></li>
-                <li>|</li>
-                <li><span><i class="glyphicon glyphicon-comment"></i> 2 Kommentarer</span></li>
-                <li>|</li>
-                <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href=""> Ladda ned fil </a></li>
-                <li>|</li>
-
-                @Html.ActionLink("Ta bort", "DeleteEntry", "FormalBlog", new { id = Model.Id }, null);
-            </ul>
-        </div>
-    </div>
-    </div>
