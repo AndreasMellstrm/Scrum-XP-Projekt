@@ -1,16 +1,15 @@
-﻿@model Örebro_Universitet_Kommunikation.Models.FormalBlogEntry
+﻿@model Örebro_Universitet_Kommunikation.Models.CreateEntryViewModel
 
 @{
     ViewBag.Title = "CreateEntry";
 }
-
 <h2>Skapa inlägg</h2>
 
 
 @using (Html.BeginForm("CreateEntry", "FormalBlog", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -29,7 +28,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.DropDownList
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryList, "Category"), new { @class = "form-control" })
+        </div>  
     </div>
     <input type="file" name="File">
     <div class="form-group">

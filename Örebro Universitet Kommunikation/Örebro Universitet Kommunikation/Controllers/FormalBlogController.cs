@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Örebro_Universitet_Kommunikation.Models;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,18 +36,25 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
         }
         public ActionResult CreateEntry() {
-            
-            return View();
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
+
+                CategoryListName.Add(c.CategoryName);
+            }
+            return View(new CreateEntryViewModel {
+                CategoryList = CategoryListName
+            });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEntry(FormalBlogEntry model, HttpPostedFileBase File) {
+        public ActionResult CreateEntry(FormalBlogEntry model, HttpPostedFileBase File, string Category) {
             
             var user = UserManager.FindById(User.Identity.GetUserId());
             var fileString = FileUpload(File);
             Ctx.FormalBlogEntreis.Add(new FormalBlogEntry {
                 AttachedFile = fileString,
-                Category = null,
+                Category = Category,
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,
                 Content = model.Content,
@@ -55,7 +63,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             );
             Ctx.SaveChanges();
 
-            return View();
+            return RedirectToAction("Index", "FormalBlog");
         }
         public string FileUpload(HttpPostedFileBase File)
         {
