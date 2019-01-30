@@ -1,4 +1,4 @@
-﻿
+﻿@model Örebro_Universitet_Kommunikation.Models.FormalBlogViewModel
 
 @{
     ViewBag.Title = "Home Page";
@@ -8,10 +8,13 @@
 
     <div class="container">
         <h2 class="formal-blog-header"> Formell Blogg</h2>
-        
+        @Html.ActionLink("Nytt Inlägg", "CreateEntry", "FormalBlog")
 
     </div>
-    @{
-        Html.RenderPartial("_BlogEntryPartial");
+    
+
+
+    @foreach(var item in Model.FormalBlogEntries){
+        Html.RenderPartial("_BlogEntryPartial", item);
     }
 </div>
