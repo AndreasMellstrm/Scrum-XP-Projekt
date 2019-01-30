@@ -8,8 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Örebro_Universitet_Kommunikation.Models;
 
-namespace Örebro_Universitet_Kommunikation.Controllers
-{   
+namespace Örebro_Universitet_Kommunikation.Controllers {
     [Authorize]
     public class AdminToolController : Controller {
         public ApplicationDbContext Ctx { get; set; }
@@ -32,8 +31,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             return false;
         }
         // GET: AdminTool
-        public async Task<ActionResult> Index(string Id)
-        {
+        public async Task<ActionResult> Index(string Id) {
             if (await IsAdmin(Id)) {
                 return View();
             }
@@ -63,32 +61,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 if (result.Succeeded) {
                     ModelState.Clear();
                     return View(new CreateUserViewModel {
-                        ErrorMessage = "Användare " +model.Email+ " har skapats"
-                    });
-                }
-            }
-            return View(new CreateUserViewModel {
-                ErrorMessage = "Skapandet av " +model.Email+ " misslyckades."
-            });
-            
-        }
-
-        public ActionResult CreateCategory() {
-            return View();
-        }
-
-        /*public async Task<ActionResult> CreateCategory(CreateCategoryViewModel model) {
-            if (ModelState.IsValid) {
-                var Category = new CategoryModel {
-                    CategoryName = model.CategoryName,
-                    CategoryType = model.CategoryType,
-                    
-                };
-                Ctx.Categories.Add(Category);
-                var result = await Ctx.SaveChangesAsync();
-                if (result.Succeeded) {
-                    ModelState.Clear();
-                    return View(new CreateUserViewModel {
                         ErrorMessage = "Användare " + model.Email + " har skapats"
                     });
                 }
@@ -96,6 +68,38 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             return View(new CreateUserViewModel {
                 ErrorMessage = "Skapandet av " + model.Email + " misslyckades."
             });
-        }*/
+
+        }
+
+        public ActionResult CreateCategory() {
+            return View(new CreateCategoryViewModel(""));
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateCategory(CreateCategoryViewModel model) {
+            var Category = new CategoryModel {
+                CategoryName = model.CategoryName,
+                CategoryType = model.CategoryType,
+
+            };
+            try {
+                Ctx.Categories.Add(Category);
+                var result = await Ctx.SaveChangesAsync();
+                if (result > 0) {
+                    ModelState.Clear();
+                    var ErrorMessageSuccess = "Kategorin " + model.CategoryName + " har skapats";
+                    return View(new CreateCategoryViewModel(ErrorMessageSuccess));
+                }
+            }
+            catch {
+
+                var ErrorMessageFail = "Skapandet av " + model.CategoryName + " misslyckades.";
+                return View(new CreateCategoryViewModel(ErrorMessageFail));
+            }
+            return View();
+        }
     }
 }

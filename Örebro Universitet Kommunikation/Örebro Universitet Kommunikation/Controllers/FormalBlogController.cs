@@ -65,18 +65,25 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
 
         public ActionResult CreateEntry() {
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
 
-            return View();
+                CategoryListName.Add(c.CategoryName);
+            }
+            return View(new CreateEntryViewModel {
+                CategoryList = CategoryListName
+            });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEntry(FormalBlogEntry model, HttpPostedFileBase File) {
+        public ActionResult CreateEntry(FormalBlogEntry model, HttpPostedFileBase File, string Category) {
             
             var user = UserManager.FindById(User.Identity.GetUserId());
             var fileString = FileUpload(File);
             Ctx.FormalBlogEntries.Add(new FormalBlogEntry {
                 AttachedFile = fileString,
-                Category = null,
+                Category = Category,
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,
                 Content = model.Content,
@@ -85,7 +92,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             );
             Ctx.SaveChanges();
 
-            return View();
+            return RedirectToAction("Index", "FormalBlog");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
