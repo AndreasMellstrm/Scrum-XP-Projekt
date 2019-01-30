@@ -40,10 +40,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEntry(FormalBlogEntry model) {
+        public ActionResult CreateEntry(FormalBlogEntry model, HttpPostedFileBase File) {
+            isCreated = false;
             var user = UserManager.FindById(User.Identity.GetUserId());
+            var fileString = FileUpload(File);
             Ctx.FormalBlogEntreis.Add(new FormalBlogEntry {
-                AttachedFile = null,
+                AttachedFile = fileString,
                 Category = null,
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,

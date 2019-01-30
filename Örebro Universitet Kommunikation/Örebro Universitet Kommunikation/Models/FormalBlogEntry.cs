@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Örebro_Universitet_Kommunikation.Models {
     public class FormalBlogEntry {
-
         [Key]
         public int Id { get; set; }
         public ApplicationUser Creator { get; set; }
@@ -14,7 +13,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
         [Display(Name = "Titel")]
         public string Title { get; set; }
-        [Required]
         [Display(Name = "Inlägg")]
         public string Content { get; set; }
         public DateTime BlogEntryTime { get; set; }
