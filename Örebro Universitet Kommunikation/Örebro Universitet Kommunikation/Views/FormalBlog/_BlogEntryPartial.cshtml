@@ -1,19 +1,20 @@
-﻿<div class="well">
+﻿@model Örebro_Universitet_Kommunikation.Models.FormalBlogEntry
+
+
+<div class="well">
     <div class="media">
         <div class="media-body">
-            <h4 class="media-heading">Receta 1</h4>
+            <h4 class="media-heading">@Model.Title</h4>
 
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-            Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
-            dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
-            Aliquam in felis sit amet augue.
-            </p>
+            
+            
+            <p>@Model.Content</p>
             <ul class="list-inline list-unstyled">
-                <li><span><i class="glyphicon glyphicon-user"></i> User <i>(user@oru.se)</i> </span></li>
+                <li><span><i class="glyphicon glyphicon-user"></i> @Model.Creator <i>(user@oru.se)</i> </span></li>
                 <li>|</li>
-                <li><span><i class="glyphicon glyphicon-calendar"></i> @DateTime.Today </span></li>
+                <li><span><i class="glyphicon glyphicon-calendar"></i> @Model.BlogEntryTime</span></li>
                 <li>|</li>
-                <li><span><i class="glyphicon glyphicon-folder-open"></i> Kategori </span></li>
+                <li><span><i class="glyphicon glyphicon-folder-open"></i> @Model.Category </span></li>
                 <li>|</li>
                 <li><span><i class="glyphicon glyphicon-comment"></i> 2 Kommentarer</span></li>
                 <li>|</li>
