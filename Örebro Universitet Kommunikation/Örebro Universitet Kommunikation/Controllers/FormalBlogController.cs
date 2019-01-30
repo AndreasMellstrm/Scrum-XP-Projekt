@@ -58,7 +58,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 FormalBlogItemList.Add(blogItem);
             };
 
-            return View(FormalBlogItemList);
+            return View(new FormalBlogViewModel {
+                FormalBlogItems = FormalBlogItemList
+            });
         }
 
 
@@ -87,7 +89,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,
                 Content = model.Content,
-                Creator = user
+                CreatorId = user.Id
             }
             );
             Ctx.SaveChanges();
@@ -107,21 +109,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return View();
         }
 
-        public ActionResult DeleteEntry(int EntryId, ApplicationUser Creator) {
-
-
-            //var entry = Ctx.FormalBlogEntries.Where(m => m.Id == EntryId);
-
-           
-
+        public ActionResult DeleteEntry(int EntryId, string CreatorId) {
             FormalBlogEntry blogEntry =  Ctx.FormalBlogEntries.Find(EntryId);
-            
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
 
-            if (Creator.Equals(currentUser)) {
-
-
-
+            if (CreatorId.Equals(currentUser)) {
 
                 Ctx.FormalBlogEntries.Remove(blogEntry);
                 Ctx.SaveChanges();
