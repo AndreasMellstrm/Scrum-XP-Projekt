@@ -42,13 +42,15 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
         public ActionResult CreateUser() {
 
-            return View();
+            return View(new CreateUserViewModel {
+                ErrorMessage = ""
+            });
         }
 
         // POST: /AdminTool/CreateUser
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<bool> CreateUser(CreateUserViewModel model) {
+        public async Task<ActionResult> CreateUser(CreateUserViewModel model) {
             if (ModelState.IsValid) {
                 var user = new ApplicationUser {
                     UserName = model.Email,
@@ -59,10 +61,41 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) {
-                    return true;
+                    ModelState.Clear();
+                    return View(new CreateUserViewModel {
+                        ErrorMessage = "Användare " +model.Email+ " har skapats"
+                    });
                 }
             }
-            return false;
+            return View(new CreateUserViewModel {
+                ErrorMessage = "Skapandet av " +model.Email+ " misslyckades."
+            });
+            
         }
+
+        public ActionResult CreateCategory() {
+            return View();
+        }
+
+        /*public async Task<ActionResult> CreateCategory(CreateCategoryViewModel model) {
+            if (ModelState.IsValid) {
+                var Category = new CategoryModel {
+                    CategoryName = model.CategoryName,
+                    CategoryType = model.CategoryType,
+                    
+                };
+                Ctx.Categories.Add(Category);
+                var result = await Ctx.SaveChangesAsync();
+                if (result.Succeeded) {
+                    ModelState.Clear();
+                    return View(new CreateUserViewModel {
+                        ErrorMessage = "Användare " + model.Email + " har skapats"
+                    });
+                }
+            }
+            return View(new CreateUserViewModel {
+                ErrorMessage = "Skapandet av " + model.Email + " misslyckades."
+            });
+        }*/
     }
 }
