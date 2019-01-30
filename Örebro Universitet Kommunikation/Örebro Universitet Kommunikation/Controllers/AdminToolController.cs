@@ -74,18 +74,18 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult CreateCategory() {
             return View(new CreateCategoryViewModel(""));
         }
-    
+
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateCategory(CreateCategoryViewModel model) {
-            if (ModelState.IsValid) {
-                var Category = new CategoryModel {
-                    CategoryName = model.CategoryName,
-                    CategoryType = model.CategoryType,
-                    
-                };
+            var Category = new CategoryModel {
+                CategoryName = model.CategoryName,
+                CategoryType = model.CategoryType,
+
+            };
+            try {
                 Ctx.Categories.Add(Category);
                 var result = await Ctx.SaveChangesAsync();
                 if (result > 0) {
@@ -94,8 +94,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     return View(new CreateCategoryViewModel(ErrorMessageSuccess));
                 }
             }
-            var ErrorMessageFail = "Skapandet av " + model.CategoryName + " misslyckades.";
-            return View(new CreateCategoryViewModel (ErrorMessageFail));
+            catch {
+
+                var ErrorMessageFail = "Skapandet av " + model.CategoryName + " misslyckades.";
+                return View(new CreateCategoryViewModel(ErrorMessageFail));
+            }
+            return View();
         }
     }
 }
