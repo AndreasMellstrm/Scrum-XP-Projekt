@@ -25,7 +25,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
-        public DbSet<FormalBlogEntry> FormalBlogEntreis { get; set; }
+        public DbSet<FormalBlogEntry> FormalBlogEntries { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
 
         public ApplicationDbContext()

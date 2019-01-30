@@ -20,6 +20,8 @@
                 <li>|</li>
                 <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href=""> Ladda ned fil </a></li>
                 <li>|</li>
+
+                @Html.ActionLink("Ta bort", "DeleteEntry", "FormalBlog", new { id = Model.Id }, null);
             </ul>
         </div>
     </div>
