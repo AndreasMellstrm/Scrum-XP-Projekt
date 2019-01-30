@@ -35,7 +35,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
         }
         public ActionResult CreateEntry() {
-
+ 
             return View();
         }
         [HttpPost]
