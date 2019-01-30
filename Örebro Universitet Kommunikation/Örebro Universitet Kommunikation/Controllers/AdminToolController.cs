@@ -8,8 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Örebro_Universitet_Kommunikation.Models;
 
-namespace Örebro_Universitet_Kommunikation.Controllers
-{   
+namespace Örebro_Universitet_Kommunikation.Controllers {
     [Authorize]
     public class AdminToolController : Controller {
         public ApplicationDbContext Ctx { get; set; }
@@ -32,8 +31,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             return false;
         }
         // GET: AdminTool
-        public async Task<ActionResult> Index(string Id)
-        {
+        public async Task<ActionResult> Index(string Id) {
             if (await IsAdmin(Id)) {
                 return View();
             }
@@ -63,21 +61,25 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 if (result.Succeeded) {
                     ModelState.Clear();
                     return View(new CreateUserViewModel {
-                        ErrorMessage = "Användare " +model.Email+ " har skapats"
+                        ErrorMessage = "Användare " + model.Email + " har skapats"
                     });
                 }
             }
             return View(new CreateUserViewModel {
-                ErrorMessage = "Skapandet av " +model.Email+ " misslyckades."
+                ErrorMessage = "Skapandet av " + model.Email + " misslyckades."
             });
-            
+
         }
 
         public ActionResult CreateCategory() {
-            return View();
+            return View(new CreateCategoryViewModel(""));
         }
+    
 
-        /*public async Task<ActionResult> CreateCategory(CreateCategoryViewModel model) {
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateCategory(CreateCategoryViewModel model) {
             if (ModelState.IsValid) {
                 var Category = new CategoryModel {
                     CategoryName = model.CategoryName,
@@ -86,16 +88,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 };
                 Ctx.Categories.Add(Category);
                 var result = await Ctx.SaveChangesAsync();
-                if (result.Succeeded) {
+                if (result > 0) {
                     ModelState.Clear();
-                    return View(new CreateUserViewModel {
-                        ErrorMessage = "Användare " + model.Email + " har skapats"
-                    });
+                    var ErrorMessageSuccess = "Kategorin " + model.CategoryName + " har skapats";
+                    return View(new CreateCategoryViewModel(ErrorMessageSuccess));
                 }
             }
-            return View(new CreateUserViewModel {
-                ErrorMessage = "Skapandet av " + model.Email + " misslyckades."
-            });
-        }*/
+            var ErrorMessageFail = "Skapandet av " + model.CategoryName + " misslyckades.";
+            return View(new CreateCategoryViewModel (ErrorMessageFail));
+        }
     }
 }

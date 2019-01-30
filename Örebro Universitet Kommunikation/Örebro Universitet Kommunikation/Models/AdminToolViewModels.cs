@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Örebro_Universitet_Kommunikation.Models {
     public class CreateUserViewModel {
@@ -60,6 +60,20 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [Display(Name = "Typ")]
         public string CategoryType { get; set; }
 
+        public string ErrorMessage { get; set; }
 
+        public List<string> CategoryTypes { get; set; }
+
+        public CreateCategoryViewModel() {
+
+        }
+
+        public CreateCategoryViewModel(string ErrorMessage = "") {
+            CategoryTypes = new List<string> {
+                "Formal",
+                "Informal"
+            };
+            this.ErrorMessage = ErrorMessage;
+        }
     }
 }
