@@ -36,9 +36,23 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var currentUserId = currentUser.Id;
+            bool CanDelete = false;
+            var CurrentUserAdmin = currentUser.Admin;
+
 
             foreach (var item in BlogEntries) {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
+                
+                
+                if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
+                    CanDelete = true;
+
+
+
+                }
+
 
                 var blogItem = new FormalBlogItem {
 
@@ -51,13 +65,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Date = item.BlogEntryTime,
                     Content = item.Content,
                     Category = item.Category,
-                    Title = item.Title
+                    Title = item.Title,
+                    CanDelete = CanDelete
+
+                   
 
             };
 
                 FormalBlogItemList.Add(blogItem);
             };
-
+        
+            
             return View(new FormalBlogViewModel {
                 FormalBlogItems = FormalBlogItemList
             });
@@ -96,34 +114,37 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return RedirectToAction("Index", "FormalBlog");
         }
+
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditEntry(FormalBlogEntry model, HttpPostedFileBase File) {
 
-
             FormalBlogEntry BlogEntry = Ctx.FormalBlogEntries.Find();
-
-            
-
-
             return View();
         }
 
         public ActionResult DeleteEntry(int EntryId, string CreatorId) {
             FormalBlogEntry blogEntry =  Ctx.FormalBlogEntries.Find(EntryId);
-            var currentUser = UserManager.FindById(User.Identity.GetUserId());
-
-            if (CreatorId.Equals(currentUser)) {
-
-                Ctx.FormalBlogEntries.Remove(blogEntry);
-                Ctx.SaveChanges();
-                return RedirectToAction("Index", "FormalBlog");
-            } else {
-                return View();
-            }
-
             
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var currentUserId = currentUser.Id;
+
+            // currentUserId.Equals(CreatorId)
+            Ctx.FormalBlogEntries.Remove(blogEntry);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("Index", "FormalBlog");
         }
+
+
+
+
+
+
+
 
 
         public string FileUpload(HttpPostedFileBase File)

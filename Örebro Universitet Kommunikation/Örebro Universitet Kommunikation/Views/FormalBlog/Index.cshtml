@@ -16,11 +16,11 @@
         <div class="well">
             <div class="media">
                 <div class="media-body">
-                    <h4 class="media-heading">@item.CreatorFirstName @item.CreatorLastName</h4>
+                    <h4 class="media-heading">@item.Title</h4>
 
                     <p>@item.Content</p>
                     <ul class="list-inline list-unstyled">
-                        <li><span><i class="glyphicon glyphicon-user"></i> Användrarnamn <i>(user@oru.se)</i> </span></li>
+                        <li><span><i class="glyphicon glyphicon-user"></i> @item.CreatorFirstName @item.CreatorLastName <i>(user@oru.se)</i> </span></li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
                         <li>|</li>
@@ -29,8 +29,13 @@
                         <li><span><i class="glyphicon glyphicon-comment"></i> @item.Comments </span></li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href=""> Ladda ned fil </a></li>
-                        <li>|</li>
-                        <li> @Html.ActionLink("Ta bort", "DeleteEntry", "FormalBlog", new { EntryId = item.Id , CreatorId = item.CreatorId }, null) </li>
+
+
+                        @if (item.CanDelete) {
+                            <li>|</li>
+                            <li> @Html.ActionLink("Ta bort", "DeleteEntry", "FormalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                        }
+
 
                     </ul>
                 </div>
