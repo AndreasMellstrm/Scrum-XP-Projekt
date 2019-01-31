@@ -16,6 +16,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string CreatorId { get; set; }
         public string CreatorFirstName { get; set; }
         public string CreatorLastName { get; set; }
+        public string CreaterMail { get; set; }
         public string AttachedFile { get; set; }
         public int Comments { get; set; }
         public DateTime Date { get; set; }
