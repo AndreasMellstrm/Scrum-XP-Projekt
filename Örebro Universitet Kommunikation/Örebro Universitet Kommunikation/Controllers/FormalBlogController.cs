@@ -14,10 +14,8 @@ using Örebro_Universitet_Kommunikation.Models;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
-
         public ApplicationDbContext Ctx { get; set; }
         public UserManager<ApplicationUser> UserManager { get; set; }
-
 
         public FormalBlogController(){
             Ctx = new ApplicationDbContext();
@@ -30,7 +28,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             var profileList = Ctx.Users.ToList();
 
-
             var BlogEntries = (from BE in Ctx.FormalBlogEntries
                                select BE).ToList();
 
@@ -41,25 +38,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             bool CanDelete = false;
             var CurrentUserAdmin = currentUser.Admin;
 
-
             foreach (var item in BlogEntries) {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
-                
-                
+
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
-
-
-
                 }
 
-
                 var blogItem = new FormalBlogItem {
-
                     Id = item.Id,
                     CreatorId = item.CreatorId,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
+                    CreaterMail = user.Email,
                     AttachedFile = item.AttachedFile,
                     Comments = 0,
                     Date = item.BlogEntryTime,
@@ -67,9 +58,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Category = item.Category,
                     Title = item.Title,
                     CanDelete = CanDelete
-
-                   
-
             };
 
                 FormalBlogItemList.Add(blogItem);
