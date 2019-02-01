@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Örebro_Universitet_Kommunikation.Helpers;
 using Örebro_Universitet_Kommunikation.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
-using Örebro_Universitet_Kommunikation.Models;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
@@ -80,12 +80,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 CategoryListName.Add(c.CategoryName);
             }
             return View(new CreateEntryViewModel {
+                CreatorId = User.Identity.GetUserId(),
                 CategoryList = CategoryListName
             });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEntry(FormalBlogEntry model, HttpPostedFileBase File, string Category) {
+        public ActionResult CreateEntry(CreateEntryViewModel model, HttpPostedFileBase File, string Category) {
             
             var user = UserManager.FindById(User.Identity.GetUserId());
             var fileString = FileUpload(File);
@@ -99,7 +100,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             );
             Ctx.SaveChanges();
-
+            string subject = "Nytt inlägg från " + user.FirstName + ".";
+            string emailText = "Inlägg med rubrik: " + model.Title + " finns nu att läsa.";
+            foreach (var appUser in model.EmailRecipients) {
+                var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210", appUser.Email);
+                emailHelper.SendEMail(appUser.Email, subject, emailText);
+            }
             return RedirectToAction("Index", "FormalBlog");
         }
 
