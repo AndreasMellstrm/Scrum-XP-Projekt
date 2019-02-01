@@ -295,11 +295,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\FormalBlog\_BlogEntryPartial.cshtml" />
     <Content Include="Views\AdminTool\Index.cshtml" />
     <Content Include="Views\AdminTool\CreateUser.cshtml" />
     <Content Include="Views\FormalBlog\CreateEntry.cshtml" />
     <Content Include="Views\AdminTool\CreateCategory.cshtml" />
+    <Content Include="Views\FormalBlog\EditEntry.cshtml" />
     <Content Include="Views\Manage\ChangeNotifications.cshtml" />
   </ItemGroup>
   <ItemGroup>

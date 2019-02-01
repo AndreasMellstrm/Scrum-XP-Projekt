@@ -14,8 +14,10 @@ using System.Web.Mvc.Async;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
+
         public ApplicationDbContext Ctx { get; set; }
         public UserManager<ApplicationUser> UserManager { get; set; }
+
 
         public FormalBlogController(){
             Ctx = new ApplicationDbContext();
@@ -28,6 +30,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             var profileList = Ctx.Users.ToList();
 
+
             var BlogEntries = (from BE in Ctx.FormalBlogEntries
                                select BE).ToList();
 
@@ -38,19 +41,25 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             bool CanDelete = false;
             var CurrentUserAdmin = currentUser.Admin;
 
+
             foreach (var item in BlogEntries) {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
-
+                
+                
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
+
+                        
+
                 }
 
+
                 var blogItem = new FormalBlogItem {
+
                     Id = item.Id,
                     CreatorId = item.CreatorId,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
-                    CreaterMail = user.Email,
                     AttachedFile = item.AttachedFile,
                     Comments = 0,
                     Date = item.BlogEntryTime,
@@ -58,6 +67,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Category = item.Category,
                     Title = item.Title,
                     CanDelete = CanDelete
+
+                   
+
             };
 
                 FormalBlogItemList.Add(blogItem);
@@ -109,15 +121,60 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return RedirectToAction("Index", "FormalBlog");
         }
 
+        [HttpGet]
+        public ActionResult EditEntry(int EntryId) {
+            var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
 
+                CategoryListName.Add(c.CategoryName);
+            }
+            var blogItem1 = new EditEntryViewModel() {
+                Id = BlogEntry.Id,
+                AttachedFile = BlogEntry.AttachedFile,
+                Category = BlogEntry.Category,
+                Content = BlogEntry.Content,
+                Title = BlogEntry.Title,
+                CategoryItems = CategoryListName
 
+            };
+            return View(blogItem1);
+
+                
+
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditEntry(FormalBlogEntry model, HttpPostedFileBase File) {
+        public ActionResult Edit(EditEntryViewModel model, HttpPostedFileBase File, int Id) {
+            if (ModelState.IsValid) {
+                var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == Id);
+                var Filestring = FileUpload(File);
 
-            FormalBlogEntry BlogEntry = Ctx.FormalBlogEntries.Find();
-            return View();
+
+                entry.AttachedFile = Filestring;
+                entry.Category = model.Category;
+
+
+                entry.Content = model.Content;
+                entry.Title = model.Title;
+
+                Ctx.SaveChanges();
+            }
+
+
+            return RedirectToAction("Index", "FormalBlog");
+        }
+        
+        public ActionResult DeleteLink(int EntryId) {
+            var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            if (ModelState.IsValid) {
+                entry.AttachedFile = null;
+                Ctx.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "FormalBlog");
         }
 
         public ActionResult DeleteEntry(int EntryId, string CreatorId) {

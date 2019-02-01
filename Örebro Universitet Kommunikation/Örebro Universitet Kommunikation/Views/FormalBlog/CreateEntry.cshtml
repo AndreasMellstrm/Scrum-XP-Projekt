@@ -23,24 +23,43 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextAreaFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.TextAreaFor(model => model.Content, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-10">
-            @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryList, "Category"), new { @class = "form-control" })
-        </div>  
-    </div>
-    <input type="file" name="File">
-    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Skapa inlägg" class="btn btn-default" />
+            @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryList, "Category"), new { @class = "form-control" })
         </div>
     </div>
-</div>
-}
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <label>
+                <input type="file" name="File" style="display: none;">
+                <a class="btn btn-info form-control">Ladda upp en fil</a>
+            </label>
+        </div>
+    </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Skapa inlägg" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+    }
 
-@section Scripts {
+    @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}
+    <script>
+          $("[type=file]").on("change", function(){
+          // Name of file and placeholder
+          var file = this.files[0].name;
+          var dflt = $(this).attr("placeholder");
+          if($(this).val()!=""){
+            $(this).next().text(file);
+          } else {
+            $(this).next().text(dflt);
+          }
+        });
+    </script>
+    }
