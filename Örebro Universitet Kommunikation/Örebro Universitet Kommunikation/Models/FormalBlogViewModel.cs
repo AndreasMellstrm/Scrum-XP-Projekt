@@ -10,7 +10,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public List<FormalBlogEntry> FormalBlogEntries { get; set; }
         public List<FormalBlogItem> FormalBlogItems { get; set; }
     }
-
     public class FormalBlogItem {
         public int Id { get; set; }
         public string CreatorId { get; set; }
@@ -24,6 +23,5 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Content { get; set; }
         public string Category { get; set; }
         public bool CanDelete { get; set; }
-
     }
 }
