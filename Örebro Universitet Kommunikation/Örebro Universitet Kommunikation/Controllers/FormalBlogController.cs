@@ -13,6 +13,7 @@ using System.Web.Mvc.Async;
 using Örebro_Universitet_Kommunikation.Models;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
+    [Authorize]
     public class FormalBlogController : Controller {
         public ApplicationDbContext Ctx { get; set; }
         public UserManager<ApplicationUser> UserManager { get; set; }
