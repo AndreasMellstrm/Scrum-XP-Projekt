@@ -1,4 +1,4 @@
-﻿
+﻿@model Örebro_Universitet_Kommunikation.Models.AdminToolViewModel
 @{
     ViewBag.Title = "Index";
 }
@@ -6,7 +6,10 @@
     <h2 class="formal-blog-header"> Administratörsverktyg</h2>
     <div class="well">
         <div class="btn">
-                @Html.ActionLink("Skapa ny användare", "CreateUser", "AdminTool", new { @class = "btn btn-primary" })
+                @Html.ActionLink("Skapa ny användare", "CreateUser", "AdminTool", new { Model.Id }, new { @class = "btn btn-primary" })
+        </div>
+        <div class="btn">
+                @Html.ActionLink("Skapa ny kategori","CreateCategory", "AdminTool", new { Model.Id }, new {@class = "btn btn-primary"})
         </div>
     </div>
 </div>

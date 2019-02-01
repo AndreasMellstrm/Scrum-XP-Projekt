@@ -288,6 +288,7 @@
     <Content Include="Views\FormalBlog\CreateEntry.cshtml" />
     <Content Include="Views\AdminTool\CreateCategory.cshtml" />
     <Content Include="Views\FormalBlog\EditEntry.cshtml" />
+    <Content Include="Views\Manage\ChangeNotifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
