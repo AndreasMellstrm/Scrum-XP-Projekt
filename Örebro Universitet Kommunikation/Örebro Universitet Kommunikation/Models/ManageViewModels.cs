@@ -58,6 +58,13 @@ namespace Örebro_Universitet_Kommunikation.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ChangeNotificationsViewModel {
+
+        [Required]
+        [Display(Name = "Notifikationer")]
+        public string Notifications { get; set; }
+    }
+
     public class AddPhoneNumberViewModel
     {
         [Required]

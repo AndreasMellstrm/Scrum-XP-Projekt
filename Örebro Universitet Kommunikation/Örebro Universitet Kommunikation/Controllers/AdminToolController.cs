@@ -33,16 +33,20 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         // GET: AdminTool
         public async Task<ActionResult> Index(string Id) {
             if (await IsAdmin(Id)) {
-                return View();
+                return View(new AdminToolViewModel {
+                    Id = Id
+                });
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "FormalBlog");
         }
 
-        public ActionResult CreateUser() {
-
-            return View(new CreateUserViewModel {
-                ErrorMessage = ""
-            });
+        public async Task<ActionResult> CreateUser(string Id) {
+            if (await IsAdmin(Id)) {
+                return View(new CreateUserViewModel {
+                    ErrorMessage = ""
+                });
+            }
+            return RedirectToAction("Index", "FormalBlog");
         }
 
         // POST: /AdminTool/CreateUser
@@ -71,8 +75,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
         }
 
-        public ActionResult CreateCategory() {
-            return View(new CreateCategoryViewModel(""));
+        public async Task<ActionResult> CreateCategory(string Id) {
+            if (await IsAdmin(Id)) {
+                return View(new CreateCategoryViewModel(""));
+            }
+            return RedirectToAction("Index", "FormalBlog");
         }
 
 

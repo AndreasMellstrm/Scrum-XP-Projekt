@@ -5,6 +5,11 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 
 namespace Örebro_Universitet_Kommunikation.Models {
+
+    public class AdminToolViewModel {
+        public string Id { get; set; }
+    }
+
     public class CreateUserViewModel {
         [Required]
         [EmailAddress]
