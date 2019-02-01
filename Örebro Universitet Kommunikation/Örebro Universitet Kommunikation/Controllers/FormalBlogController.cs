@@ -91,8 +91,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
                 CategoryListName.Add(c.CategoryName);
             }
+            var Id = User.Identity.GetUserId();
             return View(new CreateEntryViewModel {
-                CreatorId = User.Identity.GetUserId(),
                 CategoryList = CategoryListName
             });
         }
@@ -112,9 +112,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             );
             Ctx.SaveChanges();
+            var EmailRecipients = (from U in Ctx.Users
+                               where U.Notifications == "Email"
+                               || U.Notifications == "EmailSms"
+                               where U.Id != user.Id
+                               select U).ToList();
             string subject = "Nytt inlägg från " + user.FirstName + ".";
             string emailText = "Inlägg med rubrik: " + model.Title + " finns nu att läsa.";
-            foreach (var appUser in model.EmailRecipients) {
+            foreach (var appUser in EmailRecipients) {
                 var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210", appUser.Email);
                 emailHelper.SendEMail(appUser.Email, subject, emailText);
             }
