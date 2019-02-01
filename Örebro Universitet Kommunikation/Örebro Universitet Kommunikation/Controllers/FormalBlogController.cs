@@ -27,6 +27,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             Ctx = new ApplicationDbContext();
 
             var profileList = Ctx.Users.ToList();
+            var blog = Ctx.FormalBlogEntries.FirstOrDefault(p => p.Id == );
 
             var BlogEntries = (from BE in Ctx.FormalBlogEntries
                                select BE).ToList();
