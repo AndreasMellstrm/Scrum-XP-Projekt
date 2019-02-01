@@ -49,7 +49,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
 
-
+                        
 
                 }
 
@@ -115,15 +115,43 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return RedirectToAction("Index", "FormalBlog");
         }
 
+        [HttpGet]
+        public ActionResult EditEntry(int EntryId) {
+            var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
 
+            return View(BlogEntry);
 
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditEntry(FormalBlogEntry model, HttpPostedFileBase File) {
+        public ActionResult Edit(FormalBlogEntry BlogEntry, HttpPostedFileBase File) {
+            if (ModelState.IsValid) {
+                var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == BlogEntry.Id);
+                var Filestring = FileUpload(File);
 
-            FormalBlogEntry BlogEntry = Ctx.FormalBlogEntries.Find();
-            return View();
+
+                entry.AttachedFile = Filestring;
+
+
+                entry.Content = BlogEntry.Content;
+                entry.Title = BlogEntry.Title;
+
+                Ctx.SaveChanges();
+            }
+
+
+            return RedirectToAction("Index", "FormalBlog");
+        }
+        
+        public ActionResult DeleteLink(int EntryId) {
+            var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            if (ModelState.IsValid) {
+                entry.AttachedFile = null;
+                Ctx.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "FormalBlog");
         }
 
         public ActionResult DeleteEntry(int EntryId, string CreatorId) {
