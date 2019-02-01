@@ -118,24 +118,41 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         [HttpGet]
         public ActionResult EditEntry(int EntryId) {
             var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
 
-            return View(BlogEntry);
+                CategoryListName.Add(c.CategoryName);
+            }
+            var blogItem1 = new EditEntryViewModel() {
+                Id = BlogEntry.Id,
+                AttachedFile = BlogEntry.AttachedFile,
+                Category = BlogEntry.Category,
+                Content = BlogEntry.Content,
+                Title = BlogEntry.Title,
+                CategoryItems = CategoryListName
+
+            };
+            return View(blogItem1);
+
+                
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(FormalBlogEntry BlogEntry, HttpPostedFileBase File) {
+        public ActionResult Edit(EditEntryViewModel model, HttpPostedFileBase File, int Id) {
             if (ModelState.IsValid) {
-                var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == BlogEntry.Id);
+                var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == Id);
                 var Filestring = FileUpload(File);
 
 
                 entry.AttachedFile = Filestring;
+                entry.Category = model.Category;
 
 
-                entry.Content = BlogEntry.Content;
-                entry.Title = BlogEntry.Title;
+                entry.Content = model.Content;
+                entry.Title = model.Title;
 
                 Ctx.SaveChanges();
             }
