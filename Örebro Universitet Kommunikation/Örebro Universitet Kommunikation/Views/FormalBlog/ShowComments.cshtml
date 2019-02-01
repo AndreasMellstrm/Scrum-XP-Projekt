@@ -1,0 +1,62 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.FormalBlogCommentsViewModel
+
+
+@{
+    /**/
+
+    ViewBag.Title = "ShowComments";
+}
+
+<h2>ShowComments</h2>
+
+<div class="well">
+    <div class="media">
+        <div class="media-body">
+            <h4 class="media-heading">@Model.Title</h4>
+
+            <p>@Model.Content</p>
+            <ul class="list-inline list-unstyled">
+                <li><span><i class="glyphicon glyphicon-user"></i> @Model.CreatorFirstName @Model.CreatorLastName <i>(user@oru.se)</i> </span></li>
+                <li>|</li>
+                <li>
+                    <span>
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        @Model.Date
+                    </span>
+                </li>
+
+                <li><span><i class="glyphicon glyphicon-folder-open"></i> @Model.Category </span></li>
+
+                @if (Model.AttachedFile != null)
+                {
+                    <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href=""> Ladda ned fil </a></li>
+                }
+
+
+
+
+
+
+            </ul>
+        </div>
+    </div>
+</div>
+@foreach (var c in Model.Comments)
+{
+    <div class="well">
+        <div class="media">
+            <div class="media-body">
+                <h4 class="media-heading">@c.FirstName @c.LastName (@c.Email)</h4>
+                <p>@c.Content</p>
+            </div>
+        </div>
+    </div>
+}
+@using (Html.BeginForm("WriteComment", "FormalBlog", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+}
+                < p >
+@*@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
+@Html.ActionLink("Back to List", "Index")
+                </p>
