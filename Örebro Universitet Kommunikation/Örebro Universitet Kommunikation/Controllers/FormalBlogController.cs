@@ -25,11 +25,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
         public async Task<ActionResult> Index() {
-
             Ctx = new ApplicationDbContext();
-
             var profileList = Ctx.Users.ToList();
-
 
             var BlogEntries = (from BE in Ctx.FormalBlogEntries
                                select BE).ToList();
@@ -41,21 +38,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             bool CanDelete = false;
             var CurrentUserAdmin = currentUser.Admin;
 
-
             foreach (var item in BlogEntries) {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
                 
-                
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
-
-                        
-
                 }
 
-
                 var blogItem = new FormalBlogItem {
-
                     Id = item.Id,
                     CreatorId = item.CreatorId,
                     CreatorFirstName = user.FirstName,
@@ -67,10 +57,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Category = item.Category,
                     Title = item.Title,
                     CanDelete = CanDelete
-
-                   
-
-            };
+                };
 
                 FormalBlogItemList.Add(blogItem);
             };
