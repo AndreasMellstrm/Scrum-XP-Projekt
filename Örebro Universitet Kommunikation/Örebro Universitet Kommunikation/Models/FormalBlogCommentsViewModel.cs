@@ -19,6 +19,7 @@ namespace Örebro_Universitet_Kommunikation.Models
         public string Content { get; set; }
         public string Category { get; set; }
         public string CommentContent { get; set; }
+        public bool NewCommentCreated { get; set; }
     }
     public class Comment
     {

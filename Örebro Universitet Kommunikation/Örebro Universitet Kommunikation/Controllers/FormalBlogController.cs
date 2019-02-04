@@ -226,7 +226,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                         Email = User.Email,
                         FirstName = User.FirstName,
                         LastName = User.LastName
-
                     };
                     Comments.Add(CommentItem);
                 }
@@ -242,12 +241,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     CreaterMail = BloggUser.Email,
                     CreatorFirstName = BloggUser.FirstName,
                     CreatorLastName = BloggUser.LastName
-
                 });
             }
             return RedirectToAction("Index", "FormalBlog");
         }
-
         public ActionResult WriteComment(FormalBlogCommentsViewModel newComment) {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             Ctx.BlogComments.Add(new FormalBlogCommentsModel {
@@ -258,7 +255,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowComments", new { newComment.BlogId });
+            return RedirectToAction("ShowComments", new { BlogId = newComment.BlogId});
         }
     }
 }
