@@ -272,6 +272,18 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return View();
         }
         
+        public ActionResult _SearchAndFilterPartial() {
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
+
+                CategoryListName.Add(c.CategoryName);
+            }
+            var Id = User.Identity.GetUserId();
+            return View(new SearchViewModel {
+                CategoryList = CategoryListName
+            });
+        }
         
     }
 }
