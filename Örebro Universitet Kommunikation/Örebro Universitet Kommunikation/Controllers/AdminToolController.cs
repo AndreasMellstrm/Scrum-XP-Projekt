@@ -59,7 +59,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Position = model.Position
+                    Position = model.Position,
+                    Admin = model.Admin
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) {
