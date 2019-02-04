@@ -308,6 +308,7 @@
     <Content Include="Views\Manage\ChangeNotifications.cshtml" />
     <Content Include="Views\FormalBlog\ShowComments.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\FormalBlog\_SearchAndFilterPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
