@@ -29,6 +29,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var profileList = Ctx.Users.ToList();
 
             var BlogEntries = (from BE in Ctx.FormalBlogEntries
+                               orderby BE.Id descending
                                select BE).ToList();
 
             List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
@@ -62,15 +63,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 FormalBlogItemList.Add(blogItem);
             };
         
-            
             return View(new FormalBlogViewModel {
                 FormalBlogItems = FormalBlogItemList
             });
         }
-
-
-
-
         public ActionResult CreateEntry() {
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
             List<string> CategoryListName = new List<string>();
@@ -132,9 +128,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             };
             return View(blogItem1);
-
-                
-
         }
 
         [HttpPost]
@@ -181,15 +174,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return RedirectToAction("Index", "FormalBlog");
         }
-
-
-
-
-
-
-
-
-
         public string FileUpload(HttpPostedFileBase File)
         {
 
@@ -219,7 +203,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         
         public ActionResult TempUpload(HttpPostedFileBase File)
         {
-            
             var fileString = FileUpload(File);
             Debug.WriteLine(fileString);
             return View();
@@ -228,39 +211,41 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
        public async Task <ActionResult> ShowComments(int BlogId)
         {
             var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == BlogId);
-            var CommentList = Ctx.BlogComments.Where(c => c.BlogId == BlogId);
-            var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
-            List<Comment> Comments = new List<Comment>();
-            foreach(var c in CommentList)
-            {
-                var User = await UserManager.FindByIdAsync(c.CreatorId);
-
-                var CommentItem = new Comment
+            if (BlogEntry != null) { 
+                var CommentList = Ctx.BlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
+                var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
+                List<Comment> Comments = new List<Comment>();
+                foreach(var c in CommentList)
                 {
-                    Content = c.Content,
-                    Time = c.Time,
-                    Email = User.Email,
-                    FirstName = User.FirstName,
-                    LastName = User.LastName
+                    var User = await UserManager.FindByIdAsync(c.CreatorId);
 
-                };
-                Comments.Add(CommentItem);
+                    var CommentItem = new Comment
+                    {
+                        Content = c.Content,
+                        Time = c.Time,
+                        Email = User.Email,
+                        FirstName = User.FirstName,
+                        LastName = User.LastName
+
+                    };
+                    Comments.Add(CommentItem);
+                }
+                return View(new FormalBlogCommentsViewModel
+                {
+                    AttachedFile = BlogEntry.AttachedFile,
+                    BlogId = BlogEntry.Id,
+                    Category = BlogEntry.Category,
+                    Comments = Comments,
+                    Content = BlogEntry.Content,
+                    Date = BlogEntry.BlogEntryTime,
+                    Title = BlogEntry.Title,
+                    CreaterMail = BloggUser.Email,
+                    CreatorFirstName = BloggUser.FirstName,
+                    CreatorLastName = BloggUser.LastName
+
+                });
             }
-            return View(new FormalBlogCommentsViewModel
-            {
-                AttachedFile = BlogEntry.AttachedFile,
-                BlogId = BlogEntry.Id,
-                Category = BlogEntry.Category,
-                Comments = Comments,
-                Content = BlogEntry.Content,
-                Date = BlogEntry.BlogEntryTime,
-                Title = BlogEntry.Title,
-                CreaterMail = BloggUser.Email,
-                CreatorFirstName = BloggUser.FirstName,
-                CreatorLastName = BloggUser.LastName
-
-            });
-
+            return RedirectToAction("Index", "FormalBlog");
         }
 
        public ActionResult WriteComment()
