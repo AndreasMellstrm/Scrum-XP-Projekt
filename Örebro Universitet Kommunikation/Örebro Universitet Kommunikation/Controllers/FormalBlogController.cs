@@ -26,25 +26,23 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
 
-        public async Task<ActionResult> Index(string searchString) {
+        public async Task<ActionResult> Index(String searchString) {
 
             Ctx = new ApplicationDbContext();
 
 
 
-
+            
             var items = from m in Ctx.FormalBlogEntries select m;
             if(!String.IsNullOrEmpty(searchString)) {
                 items = items.Where(s => s.Title.Contains(searchString));
             }
-
+            
 
 
             var profileList = Ctx.Users.ToList();
 
-            var BlogEntries = (from BE in Ctx.FormalBlogEntries
-                               orderby BE.Id descending
-                               select BE).ToList();
+            var BlogEntries = items;
 
             List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
