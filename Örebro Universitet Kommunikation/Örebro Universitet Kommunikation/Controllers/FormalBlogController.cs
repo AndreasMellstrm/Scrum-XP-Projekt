@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
+using Örebro_Universitet_Kommunikation.Models;
+using System.Data.Entity;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
@@ -24,15 +26,29 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
 
-        public async Task<ActionResult> Index() {
+        public async Task<ActionResult> Index(string searchString, string Category) {
+
             Ctx = new ApplicationDbContext();
+
+
+
+            
+            var items = from m in Ctx.FormalBlogEntries orderby m.BlogEntryTime descending select m;
+            
+            if(!String.IsNullOrEmpty(searchString)) {
+                items = items.Where(s => s.Title.Contains(searchString)).OrderByDescending( s => s.BlogEntryTime);
+            }
+            
+
+
             var profileList = Ctx.Users.ToList();
 
-            var BlogEntries = (from BE in Ctx.FormalBlogEntries
-                               orderby BE.Id descending
-                               select BE).ToList();
+            var BlogEntries = items;
+            
 
             List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
+            
+
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var currentUserId = currentUser.Id;
@@ -61,10 +77,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 };
 
                 FormalBlogItemList.Add(blogItem);
+                
             };
-        
+
             return View(new FormalBlogViewModel {
                 FormalBlogItems = FormalBlogItemList
+                
             });
         }
         public ActionResult CreateEntry() {
@@ -257,5 +275,26 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return RedirectToAction("ShowComments", new { BlogId = newComment.BlogId});
         }
+        
+        public ActionResult _SearchAndFilterPartial() {
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
+
+                CategoryListName.Add(c.CategoryName);
+            }
+            CategoryListName.Add("Välj en kategori");
+            CategoryListName.Reverse();
+            var Id = User.Identity.GetUserId();
+            return View(new SearchViewModel {
+                CategoryList = CategoryListName
+            });
+        }
+
+        [HttpPost]
+        public ActionResult _SearchAndFilterPartial(SearchViewModel model) {
+            return RedirectToAction("Index", new { model.SearchString, model.Category });
+        }
+        
     }
 }
