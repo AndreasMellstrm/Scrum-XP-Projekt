@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNet.Identity
+@using Örebro_Universitet_Kommunikation.Models
+@model FormalBlogViewModel
+
+@if (Request.IsAuthenticated) {
+    using (Html.BeginForm("sträng", "sträng", FormMethod.Get, new { nånting = "sträng", @class ="enKlass"})) {
+        @Html.AntiForgeryToken()
+
+
+    }
+}

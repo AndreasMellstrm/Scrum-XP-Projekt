@@ -10,6 +10,7 @@
         <h2 class="formal-blog-header"> Formell Blogg</h2>
         @Html.ActionLink("Nytt Inlägg", "CreateEntry", "FormalBlog")
 
+        
     </div>
 
     @foreach (var item in Model.FormalBlogItems) {
@@ -26,17 +27,15 @@
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-folder-open"></i> @item.Category </span></li>
                         <li>|</li>
-                        <li><span><i class="glyphicon glyphicon-comment"></i>  @Html.ActionLink("Kommentarer", "ShowComments", "FormalBlog", new { BlogId = item.Id}, null)</span></li>
+                        <li><span><i class="glyphicon glyphicon-comment"></i>  @Html.ActionLink("Kommentarer", "ShowComments", "FormalBlog", new { BlogId = item.Id }, null)</span></li>
                         <li>|</li>
-                        @if (item.AttachedFile != null)
-                        {
+                        @if (item.AttachedFile != null) {
                             <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>
                         }
 
 
 
-                        @if (item.CanDelete)
-                        {
+                        @if (item.CanDelete) {
                             <li>|</li>
                             <li> @Html.ActionLink("Ändra", "EditEntry", "FormalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
                             <li>|</li>
