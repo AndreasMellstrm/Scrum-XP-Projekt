@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Örebro_Universitet_Kommunikation.Helpers;
 using Örebro_Universitet_Kommunikation.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
-using Örebro_Universitet_Kommunikation.Models;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
@@ -91,13 +91,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
                 CategoryListName.Add(c.CategoryName);
             }
+            var Id = User.Identity.GetUserId();
             return View(new CreateEntryViewModel {
                 CategoryList = CategoryListName
             });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEntry(FormalBlogEntry model, HttpPostedFileBase File, string Category) {
+        public ActionResult CreateEntry(CreateEntryViewModel model, HttpPostedFileBase File, string Category) {
             
             var user = UserManager.FindById(User.Identity.GetUserId());
             var fileString = FileUpload(File);
@@ -111,31 +112,58 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             );
             Ctx.SaveChanges();
-
+            var EmailRecipients = (from U in Ctx.Users
+                               where U.Notifications == "Email"
+                               || U.Notifications == "EmailSms"
+                               where U.Id != user.Id
+                               select U).ToList();
+            string subject = "Nytt inlägg från " + user.FirstName + ".";
+            string emailText = "Inlägg med rubrik: " + model.Title + " finns nu att läsa.";
+            foreach (var appUser in EmailRecipients) {
+                var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210", appUser.Email);
+                emailHelper.SendEMail(appUser.Email, subject, emailText);
+            }
             return RedirectToAction("Index", "FormalBlog");
         }
 
         [HttpGet]
         public ActionResult EditEntry(int EntryId) {
             var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
 
-            return View(BlogEntry);
+                CategoryListName.Add(c.CategoryName);
+            }
+            var blogItem1 = new EditEntryViewModel() {
+                Id = BlogEntry.Id,
+                AttachedFile = BlogEntry.AttachedFile,
+                Category = BlogEntry.Category,
+                Content = BlogEntry.Content,
+                Title = BlogEntry.Title,
+                CategoryItems = CategoryListName
+
+            };
+            return View(blogItem1);
+
+                
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(FormalBlogEntry BlogEntry, HttpPostedFileBase File) {
+        public ActionResult Edit(EditEntryViewModel model, HttpPostedFileBase File, int Id) {
             if (ModelState.IsValid) {
-                var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == BlogEntry.Id);
+                var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == Id);
                 var Filestring = FileUpload(File);
 
 
                 entry.AttachedFile = Filestring;
+                entry.Category = model.Category;
 
 
-                entry.Content = BlogEntry.Content;
-                entry.Title = BlogEntry.Title;
+                entry.Content = model.Content;
+                entry.Title = model.Title;
 
                 Ctx.SaveChanges();
             }

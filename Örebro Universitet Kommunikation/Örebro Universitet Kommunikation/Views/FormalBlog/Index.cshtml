@@ -20,15 +20,16 @@
 
                     <p>@item.Content</p>
                     <ul class="list-inline list-unstyled">
-                        <li><span><i class="glyphicon glyphicon-user"></i> @item.CreatorFirstName @item.CreatorLastName <i>(user@oru.se)</i> </span></li>
+                        <li><span><i class="glyphicon glyphicon-user"></i> @item.CreatorFirstName @item.CreatorLastName <i> @item.CreaterMail </i> </span></li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-folder-open"></i> @item.Category </span></li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-comment"></i> @item.Comments </span></li>
-                        <li>|</li>
+
                         @if (item.AttachedFile != null) {
+                            <li>|</li>
                             <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href=""> Ladda ned fil </a></li>
                         }
 

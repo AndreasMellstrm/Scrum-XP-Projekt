@@ -9,6 +9,8 @@ namespace Örebro_Universitet_Kommunikation.Models {
 
         public List<FormalBlogEntry> FormalBlogEntries { get; set; }
         public List<FormalBlogItem> FormalBlogItems { get; set; }
+        public List<String> CategoryItems { get; set; }
+        public FormalBlogEditItem FormalEdit { get; set; }
     }
     public class FormalBlogItem {
         public int Id { get; set; }
@@ -23,5 +25,32 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Content { get; set; }
         public string Category { get; set; }
         public bool CanDelete { get; set; }
+    }
+
+    public class FormalBlogEditItem {
+        [Key]
+        public int Id { get; set; }
+        public string CreatorId { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
+        [Display(Name = "Titel")]
+        public string Title { get; set; }
+        [Display(Name = "Inlägg")]
+        public string Content { get; set; }
+        public DateTime BlogEntryTime { get; set; }
+        public string Category { get; set; }
+        public string AttachedFile { get; set; }
+    }
+
+    public class EditEntryViewModel {
+
+        public int Id { get; set; }
+        [Display(Name = "Titel")]
+        public string Title { get; set; }
+        [Display(Name = "Inlägg")]
+        public string Content { get; set; }
+        public string Category { get; set; }
+        public string AttachedFile { get; set; }
+        public List<String> CategoryItems { get; set; }
     }
 }
