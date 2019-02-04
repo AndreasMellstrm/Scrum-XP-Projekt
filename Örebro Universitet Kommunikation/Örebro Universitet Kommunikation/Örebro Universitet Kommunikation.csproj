@@ -228,6 +228,8 @@
     <Compile Include="Models\AdminToolViewModels.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\CreateEntryViewModel.cs" />
+    <Compile Include="Models\FormalBlogCommentsModel.cs" />
+    <Compile Include="Models\FormalBlogCommentsViewModel.cs" />
     <Compile Include="Models\FormalBlogEntry.cs" />
     <Compile Include="Models\FormalBlogViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -240,6 +242,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Files\TextFile1.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -301,10 +304,10 @@
     <Content Include="Views\AdminTool\CreateCategory.cshtml" />
     <Content Include="Views\FormalBlog\EditEntry.cshtml" />
     <Content Include="Views\Manage\ChangeNotifications.cshtml" />
+    <Content Include="Views\FormalBlog\ShowComments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Files\" />
     <Folder Include="Controllers\ApiControllers\" />
   </ItemGroup>
   <ItemGroup>

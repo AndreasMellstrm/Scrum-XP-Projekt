@@ -238,9 +238,49 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return View();
         }
         
+       public async Task <ActionResult> ShowComments(int BlogId)
+        {
+            var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == BlogId);
+            var CommentList = Ctx.BlogComments.Where(c => c.BlogId == BlogId);
+            var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
+            List<Comment> Comments = new List<Comment>();
+            foreach(var c in CommentList)
+            {
+                var User = await UserManager.FindByIdAsync(c.CreatorId);
 
+                var CommentItem = new Comment
+                {
+                    Content = c.Content,
+                    Time = c.Time,
+                    Email = User.Email,
+                    FirstName = User.FirstName,
+                    LastName = User.LastName
 
-       
+                };
+                Comments.Add(CommentItem);
+            }
+            return View(new FormalBlogCommentsViewModel
+            {
+                AttachedFile = BlogEntry.AttachedFile,
+                BlogId = BlogEntry.Id,
+                Category = BlogEntry.Category,
+                Comments = Comments,
+                Content = BlogEntry.Content,
+                Date = BlogEntry.BlogEntryTime,
+                Title = BlogEntry.Title,
+                CreaterMail = BloggUser.Email,
+                CreatorFirstName = BloggUser.FirstName,
+                CreatorLastName = BloggUser.LastName
+
+            });
+
+        }
+
+       public ActionResult WriteComment()
+        {
+
+            return View();
+        }
         
         
     }
