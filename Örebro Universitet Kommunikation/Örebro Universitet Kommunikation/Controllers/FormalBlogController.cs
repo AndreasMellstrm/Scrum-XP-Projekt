@@ -21,7 +21,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public UserManager<ApplicationUser> UserManager { get; set; }
 
 
-        public FormalBlogController(){
+        public FormalBlogController() {
             Ctx = new ApplicationDbContext();
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
@@ -32,22 +32,35 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
 
 
-            
+
             var items = from m in Ctx.FormalBlogEntries orderby m.BlogEntryTime descending select m;
-            
-            if(!String.IsNullOrEmpty(searchString)) {
-                items = items.Where(s => s.Title.Contains(searchString)).OrderByDescending( s => s.BlogEntryTime);
+
+            if (String.IsNullOrEmpty(searchString)) {
+                searchString = "";
+               
+
             }
-            
+            if (Category == "Välj en kategori" || Category == null) {
+                items = items.Where(s => s.Title.Contains(searchString)).OrderByDescending(s => s.BlogEntryTime);
+            }
+            else if (Category != "Välj en kategori") {
+                items = from item in items
+                        where item.Title.Contains(searchString)
+                        where item.Category == Category
+                        orderby item.BlogEntryTime descending
+                        select item;
+            }
+
+
 
 
             var profileList = Ctx.Users.ToList();
 
             var BlogEntries = items;
-            
+
 
             List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
-            
+
 
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -57,7 +70,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             foreach (var item in BlogEntries) {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
-                
+
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
                 }
@@ -77,12 +90,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 };
 
                 FormalBlogItemList.Add(blogItem);
-                
+
             };
 
             return View(new FormalBlogViewModel {
                 FormalBlogItems = FormalBlogItemList
-                
+
             });
         }
         public ActionResult CreateEntry() {
@@ -100,7 +113,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateEntry(CreateEntryViewModel model, HttpPostedFileBase File, string Category) {
-            
+
             var user = UserManager.FindById(User.Identity.GetUserId());
             var fileString = FileUpload(File);
             Ctx.FormalBlogEntries.Add(new FormalBlogEntry {
@@ -114,10 +127,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             );
             Ctx.SaveChanges();
             var EmailRecipients = (from U in Ctx.Users
-                               where U.Notifications == "Email"
-                               || U.Notifications == "EmailSms"
-                               where U.Id != user.Id
-                               select U).ToList();
+                                   where U.Notifications == "Email"
+                                   || U.Notifications == "EmailSms"
+                                   where U.Id != user.Id
+                                   select U).ToList();
             string subject = "Nytt inlägg från " + user.FirstName + ".";
             string emailText = "Inlägg med rubrik: " + model.Title + " finns nu att läsa.";
             foreach (var appUser in EmailRecipients) {
@@ -169,7 +182,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return RedirectToAction("Index", "FormalBlog");
         }
-        
+
         public ActionResult DeleteLink(int EntryId) {
             var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
             if (ModelState.IsValid) {
@@ -181,8 +194,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
         public ActionResult DeleteEntry(int EntryId, string CreatorId) {
-            FormalBlogEntry blogEntry =  Ctx.FormalBlogEntries.Find(EntryId);
-            
+            FormalBlogEntry blogEntry = Ctx.FormalBlogEntries.Find(EntryId);
+
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var currentUserId = currentUser.Id;
 
@@ -192,12 +205,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return RedirectToAction("Index", "FormalBlog");
         }
-        public string FileUpload(HttpPostedFileBase File)
-        {
+        public string FileUpload(HttpPostedFileBase File) {
 
             //Vi kollar att det finns en fil att spara
-            if (File != null && File.ContentLength > 0)
-            {
+            if (File != null && File.ContentLength > 0) {
                 //Hämtar filnamnet utan filändelse
                 var NoExtension = Path.GetFileNameWithoutExtension(File.FileName);
                 //Hämtar filändelsen
@@ -213,32 +224,27 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
                 return NameOfPath;
             }
-            else
-            {
+            else {
                 return null;
             }
         }
-        
-        public ActionResult TempUpload(HttpPostedFileBase File)
-        {
+
+        public ActionResult TempUpload(HttpPostedFileBase File) {
             var fileString = FileUpload(File);
             Debug.WriteLine(fileString);
             return View();
         }
-        
-       public async Task <ActionResult> ShowComments(int BlogId)
-        {
+
+        public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == BlogId);
-            if (BlogEntry != null) { 
+            if (BlogEntry != null) {
                 var CommentList = Ctx.BlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
                 List<Comment> Comments = new List<Comment>();
-                foreach(var c in CommentList)
-                {
+                foreach (var c in CommentList) {
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
 
-                    var CommentItem = new Comment
-                    {
+                    var CommentItem = new Comment {
                         Content = c.Content,
                         Time = c.Time,
                         Email = User.Email,
@@ -248,8 +254,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     };
                     Comments.Add(CommentItem);
                 }
-                return View(new FormalBlogCommentsViewModel
-                {
+                return View(new FormalBlogCommentsViewModel {
                     AttachedFile = BlogEntry.AttachedFile,
                     BlogId = BlogEntry.Id,
                     Category = BlogEntry.Category,
@@ -266,12 +271,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return RedirectToAction("Index", "FormalBlog");
         }
 
-       public ActionResult WriteComment()
-        {
+        public ActionResult WriteComment() {
 
             return View();
         }
-        
+
         public ActionResult _SearchAndFilterPartial() {
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
             List<string> CategoryListName = new List<string>();
@@ -291,6 +295,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult _SearchAndFilterPartial(SearchViewModel model) {
             return RedirectToAction("Index", new { model.SearchString, model.Category });
         }
-        
+
     }
 }
