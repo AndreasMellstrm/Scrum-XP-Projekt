@@ -248,12 +248,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return RedirectToAction("Index", "FormalBlog");
         }
 
-       public ActionResult WriteComment()
-        {
+        public ActionResult WriteComment(FormalBlogCommentsViewModel newComment) {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            Ctx.BlogComments.Add(new FormalBlogCommentsModel {
+                BlogId = newComment.BlogId,
+                Content = newComment.CommentContent,
+                Time = DateTime.Now,
+                CreatorId = currentUser.Id
+            });
+            Ctx.SaveChanges();
 
-            return View();
+            return RedirectToAction("ShowComments", new { newComment.BlogId });
         }
-        
-        
     }
 }
