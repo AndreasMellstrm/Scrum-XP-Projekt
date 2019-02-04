@@ -26,7 +26,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
 
-        public async Task<ActionResult> Index(String searchString) {
+        public async Task<ActionResult> Index(string searchString, string Category) {
 
             Ctx = new ApplicationDbContext();
 
@@ -273,10 +273,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
                 CategoryListName.Add(c.CategoryName);
             }
+            CategoryListName.Add("Välj en kategori");
+            CategoryListName.Reverse();
             var Id = User.Identity.GetUserId();
             return View(new SearchViewModel {
                 CategoryList = CategoryListName
             });
+        }
+
+        [HttpPost]
+        public ActionResult _SearchAndFilterPartial(SearchViewModel model) {
+            return RedirectToAction("Index", new { model.SearchString, model.Category });
         }
         
     }
