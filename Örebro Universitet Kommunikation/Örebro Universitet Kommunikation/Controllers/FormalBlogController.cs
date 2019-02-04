@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Örebro_Universitet_Kommunikation.Models;
+using System.Data.Entity;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
     public class FormalBlogController : Controller {
@@ -24,9 +25,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
 
-        public async Task<ActionResult> Index() {
+        public async Task<ActionResult> Index(string searchString) {
 
             Ctx = new ApplicationDbContext();
+
+
+
+
+            var items = from m in Ctx.FormalBlogEntries select m;
+            if(!String.IsNullOrEmpty(searchString)) {
+                items = items.Where(s => s.Title.Contains(searchString));
+            }
+
+
 
             var profileList = Ctx.Users.ToList();
 
@@ -226,6 +237,18 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             Debug.WriteLine(fileString);
             return View();
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public string Index(string searchString, bool ed) {
+
+
+            return "From [HttpPost]Index: filter on:: " + searchString;
+
+        }
+
+
         
 
 
