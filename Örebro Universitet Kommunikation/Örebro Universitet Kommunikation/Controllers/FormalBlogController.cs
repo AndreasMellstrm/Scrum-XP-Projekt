@@ -33,9 +33,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
 
             
-            var items = from m in Ctx.FormalBlogEntries select m;
+            var items = from m in Ctx.FormalBlogEntries orderby m.BlogEntryTime descending select m;
+            
             if(!String.IsNullOrEmpty(searchString)) {
-                items = items.Where(s => s.Title.Contains(searchString));
+                items = items.Where(s => s.Title.Contains(searchString)).OrderByDescending( s => s.BlogEntryTime);
             }
             
 
@@ -43,8 +44,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var profileList = Ctx.Users.ToList();
 
             var BlogEntries = items;
+            
 
             List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
+            
+
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var currentUserId = currentUser.Id;
@@ -73,10 +77,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 };
 
                 FormalBlogItemList.Add(blogItem);
+                
             };
-        
+
             return View(new FormalBlogViewModel {
                 FormalBlogItems = FormalBlogItemList
+                
             });
         }
         public ActionResult CreateEntry() {
