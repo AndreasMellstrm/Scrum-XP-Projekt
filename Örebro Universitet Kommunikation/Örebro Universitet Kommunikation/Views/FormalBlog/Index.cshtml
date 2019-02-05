@@ -11,9 +11,6 @@
         @Html.ActionLink("Nytt Inlägg", "CreateEntry", "FormalBlog")
 
     </div>
-    @using (Html.BeginForm("Index", "FormalBlog", FormMethod.Get)) {
-        @Html.TextBox("searchString")<input type="submit" value="Sök" />
-    }
     @{Html.RenderAction("_SearchAndFilterPartial", "FormalBlog"); }
 
 @foreach (var item in Model.FormalBlogItems) {

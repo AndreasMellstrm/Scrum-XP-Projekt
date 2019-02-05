@@ -18,8 +18,9 @@ namespace Örebro_Universitet_Kommunikation.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public string Category { get; set; }
+        [Required(ErrorMessage = "Var vänlig ange en kommentar")]
+        [StringLength(200, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
         public string CommentContent { get; set; }
-        public bool NewCommentCreated { get; set; }
     }
     public class Comment
     {
