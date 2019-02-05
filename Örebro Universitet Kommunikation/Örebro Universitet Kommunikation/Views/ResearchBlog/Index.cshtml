@@ -2,11 +2,9 @@
 @{
     ViewBag.Title = "Index";
 }
-<ul class="nav flex-column">
+<div class="list-group">
+    <h3 class="list-group-item list-group-item-action active">Kategorier:</h3>
     @foreach (var p in Model.ProjectItems) {
-    <li class="nav-item">
-        @Html.ActionLink(p.ProjectName, "ShowResearch", "ResearchBlog", new { ResearchProject = p.Id }, null )
-    </li>
-    }
-</ul>
-
+        @Html.ActionLink(p.ProjectName, "ShowResearch", "ResearchBlog", new { ResearchProject = p.Id }, new { @class = "list-group-item list-group-item-action" })
+        }
+</div>
