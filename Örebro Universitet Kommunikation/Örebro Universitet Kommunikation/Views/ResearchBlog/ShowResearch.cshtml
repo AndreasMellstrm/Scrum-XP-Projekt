@@ -1,17 +1,13 @@
 ﻿@model Örebro_Universitet_Kommunikation.Models.ResearchBlogViewModel
-@{
-    ViewBag.Title = "ShowResearch";
-}
 
-<h2>ShowResearch</h2>
+<h2 class="formal-blog-header">Visar forskningprojekt: @Model.ResearchName</h2>
 <div class="jumbotron">
 
     <div class="container">
-        <h2 class="formal-blog-header">Visar forskningprojekt: @Model.ResearchName</h2>
+        
         @Html.ActionLink("Nytt Inlägg", "CreateEntry", "ResearchBlog")
 
     </div>
-    @{Html.RenderAction("_SearchAndFilterPartial", "ResearchBlog"); }
     
     @foreach (var item in Model.ResearchBlogList) {
         <div class="well">

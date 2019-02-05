@@ -1,0 +1,12 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.ProjectViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<ul class="nav flex-column">
+    @foreach (var p in Model.ProjectItems) {
+    <li class="nav-item">
+        @Html.ActionLink(p.ProjectName, "ShowResearch", "ResearchBlog", new { ResearchProject = p.Id }, null )
+    </li>
+    }
+</ul>
+

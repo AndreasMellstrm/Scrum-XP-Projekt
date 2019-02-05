@@ -22,42 +22,47 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         // GET: ResearchBlog
         public ActionResult Index()
         {
+            var researchProjects = Ctx.Projects;
+            List<ProjectItem> researchList = new List<ProjectItem>();
+            foreach(var p in researchProjects) {
+                var item = new ProjectItem {
+                    ProjectName = p.ProjectName,
+                    Id = p.ProjectId
+                };
+                researchList.Add(item);
+            }
 
-            return View();
+            return View(new ProjectViewModel { ProjectItems = researchList });
         }
         public async Task<ActionResult> ShowResearch(int ResearchProject) {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
-            var currentUserProject = currentUser.Project.ProjectId;
             var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == ResearchProject);
 
             List<ResearchBlogItem> researchList = new List<ResearchBlogItem>();
             bool canEdit = false;
-            if (currentUserProject == ResearchProject) {
-                var ResearchList = Ctx.ResearchBlogs.Where(c => c.ProjectId == ResearchProject);
-                foreach (var r in ResearchList) {
-                    var user = await UserManager.FindByIdAsync(r.CreatorId);
+            var ResearchList = Ctx.ResearchBlogs.Where(c => c.ProjectId == ResearchProject);
+            foreach (var r in ResearchList) {
+                var user = await UserManager.FindByIdAsync(r.CreatorId);
                     
-                    if(currentUser.Id == r.CreatorId || currentUser.Admin) {
-                        canEdit = true;
-                    }
-                    var blogItem = new ResearchBlogItem {
-                        CreatorId = r.CreatorId,
-                        AttachedFile = r.AttachedFile,
-                        CanDelete = canEdit,
-                        Content = r.Content,
-                        CreaterMail = user.Email,
-                        CreatorFirstName = user.FirstName,
-                        CreatorLastName = user.LastName,
-                        Date = r.BlogEntryTime,
-                        Title = r.Title
-                    };
-                    researchList.Add(blogItem);
+                if(currentUser.Id == r.CreatorId || currentUser.Admin) {
+                    canEdit = true;
                 }
-                researchList.OrderByDescending(r => r.Date);
-
-                return View(new ResearchBlogViewModel { ResearchBlogList = researchList, ResearchName = currentProject.ProjectName });
+                var blogItem = new ResearchBlogItem {
+                    CreatorId = r.CreatorId,
+                    AttachedFile = r.AttachedFile,
+                    CanDelete = canEdit,
+                    Content = r.Content,
+                    CreaterMail = user.Email,
+                    CreatorFirstName = user.FirstName,
+                    CreatorLastName = user.LastName,
+                    Date = r.BlogEntryTime,
+                    Title = r.Title
+                };
+                researchList.Add(blogItem);
             }
-            return RedirectToAction("Index", "ResearchBlog");
+            researchList.OrderByDescending(r => r.Date);
+
+            return View(new ResearchBlogViewModel { ResearchBlogList = researchList, ResearchName = currentProject.ProjectName });
         }
         
     }
