@@ -7,7 +7,7 @@ using System.Web;
 namespace Örebro_Universitet_Kommunikation.Models {
     public class ProjectModel {
         [Key]
-        public string ProjectId { get; set; }
+        public int ProjectId { get; set; }
         
         public string ProjectName { get; set; }
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }

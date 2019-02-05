@@ -90,5 +90,9 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string ProjectName { get; set; }
 
         public string ErrorMessage { get; set; }
+
+        public CreateProjectViewModel(string Id) {
+
+        }
     }
 }
