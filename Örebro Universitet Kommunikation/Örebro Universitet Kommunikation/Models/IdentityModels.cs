@@ -30,6 +30,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<FormalBlogEntry> FormalBlogEntries { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<FormalBlogCommentsModel> BlogComments { get; set; }
+        public DbSet<ResearchBlogModel> ResearchBlogs { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
