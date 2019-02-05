@@ -1,0 +1,41 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.AsignUserToProjectViewModel
+@{
+    ViewBag.Title = "AsignUserToProject";
+}
+
+<h2>AsignUserToProject</h2>
+
+@using (Html.BeginForm("AsignUserToProject", "AdminTool", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+    @Html.AntiForgeryToken()
+    <h4>Skapa en ny kategori.</h4>
+    <hr />
+    if (Model.ErrorMessage == "") {
+        <label class="hidden" role="alert">@Model.ErrorMessage</label>
+    }
+    else if (Model.ErrorMessage.StartsWith("Användaren")) {
+        <label class="alert alert-success" role="alert">@Model.ErrorMessage</label>
+    }
+    else {
+        <label class="alert alert-danger" role="alert">@Model.ErrorMessage</label>
+    }
+
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label("Användare", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.UserId, new SelectList(Model.UserList, "Id", "Email", new { @class = "form-control" }))
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Projekt", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.ProjectId, new SelectList(Model.ProjectList, "ProjectId","ProjectName"), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Register" />
+        </div>
+    </div>
+}
+

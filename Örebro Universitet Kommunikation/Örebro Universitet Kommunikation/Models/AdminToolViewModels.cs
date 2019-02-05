@@ -92,4 +92,14 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string ErrorMessage { get; set; }
 
     }
+
+    public class AsignUserToProjectViewModel {
+        
+        public List<ProjectModel> ProjectList { get; set; }
+        public List<ApplicationUser> UserList { get; set; }
+        public int ProjectId { get; set; }
+        public string UserId { get; set; }
+        public string ErrorMessage { get; set; }
+
+    }
 }

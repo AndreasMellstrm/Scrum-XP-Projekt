@@ -311,6 +311,7 @@
     <Content Include="Views\FormalBlog\ShowComments.cshtml" />
     <Content Include="Views\FormalBlog\_SearchAndFilterPartial.cshtml" />
     <Content Include="Views\AdminTool\CreateProject.cshtml" />
+    <Content Include="Views\AdminTool\AsignUserToProject.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
