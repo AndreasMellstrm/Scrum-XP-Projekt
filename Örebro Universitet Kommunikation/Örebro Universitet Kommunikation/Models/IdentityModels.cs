@@ -17,6 +17,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [DefaultValue("None")]
         public string Notifications { get; set; }
         public virtual ProjectModel Project { get; set; }
+        
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {

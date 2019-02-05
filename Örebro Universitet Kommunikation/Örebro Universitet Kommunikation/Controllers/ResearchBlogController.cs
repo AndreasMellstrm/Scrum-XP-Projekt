@@ -26,9 +26,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         }
         public ActionResult ShowResearch(int ResearchProject) {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
-            if(currentUser.ProjectId == ResearchProject) {
+            if (currentUser.Project.ProjectId == ResearchProject) {
                 var ResearchList = Ctx.ResearchBlogs.Where(c => c.ProjectId == ResearchProject);
-                foreach(var r in ResearchList) {
+                foreach (var r in ResearchList) {
 
                 }
 
