@@ -144,5 +144,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             return View();
         }
+
+        public ActionResult AsignUserToProject() {
+            List<ApplicationUser> UserList = (from u in Ctx.Users
+                                              select u).ToList();
+            List<ProjectModel> ProjectList = (from p in Ctx.Projects
+                                              select p).ToList();
+            return View(new AsignUserToProjectViewModel{
+                UserList = UserList,
+                ProjectList = ProjectList,
+                ErrorMessage = ""
+                    });
+        }
     }
 }
