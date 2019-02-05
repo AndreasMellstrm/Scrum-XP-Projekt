@@ -109,5 +109,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             return View();
         }
+
+        public async Task<ActionResult> CreateProject(string Id) {
+            if (await IsAdmin(Id)) {
+                return View(new CreateProjectViewModel(""));
+            }
+            return RedirectToAction("Index", "FormalBlog");
+        }
     }
 }

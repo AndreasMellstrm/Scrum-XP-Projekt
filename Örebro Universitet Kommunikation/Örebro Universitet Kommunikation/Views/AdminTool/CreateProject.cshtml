@@ -10,7 +10,7 @@
     @Html.AntiForgeryToken()
     <h4>Skapa ett nytt forskningsprojekt.</h4>
     <hr />
-    if (Model.ErrorMessage == "") {
+    /*if (Model.ErrorMessage == "") {
         <label class="hidden" role="alert">@Model.ErrorMessage</label>
     }
     else if (Model.ErrorMessage.StartsWith("Kategorin")) {
@@ -19,7 +19,7 @@
     else {
         <label class="alert alert-danger" role="alert">@Model.ErrorMessage</label>
     }
-
+    */
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.ProjectName, new { @class = "col-md-2 control-label" })
@@ -30,7 +30,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.ProjectName, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(n => n.ProjectName, new SelectList(Model.ProjectName) , new { @class = "form-control" })
+            <!--Html.DropDownListFor(n => n.ProjectName, new SelectList(Model.ProjectName) , new { class = "form-control" })-->
         </div>
     </div>
     <div class="form-group">
