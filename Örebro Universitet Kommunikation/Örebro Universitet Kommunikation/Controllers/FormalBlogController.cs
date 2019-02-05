@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
-using Örebro_Universitet_Kommunikation.Models;
 using System.Data.Entity;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {

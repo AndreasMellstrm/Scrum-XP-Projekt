@@ -104,7 +104,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             catch {
 
-                var ErrorMessageFail = "Skapandet av " + model.CategoryName + " misslyckades.";
+                var ErrorMessageFail = "Skapandet av kategorin: " + model.CategoryName + " misslyckades.";
                 return View(new CreateCategoryViewModel(ErrorMessageFail));
             }
             return View();
@@ -112,9 +112,37 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
         public async Task<ActionResult> CreateProject(string Id) {
             if (await IsAdmin(Id)) {
-                return View(new CreateProjectViewModel(""));
+                return View(new CreateProjectViewModel{
+                    ErrorMessage = ""
+                    });
             }
             return RedirectToAction("Index", "FormalBlog");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateProject(CreateProjectViewModel model) {
+            var Project = new ProjectModel {
+                ProjectName = model.ProjectName
+            };
+            try {
+                Ctx.Projects.Add(Project);
+                var result = await Ctx.SaveChangesAsync();
+                if (result > 0) {
+                    ModelState.Clear();
+                    var ErrorMessageSuccess = "Projektet " + model.ProjectName + " har skapats";
+                    return View(new CreateProjectViewModel {
+                        ErrorMessage = ErrorMessageSuccess
+                    });
+                }
+            }
+            catch {
+                var ErrorMessageFail = "Skapandet av projektet: " + model.ProjectName + " misslyckades.";
+                return View(new CreateProjectViewModel{
+                    ErrorMessage = ErrorMessageFail
+                });
+            }
+            return View();
         }
     }
 }
