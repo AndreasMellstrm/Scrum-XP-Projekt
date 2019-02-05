@@ -4,6 +4,7 @@ using Örebro_Universitet_Kommunikation.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -24,17 +25,39 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
             return View();
         }
-        public ActionResult ShowResearch(int ResearchProject) {
+        public async Task<ActionResult> ShowResearch(int ResearchProject) {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
-            if (currentUser.Project.ProjectId == ResearchProject) {
+            var currentUserProject = currentUser.Project.ProjectId;
+            var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == ResearchProject);
+
+            List<ResearchBlogItem> researchList = new List<ResearchBlogItem>();
+            bool canEdit = false;
+            if (currentUserProject == ResearchProject) {
                 var ResearchList = Ctx.ResearchBlogs.Where(c => c.ProjectId == ResearchProject);
                 foreach (var r in ResearchList) {
-
+                    var user = await UserManager.FindByIdAsync(r.CreatorId);
+                    
+                    if(currentUser.Id == r.CreatorId || currentUser.Admin) {
+                        canEdit = true;
+                    }
+                    var blogItem = new ResearchBlogItem {
+                        CreatorId = r.CreatorId,
+                        AttachedFile = r.AttachedFile,
+                        CanDelete = canEdit,
+                        Content = r.Content,
+                        CreaterMail = user.Email,
+                        CreatorFirstName = user.FirstName,
+                        CreatorLastName = user.LastName,
+                        Date = r.BlogEntryTime,
+                        Title = r.Title
+                    };
+                    researchList.Add(blogItem);
                 }
+                researchList.OrderByDescending(r => r.Date);
 
+                return View(new ResearchBlogViewModel { ResearchBlogList = researchList, ResearchName = currentProject.ProjectName });
             }
-
-            return View(); // Redirect till index
+            return RedirectToAction("Index", "ResearchBlog");
         }
         
     }

@@ -1,0 +1,44 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.ResearchBlogViewModel
+@{
+    ViewBag.Title = "ShowResearch";
+}
+
+<h2>ShowResearch</h2>
+<div class="jumbotron">
+
+    <div class="container">
+        <h2 class="formal-blog-header">Visar forskningprojekt: @Model.ResearchName</h2>
+        @Html.ActionLink("Nytt Inlägg", "CreateEntry", "ResearchBlog")
+
+    </div>
+    @{Html.RenderAction("_SearchAndFilterPartial", "ResearchBlog"); }
+    
+    @foreach (var item in Model.ResearchBlogList) {
+        <div class="well">
+            <div class="media">
+                <div class="media-body">
+                    <h4 class="media-heading">@item.Title</h4>
+
+                    <p>@item.Content</p>
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-user"></i> @item.CreatorFirstName @item.CreatorLastName <i> @item.CreaterMail</i></span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "ResearchBlog", new { BlogId = item.Id }, null)</span></li>
+                        @if (item.AttachedFile != null) {
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>
+                        }
+                        @if (item.CanDelete) {
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
