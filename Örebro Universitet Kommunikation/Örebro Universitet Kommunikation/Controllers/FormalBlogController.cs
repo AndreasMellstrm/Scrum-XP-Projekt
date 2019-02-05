@@ -32,14 +32,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
 
 
-            
+
             var items = from m in Ctx.FormalBlogEntries orderby m.BlogEntryTime descending select m;
             
             if(!String.IsNullOrEmpty(searchString)) {
-                items = items.Where(s => s.Title.Contains(searchString)).OrderByDescending( s => s.BlogEntryTime);
+                items = items.Where(s => s.Title.Contains(searchString)).OrderByDescending(s => s.BlogEntryTime);
             }
-            
-
 
             var profileList = Ctx.Users.ToList();
 
