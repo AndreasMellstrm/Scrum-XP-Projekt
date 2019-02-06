@@ -12,7 +12,7 @@
     if (Model.ErrorMessage == "") {
         <label class="hidden" role="alert">@Model.ErrorMessage</label>
     }
-    else if (Model.ErrorMessage.StartsWith("Användaren")) {
+    else if (Model.ErrorMessage.StartsWith("Användaren blev tilldelad")) {
         <label class="alert alert-success" role="alert">@Model.ErrorMessage</label>
     }
     else {
@@ -21,20 +21,20 @@
 
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.Label("Användare", new { @class = "col-md-2 control-label" })
+        @Html.Label("Användare:", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.UserId, new SelectList(Model.UserList, "Id", "Email", new { @class = "form-control" }))
         </div>
     </div>
     <div class="form-group">
-        @Html.Label("Projekt", new { @class = "col-md-2 control-label" })
+        @Html.Label("Projekt:", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.ProjectId, new SelectList(Model.ProjectList, "ProjectId","ProjectName"), new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+            <input type="submit" class="btn btn-primary" value="Tilldela" />
         </div>
     </div>
 }
