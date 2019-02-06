@@ -206,6 +206,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="CalendarDataModel.cs" />
+    <Compile Include="CalendarEvents.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\NotificationControllers.cs" />
@@ -248,7 +250,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdapterResponseBase.cs" />
     <Compile Include="Models\AdminToolViewModels.cs" />
-    <Compile Include="Models\CalendarViewModel.cs" />
+    <Compile Include="Models\CalendarModels.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\CreateEntryViewModel.cs" />
     <Compile Include="Models\CreateResearchViewModel.cs" />

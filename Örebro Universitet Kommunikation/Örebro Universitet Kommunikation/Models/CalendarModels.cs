@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 
 namespace Örebro_Universitet_Kommunikation.Models {
-    public class CalendarViewModel {
+    public class CalendarEvent {
         [Key]
         public int EventId { get; set; }
         public string Title { get; set; }
@@ -15,4 +15,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string ThemeColor { get; set; }
         public bool IsFullDay { get; set; }
     }
+
+    
 }
