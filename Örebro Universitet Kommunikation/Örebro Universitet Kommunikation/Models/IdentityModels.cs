@@ -37,6 +37,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<EducationBlogModel> EducationBlogs { get; set; }
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<EducationBlogCommentsModel> EducationBlogComments { get; set; }
+        public DbSet<ResearchBlogCommentsModel> ResearchBlogComments { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
 
