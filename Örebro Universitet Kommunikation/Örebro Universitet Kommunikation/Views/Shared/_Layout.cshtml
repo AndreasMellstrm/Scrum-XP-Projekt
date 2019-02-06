@@ -23,15 +23,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (Request.IsAuthenticated)
-                    {
+                    @if (Request.IsAuthenticated) {
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Forskning", "Index", "ResearchBlog")</li>
-                    Html.RenderAction("_LoginPartial", "Account");
                     }
                 </ul>
-               
+                    @{Html.RenderAction("_LoginPartial", "Account");}
+         
             </div>
         </div>
     </div>
