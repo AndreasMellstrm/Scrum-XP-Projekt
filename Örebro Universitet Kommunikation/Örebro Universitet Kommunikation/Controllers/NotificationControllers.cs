@@ -18,8 +18,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         public EmailController() {
             Ctx = new ApplicationDbContext();
             EmailRecipients = (from U in Ctx.Users
-                               where U.Notifications == "Email"
-                               || U.Notifications == "EmailSms"
+                               where U.Notifications == "Blog"
+                               || U.Notifications == "Event"
+                               || U.Notifications == "BlogEvent"
                                select U).ToArray();
         }
         
