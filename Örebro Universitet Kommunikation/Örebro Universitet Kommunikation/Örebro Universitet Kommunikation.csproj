@@ -215,6 +215,7 @@
     <Compile Include="Controllers\AdminToolController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ResearchBlogController.cs" />
     <Compile Include="DataModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -252,6 +253,7 @@
     <Compile Include="Models\CalendarModels.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\CreateEntryViewModel.cs" />
+    <Compile Include="Models\CreateResearchViewModel.cs" />
     <Compile Include="Models\FormalBlogCommentsModel.cs" />
     <Compile Include="Models\FormalBlogCommentsViewModel.cs" />
     <Compile Include="Models\FormalBlogEntry.cs" />
@@ -360,6 +362,7 @@
     <Content Include="Views\ResearchBlog\ShowResearch.cshtml" />
     <Content Include="Views\ResearchBlog\Index.cshtml" />
     <Content Include="Views\AdminTool\AsignUserToProject.cshtml" />
+    <Content Include="Views\ResearchBlog\CreateEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

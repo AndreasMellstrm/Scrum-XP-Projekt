@@ -4,7 +4,7 @@
     ViewBag.Title = "CreateProject";
 }
 
-<h2>Lägg till ett nytt forskningsprojekt.</h2>
+<h2>Lägg till ett nytt forskningsprojekt</h2>
 
 @using (Html.BeginForm("CreateProject", "AdminTool", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
     @Html.AntiForgeryToken()
@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+            <input type="submit" class="btn btn-primary" value="Skapa" />
         </div>
     </div>
 }

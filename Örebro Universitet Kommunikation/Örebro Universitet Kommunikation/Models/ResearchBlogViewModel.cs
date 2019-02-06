@@ -7,6 +7,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
     public class ResearchBlogViewModel {
         public List<ResearchBlogItem> ResearchBlogList { get; set; }
         public string ResearchName { get; set; }
+        public bool CanCreateEntry { get; set; }
     }
     public class ResearchBlogItem {
         public int Id { get; set; }
@@ -19,5 +20,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Title { get; set; }
         public string Content { get; set; }
         public bool CanDelete { get; set; }
+
     }
 }
