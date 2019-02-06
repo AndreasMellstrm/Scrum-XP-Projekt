@@ -18,8 +18,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         }
 
         public ActionResult GetEvents() {
-            using (DataModelEntities dc = new DataModelEntities()) {
-                var events = dc.Events.ToList();
+            using (CalendarDataModel dc = new CalendarDataModel()) {
+                var events = dc.CalendarEvents.ToList();
                 return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
         }
