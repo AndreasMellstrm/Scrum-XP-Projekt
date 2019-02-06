@@ -21,7 +21,8 @@ namespace Örebro_Universitet_Kommunikation.Models
         [StringLength(200, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 3)]
         public string CommentContent { get; set; }
         public string ProjectName { get; set; }
-        
+        public int ProjectId { get; set; }
+
     }
     public class ResearchComment
     {

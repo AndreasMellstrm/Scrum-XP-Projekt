@@ -3,8 +3,14 @@
     ViewBag.Title = "Index";
 }
 <div class="list-group">
-    <h3 class="list-group-item list-group-item-action active">Forskningsprojekt:</h3>
+    <h3 class="list-group-item active">Forskningsprojekt</h3>
     @foreach (var p in Model.ProjectItems) {
-        @Html.ActionLink(p.ProjectName, "ShowResearch", "ResearchBlog", new { ResearchProject = p.Id }, new { @class = "list-group-item list-group-item-action" })
-        }
+        <a href="@Url.Action("ShowResearch", "ResearchBlog", new { ResearchProject = p.Id })" class="list-group-item">
+            @p.ProjectName
+            @if (p.IsMember) {
+                <span class="label alert-success">Medlem</span>
+            }
+            <span class="badge badge-secondary">@p.BlogAmount</span>
+        </a>
+    }
 </div>

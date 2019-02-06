@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">@Html.ActionLink("Forskning", "Index", "ResearchBlog", null)</li>
-            <li class="breadcrumb-item">Test</li>
+            <li class="breadcrumb-item">@Html.ActionLink(@Model.ProjectName, "ShowResearch", "ResearchBlog", new { ResearchProject = @Model.ProjectId }, null)</li>
             <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
         </ol>
     </nav>

@@ -26,10 +26,21 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         {
             var researchProjects = Ctx.Projects;
             List<ProjectItem> researchList = new List<ProjectItem>();
-            foreach(var p in researchProjects) {
+            var isMember = false;
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            foreach (var p in researchProjects) {
+                var listOfBlogs = Ctx.ResearchBlogs.Where(b => b.ProjectId == p.ProjectId);
+                if(p.ProjectId == currentUser.Project.ProjectId) {
+                    isMember = true;
+                }
+                else {
+                    isMember = false;
+                }
                 var item = new ProjectItem {
                     ProjectName = p.ProjectName,
-                    Id = p.ProjectId
+                    Id = p.ProjectId,
+                    BlogAmount = listOfBlogs.Count(),
+                    IsMember = isMember
                 };
                 researchList.Add(item);
             }
@@ -158,6 +169,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 var CommentList = Ctx.ResearchBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
                 List<ResearchComment> Comments = new List<ResearchComment>();
+                var currentUser = UserManager.FindById(User.Identity.GetUserId());
+                var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == currentUser.Project.ProjectId);
+
                 foreach (var c in CommentList)
                 {
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
@@ -185,8 +199,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     CreatorMail = BloggUser.Email,
                     CreatorFirstName = BloggUser.FirstName,
                     CreatorLastName = BloggUser.LastName,
-                    ProjectName = "Testing"
-
+                    ProjectName = currentProject.ProjectName,
+                    ProjectId = currentProject.ProjectId
                 });
             }
             return RedirectToAction("Index", "ResearchBlog");
