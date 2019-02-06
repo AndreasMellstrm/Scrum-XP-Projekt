@@ -30,6 +30,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             return false;
         }
+
+        public List<ProjectModel> GetAllProjects() {
+            List<ProjectModel> ProjectList = (from p in Ctx.Projects
+                                              select p).ToList();
+            return ProjectList;
+        }
+
+        public List<ApplicationUser> GetAllUsers() {
+            List<ApplicationUser> UserList = (from u in Ctx.Users
+                                              select u).ToList();
+            return UserList;
+        }
+        
         // GET: AdminTool
         public async Task<ActionResult> Index(string Id) {
             if (await IsAdmin(Id)) {
@@ -146,15 +159,33 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
         public ActionResult AsignUserToProject() {
-            List<ApplicationUser> UserList = (from u in Ctx.Users
-                                              select u).ToList();
-            List<ProjectModel> ProjectList = (from p in Ctx.Projects
-                                              select p).ToList();
             return View(new AsignUserToProjectViewModel{
-                UserList = UserList,
-                ProjectList = ProjectList,
+                UserList = GetAllUsers(),
+                ProjectList = GetAllProjects(),
                 ErrorMessage = ""
                     });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AsignUserToProject(AsignUserToProjectViewModel model) {
+            var user = UserManager.FindById(model.UserId);          
+            var projects = (from p in Ctx.Projects
+                            where p.ProjectId == model.ProjectId
+                            select p).ToList();
+            user.Project = projects[0];
+            var result = await Ctx.SaveChangesAsync();
+            if(result > 0) {
+                return View(new AsignUserToProjectViewModel {
+                    ProjectList = GetAllProjects(),
+                    UserList = GetAllUsers(),
+                    ErrorMessage = "Användaren blev tilldelad projektet " + projects[0].ProjectName
+                });
+            }
+            return View(new AsignUserToProjectViewModel {
+                ProjectList = GetAllProjects(),
+                UserList = GetAllUsers(),
+                ErrorMessage = "Användaren kunde inte tilldelas projektet " + projects[0].ProjectName
+            });
         }
     }
 }
