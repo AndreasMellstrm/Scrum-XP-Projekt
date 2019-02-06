@@ -3,23 +3,23 @@
 @model SearchViewModel
 
 @if (Request.IsAuthenticated) {
-    using (Html.BeginForm("_SearchAndFilterPartial", "FormalBlog", FormMethod.Post, new { enctype = "multipart/form-data", @class ="form-horizontal"})) {
+    using (Html.BeginForm("_SearchAndFilterPartial", "FormalBlog", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" })) {
         @Html.AntiForgeryToken()
 
-        <div>
-            @Html.Label("Sök", new { @class = "col-md-2 control-label"})
+        <div class="col-md-10">
+
+            @Html.Label("Sök", new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @Html.TextBoxFor(m => m.SearchString, new { @class = "form-control" })
             </div>
 
-             @Html.Label("Kategori", new { @class = "col-md-2 control-label" })
+            @Html.Label("Kategori", new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryList, "Välj en kategori"), new { @class = "form-control" })
             </div>
-
-                <input type="submit" value="Sök & filtrera" class="btn btn-success" />
-
         </div>
-
+        <div class="col-md-12">
+            <input type="submit" value="Sök & filtrera" class="btn btn-success" />
+        </div>
     }
 }
