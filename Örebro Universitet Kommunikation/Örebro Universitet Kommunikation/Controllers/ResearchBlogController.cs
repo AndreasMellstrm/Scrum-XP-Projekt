@@ -184,7 +184,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     Title = BlogEntry.Title,
                     CreatorMail = BloggUser.Email,
                     CreatorFirstName = BloggUser.FirstName,
-                    CreatorLastName = BloggUser.LastName
+                    CreatorLastName = BloggUser.LastName,
+                    ProjectName = "Testing"
 
                 });
             }
