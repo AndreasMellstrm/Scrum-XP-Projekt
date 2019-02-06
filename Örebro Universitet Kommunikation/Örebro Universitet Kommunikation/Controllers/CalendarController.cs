@@ -4,29 +4,32 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace Örebro_Universitet_Kommunikation.Controllers
 {
+    
     public class CalendarController : Controller
     {
-        // GET: Calendar
+        // GET: 
+        
         public ActionResult Index()
         {
             return View();
         }
 
         public ActionResult GetEvents() {
-            using (CalendarDataModel dc = new CalendarDataModel()) {
+            using (ApplicationDbContext dc = new ApplicationDbContext()) {
                 var events = dc.CalendarEvents.ToList();
                 return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
         }
         [HttpPost]
-        public JsonResult SaveEvent(CalendarEvents e) {
+        public async Task<JsonResult> SaveEvent(CalendarEvent e) {
             var status = false;
-            using (CalendarDataModel dc = new CalendarDataModel()) {
+            using (ApplicationDbContext dc = new ApplicationDbContext()) {
                 if (e.EventId > 0) {
                     //Update the event
                     var v = dc.CalendarEvents.Where(a => a.EventId == e.EventId).FirstOrDefault();
@@ -41,7 +44,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 } else {
                     dc.CalendarEvents.Add(e);
                 }
-                dc.SaveChanges();
+                await dc.SaveChangesAsync();
                 status = true;
             }
             return new JsonResult { Data = new { status = status } };
@@ -50,7 +53,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         [HttpPost]
         public JsonResult DeleteEvent(int eventID) {
             var status = false;
-            using (CalendarDataModel dc = new CalendarDataModel()) {
+            using (ApplicationDbContext dc = new ApplicationDbContext()) {
                 var v = dc.CalendarEvents.Where(a => a.EventId == eventID).FirstOrDefault();
                 if (v != null) {
                     dc.CalendarEvents.Remove(v);
