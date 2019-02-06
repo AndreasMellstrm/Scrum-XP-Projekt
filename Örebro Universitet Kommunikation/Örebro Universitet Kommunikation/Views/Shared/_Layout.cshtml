@@ -27,8 +27,8 @@
                     @if (Request.IsAuthenticated) {
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                         <li>@Html.ActionLink("Kalender", "Index", "Calendar")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        Html.RenderAction("_LoginPartial", "Account");
+                        <li>@Html.ActionLink("Forskning", "Index", "ResearchBlog")</li>
+                        
                     }
                 </ul>
                     @{Html.RenderAction("_LoginPartial", "Account");}
