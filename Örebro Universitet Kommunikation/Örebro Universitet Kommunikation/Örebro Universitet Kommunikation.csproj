@@ -208,6 +208,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\EducationBlogController.cs" />
     <Compile Include="Controllers\NotificationControllers.cs" />
     <Compile Include="Controllers\FormalBlogController.cs" />
     <Compile Include="Controllers\AdminToolController.cs" />
@@ -250,8 +251,11 @@
     <Compile Include="Models\AdminToolViewModels.cs" />
     <Compile Include="Models\CalendarViewModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
+    <Compile Include="Models\CreateEducationViewModel.cs" />
     <Compile Include="Models\CreateEntryViewModel.cs" />
     <Compile Include="Models\CreateResearchViewModel.cs" />
+    <Compile Include="Models\EducationBlogModel.cs" />
+    <Compile Include="Models\EducationBlogViewModel.cs" />
     <Compile Include="Models\FormalBlogCommentsModel.cs" />
     <Compile Include="Models\FormalBlogCommentsViewModel.cs" />
     <Compile Include="Models\FormalBlogEntry.cs" />
@@ -265,6 +269,7 @@
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Models\EducationBlogViewModelBKP.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -361,6 +366,8 @@
     <Content Include="Views\ResearchBlog\Index.cshtml" />
     <Content Include="Views\AdminTool\AsignUserToProject.cshtml" />
     <Content Include="Views\ResearchBlog\CreateEntry.cshtml" />
+    <Content Include="Views\EducationBlog\Index.cshtml" />
+    <Content Include="Views\EducationBlog\CreateEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
