@@ -1,0 +1,47 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.EducationBlogCommentsViewModel
+@{
+    /**/
+    ViewBag.Title = "ShowComments";
+}
+@using (Html.BeginForm("WriteComment", "EducationBlog", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="jumbotron">
+        <h1 class"display-4">@Model.Title</h1>
+        <h6>@Model.CreatorFirstName @Model.CreatorLastName <i>(@Model.CreatorMail)</i></h6>
+        <p>@Model.Content</p>
+        <ul class="list-inline list-unstyled">
+            <li><span><i class="glyphicon glyphicon-calendar"></i>@Model.Date</span></li> 
+            <li>|</li>
+            @if (Model.AttachedFile != null)
+            {
+                <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@Model.AttachedFile"> Ladda ned fil </a></li>
+            }
+        </ul>
+    </div>
+    if (Model.Comments.Any())
+    {
+        foreach (var c in Model.Comments)
+        {
+            <div class="well">
+                <div class="media">
+                    <div class="media-body">
+                        <h4 class="media-heading">@c.FirstName @c.LastName (@c.Email)</h4>
+                        <p>@c.Content</p>
+                        <span><i class="glyphicon glyphicon-calendar"></i> @c.Time</span>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    <div class="form-group">
+        @Html.TextAreaFor(model => model.CommentContent, new { @class = "form-control", @rows = "3", required = "required" })
+        @Html.ValidationMessageFor(model => model.CommentContent, "", new { @class = "text-danger" })
+        @Html.HiddenFor(b => b.BlogId)
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Skapa kommentar" class="btn btn-success" />
+    </div>
+}
+
+

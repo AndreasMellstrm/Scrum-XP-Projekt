@@ -94,5 +94,60 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 return null;
             }
         }
+        public ActionResult WriteComment(EducationBlogCommentsViewModel newComment)
+        {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            Ctx.EducationBlogComments.Add(new EducationBlogCommentsModel
+            {
+                BlogId = newComment.BlogId,
+                Content = newComment.CommentContent,
+                Time = DateTime.Now,
+                CreatorId = currentUser.Id
+            });
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowComments", new { newComment.BlogId });
+        }
+        public async Task<ActionResult> ShowComments(int BlogId)
+        {
+            var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == BlogId);
+            if (BlogEntry != null)
+            {
+                var CommentList = Ctx.EducationBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
+                var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
+                List<EducationComment> Comments = new List<EducationComment>();
+                foreach (var c in CommentList)
+                {
+                    var User = await UserManager.FindByIdAsync(c.CreatorId);
+
+                    var CommentItem = new EducationComment
+                    {
+                        Content = c.Content,
+                        Time = c.Time,
+                        Email = User.Email,
+                        FirstName = User.FirstName,
+                        LastName = User.LastName
+
+                    };
+                    Comments.Add(CommentItem);
+                }
+                return View(new EducationBlogCommentsViewModel
+                {
+                    AttachedFile = BlogEntry.AttachedFile,
+                    BlogId = BlogEntry.Id,
+                    
+                    Comments = Comments,
+                    Content = BlogEntry.Content,
+                    Date = BlogEntry.Time,
+                    Title = BlogEntry.Title,
+                    CreatorMail = BloggUser.Email,
+                    CreatorFirstName = BloggUser.FirstName,
+                    CreatorLastName = BloggUser.LastName
+
+                });
+            }
+            return RedirectToAction("Index", "EducationBlog");
+        }
     }
+
 }

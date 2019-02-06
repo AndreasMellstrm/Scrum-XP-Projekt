@@ -5,22 +5,39 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
         @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-            </li>
-            @if (Model.Admin) {
-                <li>
-                    @Html.ActionLink("Administratörsverktyg", "Index", "AdminTool", new { Model.Id }, null)
-                </li>
-            }
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-        </ul>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle mr-lg-2" id="contactsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-fw fa-bell"></i>
+            <span class="d-lg-none">
+                Inbjudningar
+                <span class="badge badge-pill badge-warning">1 new</span>
+            </span>
+            <span class="indicator text-warning d-none d-lg-block">
+                <i class="fa fa-fw fa-circle"></i>
+            </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" style="min-width: 300px;" aria-labelledby="contactsDropdown">
+            <h6 class="dropdown-header">Inbjudningar:</h6>
+            <div class="dropdown-divider"></div>
+            
+        </div>
+    </li>
+    @if (Model.Admin) {
+        <li>
+            @Html.ActionLink("Administratörsverktyg", "Index", "AdminTool", new { Model.Id }, null)
+        </li>
+    }
+    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+</ul>
     }
 }
 else {
     <ul class="nav navbar-nav navbar-right">
-        @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })<*@/li>
+        @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
