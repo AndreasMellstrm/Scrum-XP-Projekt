@@ -3,11 +3,11 @@
     ViewBag.Title = "AsignUserToProject";
 }
 
-<h2>AsignUserToProject</h2>
+<h2>Lägg till i forskningsprojekt</h2>
 
 @using (Html.BeginForm("AsignUserToProject", "AdminTool", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
     @Html.AntiForgeryToken()
-    <h4>Skapa en ny kategori.</h4>
+    <h4>Tilldela en användare ett forskningsprojekt.</h4>
     <hr />
     if (Model.ErrorMessage == "") {
         <label class="hidden" role="alert">@Model.ErrorMessage</label>
@@ -23,7 +23,7 @@
     <div class="form-group">
         @Html.Label("Användare:", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.UserId, new SelectList(Model.UserList, "Id", "Email", new { @class = "form-control" }))
+            @Html.DropDownListFor(m => m.UserId, new SelectList(Model.UserList, "Id", "Email"), new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">

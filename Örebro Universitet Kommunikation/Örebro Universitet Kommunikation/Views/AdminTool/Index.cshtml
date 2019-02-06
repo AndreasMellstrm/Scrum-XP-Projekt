@@ -14,6 +14,9 @@
         <div class="btn">
             @Html.ActionLink("Skapa nytt forskningsprojekt", "CreateProject", "AdminTool", new { Model.Id }, new { @class = "btn btn-primary" })
         </div>
+        <div class="btn">
+            @Html.ActionLink("Lägg till användare i projekt", "AsignUserToProject", "AdminTool", new { Model.Id }, new { @class = "btn btn-primary" })
+        </div>
     </div>
 </div>
 
