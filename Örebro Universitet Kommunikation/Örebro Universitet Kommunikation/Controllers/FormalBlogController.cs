@@ -124,8 +124,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             );
             Ctx.SaveChanges();
             var EmailRecipients = (from U in Ctx.Users
-                                   where U.Notifications == "Email"
-                                   || U.Notifications == "EmailSms"
+                                   where U.Notifications == "Blog"
+                                   || U.Notifications == "BlogEvent"
                                    where U.Id != user.Id
                                    select U).ToList();
             string subject = "Nytt inlägg från " + user.FirstName + ".";
