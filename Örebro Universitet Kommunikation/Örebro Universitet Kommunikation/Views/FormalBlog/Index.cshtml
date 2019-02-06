@@ -8,10 +8,13 @@
 
     <div class="container">
         <h2 class="formal-blog-header"> Formell Blogg</h2>
-        @Html.ActionLink("Nytt Inlägg", "CreateEntry", "FormalBlog")
-
+        <div class="btn">
+            @Html.ActionLink("Skapa nytt inlägg", "CreateEntry", "FormalBlog", new { @class = "btn btn-primary" })
+        </div>
+        <div>
+            @{Html.RenderAction("_SearchAndFilterPartial", "FormalBlog"); }
+        </div>
     </div>
-    @{Html.RenderAction("_SearchAndFilterPartial", "FormalBlog"); }
 
 @foreach (var item in Model.FormalBlogItems) {
     <div class="well">
