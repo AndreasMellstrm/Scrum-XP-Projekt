@@ -319,6 +319,7 @@
     <Content Include="Views\ResearchBlog\ShowResearch.cshtml" />
     <Content Include="Views\ResearchBlog\Index.cshtml" />
     <Content Include="Views\AdminTool\AsignUserToProject.cshtml" />
+    <Content Include="Views\ResearchBlog\CreateEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -39,7 +39,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         public async Task<ActionResult> ShowResearch(int ResearchProject) {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == ResearchProject);
-
+            bool canCreate = false;
+            if(ResearchProject == currentUser.Project.ProjectId) { canCreate = true; }
             List<ResearchBlogItem> researchList = new List<ResearchBlogItem>();
             bool canEdit = false;
             var ResearchList = Ctx.ResearchBlogs.Where(c => c.ProjectId == ResearchProject);
@@ -64,7 +65,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             }
             researchList.OrderByDescending(r => r.Date);
 
-            return View(new ResearchBlogViewModel { ResearchBlogList = researchList, ResearchName = currentProject.ProjectName });
+            return View(new ResearchBlogViewModel { ResearchBlogList = researchList, ResearchName = currentProject.ProjectName, CanCreateEntry = canCreate });
         }
         
         public ActionResult CreateEntry()
@@ -81,7 +82,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             Ctx.ResearchBlogs.Add(new ResearchBlogModel
             {
                 AttachedFile = fileString,
-                ProjectId = model.ProjectId,
+                ProjectId = user.Project.ProjectId,
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,
                 Content = model.Content,
@@ -101,7 +102,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             //    var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210", appUser.Email);
             //    emailHelper.SendEMail(appUser.Email, subject, emailText);
             //}
-            return RedirectToAction("ShowResearch", "ResearchBlog", model.ProjectId);
+            return RedirectToAction("ShowResearch", new { ResearchProject = user.Project.ProjectId });
           
         }
         public string FileUpload(HttpPostedFileBase File)
