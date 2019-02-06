@@ -9,9 +9,9 @@
 <div class="jumbotron">
 
     <div class="container">
-        
+        @if (Model.CanCreateEntry) { 
         @Html.ActionLink("Nytt Inlägg", "CreateEntry", "ResearchBlog")
-
+        }
     </div>
     
     @foreach (var item in Model.ResearchBlogList) {
