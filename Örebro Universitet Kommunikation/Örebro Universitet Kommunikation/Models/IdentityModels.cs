@@ -16,6 +16,8 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Position { get; set; }
         [DefaultValue("None")]
         public string Notifications { get; set; }
+        public virtual ProjectModel Project { get; set; }
+        
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {
@@ -30,6 +32,8 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<FormalBlogEntry> FormalBlogEntries { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<FormalBlogCommentsModel> BlogComments { get; set; }
+        public DbSet<ResearchBlogModel> ResearchBlogs { get; set; }
+        public DbSet<ProjectModel> Projects { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {

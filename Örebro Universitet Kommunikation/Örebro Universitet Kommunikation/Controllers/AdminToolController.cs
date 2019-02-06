@@ -104,10 +104,57 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             catch {
 
-                var ErrorMessageFail = "Skapandet av " + model.CategoryName + " misslyckades.";
+                var ErrorMessageFail = "Skapandet av kategorin: " + model.CategoryName + " misslyckades.";
                 return View(new CreateCategoryViewModel(ErrorMessageFail));
             }
             return View();
+        }
+
+        public async Task<ActionResult> CreateProject(string Id) {
+            if (await IsAdmin(Id)) {
+                return View(new CreateProjectViewModel{
+                    ErrorMessage = ""
+                    });
+            }
+            return RedirectToAction("Index", "FormalBlog");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateProject(CreateProjectViewModel model) {
+            var Project = new ProjectModel {
+                ProjectName = model.ProjectName
+            };
+            try {
+                Ctx.Projects.Add(Project);
+                var result = await Ctx.SaveChangesAsync();
+                if (result > 0) {
+                    ModelState.Clear();
+                    var ErrorMessageSuccess = "Projektet " + model.ProjectName + " har skapats";
+                    return View(new CreateProjectViewModel {
+                        ErrorMessage = ErrorMessageSuccess
+                    });
+                }
+            }
+            catch {
+                var ErrorMessageFail = "Skapandet av projektet: " + model.ProjectName + " misslyckades.";
+                return View(new CreateProjectViewModel{
+                    ErrorMessage = ErrorMessageFail
+                });
+            }
+            return View();
+        }
+
+        public ActionResult AsignUserToProject() {
+            List<ApplicationUser> UserList = (from u in Ctx.Users
+                                              select u).ToList();
+            List<ProjectModel> ProjectList = (from p in Ctx.Projects
+                                              select p).ToList();
+            return View(new AsignUserToProjectViewModel{
+                UserList = UserList,
+                ProjectList = ProjectList,
+                ErrorMessage = ""
+                    });
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.CreateProjectViewModel
+
+@{
+    ViewBag.Title = "CreateProject";
+}
+
+<h2>Lägg till ett nytt forskningsprojekt.</h2>
+
+@using (Html.BeginForm("CreateProject", "AdminTool", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+    @Html.AntiForgeryToken()
+    <h4>Skapa ett nytt forskningsprojekt.</h4>
+    <hr />
+    if (Model.ErrorMessage == "") {
+        <label class="hidden" role="alert">@Model.ErrorMessage</label>
+    }
+    else if (Model.ErrorMessage.StartsWith("Projektet")) {
+        <label class="alert alert-success" role="alert">@Model.ErrorMessage</label>
+    }
+    else {
+        <label class="alert alert-danger" role="alert">@Model.ErrorMessage</label>
+    }
+    
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.ProjectName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Register" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

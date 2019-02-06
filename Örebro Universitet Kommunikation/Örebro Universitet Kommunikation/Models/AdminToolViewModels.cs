@@ -81,4 +81,25 @@ namespace Örebro_Universitet_Kommunikation.Models {
             this.ErrorMessage = ErrorMessage;
         }
     }
+
+    public class CreateProjectViewModel {
+
+        [Required]
+        [RegularExpression("([a-öA-Ö0-9/s.&'-]+)", ErrorMessage = "Vänligen använd endast giltiga tecken")]
+        [Display(Name = "Namn")]
+        public string ProjectName { get; set; }
+        
+        public string ErrorMessage { get; set; }
+
+    }
+
+    public class AsignUserToProjectViewModel {
+        
+        public List<ProjectModel> ProjectList { get; set; }
+        public List<ApplicationUser> UserList { get; set; }
+        public int ProjectId { get; set; }
+        public string UserId { get; set; }
+        public string ErrorMessage { get; set; }
+
+    }
 }

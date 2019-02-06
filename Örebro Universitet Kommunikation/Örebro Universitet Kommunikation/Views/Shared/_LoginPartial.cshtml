@@ -7,11 +7,11 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
             </li>
             @if (Model.Admin) {
                 <li>
-                    @Html.ActionLink("Administratörsverktyg", "Index", "AdminTool", new { Model.Id }, null);
+                    @Html.ActionLink("Administratörsverktyg", "Index", "AdminTool", new { Model.Id }, null)
                 </li>
             }
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>

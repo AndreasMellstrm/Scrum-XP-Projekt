@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
-using Örebro_Universitet_Kommunikation.Models;
 using System.Data.Entity;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
@@ -65,12 +64,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var currentUserId = currentUser.Id;
-            bool CanDelete = false;
             var CurrentUserAdmin = currentUser.Admin;
 
             foreach (var item in BlogEntries) {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
-
+                bool CanDelete = false;
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
                 }
@@ -102,7 +100,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
             List<string> CategoryListName = new List<string>();
             foreach (var c in CategoryList) {
-
                 CategoryListName.Add(c.CategoryName);
             }
             var Id = User.Identity.GetUserId();
