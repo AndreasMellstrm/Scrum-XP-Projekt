@@ -375,6 +375,8 @@
     <Content Include="Views\EducationBlog\CreateEntry.cshtml" />
     <Content Include="Views\EducationBlog\ShowComments.cshtml" />
     <Content Include="Views\ResearchBlog\ShowComments.cshtml" />
+    <Content Include="Views\AdminTool\EditUser.cshtml" />
+    <Content Include="Views\AdminTool\_EditUserPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
