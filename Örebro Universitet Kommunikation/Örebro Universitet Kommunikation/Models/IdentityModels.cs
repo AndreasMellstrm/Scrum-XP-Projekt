@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [DefaultValue("None")]
         public string Notifications { get; set; }
         public virtual ProjectModel Project { get; set; }
+        public virtual ICollection<CalendarEvent> Events { get; set; }
         
 
 

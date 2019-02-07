@@ -1,25 +1,26 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Örebro_Universitet_Kommunikation.Models
 @model SearchViewModel
+    @{ Layout = null;}
 
 @if (Request.IsAuthenticated) {
     using (Html.BeginForm("_SearchAndFilterPartial", "FormalBlog", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" })) {
         @Html.AntiForgeryToken()
 
-        <div class="col-md-10">
-
-            @Html.Label("Sök", new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.SearchString, new { @class = "form-control" })
+        <div>
+            <div>
+                @Html.TextBoxFor(m => m.SearchString, new { @placeholder = "Sök...", @class = "form-control" })
             </div>
-
-            @Html.Label("Kategori", new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
+            <br />
+            <div>
                 @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryList, "Välj en kategori"), new { @class = "form-control" })
             </div>
+            <br />
         </div>
-        <div class="col-md-12">
+        <div>
             <input type="submit" value="Sök & filtrera" class="btn btn-success" />
+            @Html.ActionLink("Skapa nytt inlägg", "CreateEntry", "FormalBlog", new { @class = "btn btn-primary" })
         </div>
+        <br />
     }
 }
