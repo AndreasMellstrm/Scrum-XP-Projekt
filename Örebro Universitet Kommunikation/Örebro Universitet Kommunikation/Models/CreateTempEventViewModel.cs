@@ -11,7 +11,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public List<SelectListItem> NewList { get; set; }
         public List<String> ListToSend { get; set; }
         [Required]
-        [StringLength(100, ErrorMessage = "Ditt {0} måste vara minst {2} tecken.", MinimumLength = 3)]
+        [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
         [Display(Name = "Ämne")]
         public string Title { get; set; }
         [Required]
