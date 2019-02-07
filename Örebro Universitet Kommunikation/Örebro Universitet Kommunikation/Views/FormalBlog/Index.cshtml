@@ -8,9 +8,6 @@
 
     <div class="container">
         <h2 class="formal-blog-header"> Formell Blogg</h2>
-        <div class="btn">
-            @Html.ActionLink("Skapa nytt inlägg", "CreateEntry", "FormalBlog", new { @class = "btn btn-primary" })
-        </div>
         <div>
             @{Html.RenderAction("_SearchAndFilterPartial", "FormalBlog"); }
         </div>
