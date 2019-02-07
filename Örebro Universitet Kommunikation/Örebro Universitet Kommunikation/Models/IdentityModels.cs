@@ -40,6 +40,10 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<EducationBlogCommentsModel> EducationBlogComments { get; set; }
         public DbSet<ResearchBlogCommentsModel> ResearchBlogComments { get; set; }
+        public DbSet<TempEventModel> TempEvents { get; set; }
+        public DbSet<TempEventSuggestionModel> TempEventSuggestions { get; set; }
+        public DbSet<TempEventTimeModel> TempEventTimes { get; set; }
+        public DbSet<TempEventUserModel> TempEventUsers { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
 
