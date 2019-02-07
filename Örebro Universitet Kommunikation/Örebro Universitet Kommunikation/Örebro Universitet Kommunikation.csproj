@@ -256,6 +256,7 @@
     <Compile Include="Models\CreateEducationViewModel.cs" />
     <Compile Include="Models\CreateEntryViewModel.cs" />
     <Compile Include="Models\CreateResearchViewModel.cs" />
+    <Compile Include="Models\CreateTempEventViewModel.cs" />
     <Compile Include="Models\EducationBlogModel.cs" />
     <Compile Include="Models\EducationBlogViewModel.cs" />
     <Compile Include="Models\EducationBlogCommentsModel.cs" />
@@ -273,6 +274,10 @@
     <Compile Include="Models\ResearchBlogModel.cs" />
     <Compile Include="Models\ResearchBlogViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\TempEventModel.cs" />
+    <Compile Include="Models\TempEventSuggestionModel.cs" />
+    <Compile Include="Models\TempEventTimeModel.cs" />
+    <Compile Include="Models\TempEventUserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -375,6 +380,7 @@
     <Content Include="Views\EducationBlog\CreateEntry.cshtml" />
     <Content Include="Views\EducationBlog\ShowComments.cshtml" />
     <Content Include="Views\ResearchBlog\ShowComments.cshtml" />
+    <Content Include="Views\Calendar\CreateTempEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
