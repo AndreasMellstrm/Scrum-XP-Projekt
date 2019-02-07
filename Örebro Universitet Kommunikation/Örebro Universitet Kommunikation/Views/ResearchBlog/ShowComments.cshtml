@@ -3,26 +3,29 @@
     /**/
     ViewBag.Title = "Visa kommentarer";
 }
-@using (Html.BeginForm("WriteComment", "ResearchBlog", FormMethod.Post))
-{
+@using (Html.BeginForm("WriteComment", "ResearchBlog", FormMethod.Post)) {
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Html.ActionLink("Forskning", "Index", "ResearchBlog", null)</li>
+            <li class="breadcrumb-item">@Html.ActionLink(@Model.ProjectName, "ShowResearch", "ResearchBlog", new { ResearchProject = @Model.ProjectId }, null)</li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+        </ol>
+    </nav>
     @Html.AntiForgeryToken()
-    <div class="jumbotron">
+    <div class="well">
         <h1 class"display-4">@Model.Title</h1>
         <h6>@Model.CreatorFirstName @Model.CreatorLastName <i>(@Model.CreatorMail)</i></h6>
         <p>@Model.Content</p>
         <ul class="list-inline list-unstyled">
             <li><span><i class="glyphicon glyphicon-calendar"></i>@Model.Date</span></li>
             <li>|</li>
-            @if (Model.AttachedFile != null)
-            {
+            @if (Model.AttachedFile != null) {
                 <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@Model.AttachedFile"> Ladda ned fil </a></li>
             }
         </ul>
     </div>
-    if (Model.Comments.Any())
-    {
-        foreach (var c in Model.Comments)
-        {
+    if (Model.Comments.Any()) {
+        foreach (var c in Model.Comments) {
             <div class="well">
                 <div class="media">
                     <div class="media-body">

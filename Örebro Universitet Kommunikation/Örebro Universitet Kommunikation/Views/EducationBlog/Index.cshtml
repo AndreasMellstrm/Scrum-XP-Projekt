@@ -1,41 +1,40 @@
 ﻿@model Örebro_Universitet_Kommunikation.Models.EducationBlogViewModel
 
-@{ 
+@{
     ViewBag.Titel = "Utbildning";
 }
 @*<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">@Html.ActionLink("Utbildning", "Index", "EducationBlog", null)</li>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Html.ActionLink("Utbildning", "Index", "EducationBlog", null)</li>
 
-        <li class="breadcrumb-item active" aria-current="page">@Model.ResearchName</li>
-    </ol>
-</nav>*@
-<div class="jumbotron">
-
-    <div class="container">
-        @Html.ActionLink("Nytt Inlägg", "CreateEntry", "EducationBlog")
-    </div>
-    @foreach (var item in Model.EducationBlogList) {
-            <h1 class"display-4">@item.Title</h1>
-                        <p>@item.Content</p>
-                        <ul class="list-inline list-unstyled">
-                            <li><span><i class="glyphicon glyphicon-user"></i> @item.CreatorFirstName @item.CreatorLastName <i> @item.CreatorMail</i></span></li>
-                            <li>|</li>
-                            <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
-                            <li>|</li>
-                            <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "EducationBlog", new { BlogId = item.Id }, null)</span></li>
-                            @if (item.AttachedFile != null) {
-                                <li>|</li>
-                                <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>
-                            }
-                            @*@if (item.CanDelete) {
-                                <li>|</li>
-                                <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
-                                <li>|</li>
-                                <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
-                            }*@
-                        </ul>
-
+            <li class="breadcrumb-item active" aria-current="page">@Model.ResearchName</li>
+        </ol>
+    </nav>*@
+@foreach (var item in Model.EducationBlogList) {
+    <div class="well">
+        <h4 class="media-heading">@item.Title</h4>
+                <p>@item.Content</p>
+                <ul class="list-inline list-unstyled">
+                    <li><span><i class="glyphicon glyphicon-user"></i> @item.CreatorFirstName @item.CreatorLastName <i> @item.CreatorMail</i></span></li>
+                    <li>|</li>
+                    <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
+                    <li>|</li>
+                    <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "EducationBlog", new { BlogId = item.Id }, null)</span></li>
+                    @if (item.AttachedFile != null) {
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>
                     }
+                    @*@if (item.CanDelete) {
+                    <li>|</li>
+                    <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                    <li>|</li>
+                    <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                }*@
+                </ul>
 </div>
 
+        }
+
+    <div class="container">
+        @Html.ActionLink("Nytt Inlägg", "CreateEntry", "EducationBlog", new { @class = "btn btn-primary" })
+    </div>

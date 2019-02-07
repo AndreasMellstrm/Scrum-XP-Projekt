@@ -10,5 +10,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
     public class ProjectItem {
         public int Id { get; set; }
         public string ProjectName { get; set; }
+        public int BlogAmount { get; set; }
+        public bool IsMember { get; set; }
     }
 }
