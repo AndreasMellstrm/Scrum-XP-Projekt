@@ -1,0 +1,77 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.ShowTempEventViewModel
+@*@{
+    ViewBag.Title =  "Temporärt event";
+}*@
+
+@using (Html.BeginForm("InviteTempEvent", "Calendar", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <h2>Temporärt event du är inbjuden till</h2>
+    <p class="lead">Välj de tider då du kan närvara vid eventet</p>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div class="form-group">
+            <h4>Skapare</h4>
+            <div>
+                <p>
+                    @Model.Creator
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <h4>Titel</h4>
+            @*@Html.LabelFor(m => m.Title, new { @class = "control-label col-md-2" })*@
+            <div>
+                <p>
+                    @Model.Title
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <h4>Beskrivning</h4>
+            @*@Html.LabelFor(m => m.Content, new { @class = "control-label col-md-2" })*@
+            <div>
+                <p>
+                    @Model.Content
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(m => m.Suggestion1, new { @class = "control-label col-md-2" })*@
+            <div class="col-md-10">
+                <p>
+                    @if (Model.Suggestion1 != null) {
+                        @Html.CheckBoxFor(m => m.s1)@Html.Label(Model.Suggestion1)
+                    }
+                </p>
+                <p>
+                    @if (Model.Suggestion2 != null) {
+                        @Html.CheckBoxFor(m => m.s2)@Html.Label(Model.Suggestion2)
+                    }
+                </p>
+                <p>
+                    @if (Model.Suggestion3 != null) {
+                        @Html.CheckBoxFor(m => m.s3)@Html.Label(Model.Suggestion3)
+                    }
+                </p>
+                <p>
+                    @if (Model.Suggestion4 != null) {
+                        @Html.CheckBoxFor(m => m.s4)@Html.Label(Model.Suggestion4)
+                    }
+                </p>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.SId1)
+        @Html.HiddenFor(m => m.SId2)
+        @Html.HiddenFor(m => m.SId3)
+        @Html.HiddenFor(m => m.SId4)
+        @Html.HiddenFor(m => m.TempEventId)
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" class="btn btn-primary" value="Skapa" />
+            </div>
+        </div>
+    </div>
+}
+

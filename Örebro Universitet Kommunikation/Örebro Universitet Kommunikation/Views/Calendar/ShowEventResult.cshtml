@@ -1,0 +1,20 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.ShowResultEventViewModel
+@{
+    ViewBag.Title = "ShowEventResult";
+}
+
+<h2>ShowEventResult</h2>
+@Model.Title <br />
+@Model.Description <br />
+@if (Model.S1Name != null) {
+    <p>@Model.S1Name (@Model.S1Result)</p>
+}
+@if (Model.S2Name != null) {
+    <p>@Model.S2Name (@Model.S2Result)</p>
+}
+@if (Model.S3Name != null) {
+    <p>@Model.S3Name (@Model.S3Result)</p>
+}
+@if (Model.S4Name != null) {
+    <p>@Model.S4Name (@Model.S4Result)</p>
+}
