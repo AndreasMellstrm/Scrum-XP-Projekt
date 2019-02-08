@@ -157,12 +157,38 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             Ctx.SaveChanges();
             return RedirectToAction("Index");
         }
-        public  ActionResult InviteTempEvent()
+        public  ActionResult InviteTempEvent(int TEI)
         {
             var CurrentUserId = User.Identity.GetUserId();
-            var TempInviteList = ()
+            var EventSuggestions = Ctx.TempEventSuggestions.Where(s => s.TempEvenId == TEI).ToList();
+            string Sg1 = null;
+            string Sg2 = null;
+            string Sg3 = null;
+            string Sg4 = null;
+            if(EventSuggestions.Count() != 0) { 
+                var Sg1obj = EventSuggestions.ElementAt(0);
+                Sg1 = Sg1obj.Suggestion;
+                if(EventSuggestions.Count() > 1) {
+                    var Sg2obj = EventSuggestions.ElementAt(1);
+                    Sg2 = Sg2obj.Suggestion;
+                }
+                if (EventSuggestions.Count() > 2) {
+                    var Sg3obj = EventSuggestions.ElementAt(2);
+                    Sg3 = Sg3obj.Suggestion;
+                }
+                if (EventSuggestions.Count() > 3) {
+                    var Sg4obj = EventSuggestions.ElementAt(3);
+                    Sg4 = Sg4obj.Suggestion;
+                }
+            }
+            var EventInfo = Ctx.TempEvents.FirstOrDefault(e => e.Id == TEI);
+            var Creator = UserManager.FindById(EventInfo.CreatorId);
+            var CreatorName = Creator.FirstName + " " + Creator.LastName + " (" + Creator.Email + ")";
 
-            return View();
+
+            return View(new ShowTempEventViewModel {Suggestion1 = Sg1, Suggestion2 = Sg2,
+                Suggestion3 = Sg3, Suggestion4 = Sg4,
+                Creator = CreatorName, Title = EventInfo.Title, Content = EventInfo.Description});
         }
     }
 }
