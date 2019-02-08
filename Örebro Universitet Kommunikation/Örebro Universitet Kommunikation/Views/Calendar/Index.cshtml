@@ -1,4 +1,4 @@
-﻿
+﻿@model Örebro_Universitet_Kommunikation.Models.CalendarEvent
 
 
 
@@ -17,12 +17,15 @@
                 <h4 class="modal-title"><span id="eventTitle"></span></h4>
             </div>
             <div class="modal-body">
+                
+                
                 <button id="btnDelete" class="btn btn-default btn-sm pull-right">
                     <span class="glyphicon glyphicon-remove"></span> Remove
                 </button>
+
                 <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px;">
                     <span class="glyphicon glyphicon-pencil"></span> Edit
-                </button>
+                </button>} 
                 <p id="pDetails"></p>
             </div>
             <div class="modal-footer">
@@ -115,7 +118,7 @@
                     success: function (data) {
                         $.each(data, function (i, v) {
                             events.push({
-                                EventId: v.EventId,
+                                eventId: v.EventId,
                                 title: v.Title,
                                 description: v.Desc,
                                 start: moment(v.Start),
@@ -198,7 +201,7 @@
                     $.ajax({
                         type: "POST",
                         url: '/calendar/DeleteEvent',
-                        data: { 'EventId': selectedEvent.EventId },
+                        data: { 'EventId': selectedEvent.eventId },
                         success: function (data) {
                             if (data.status) {
                                 //Refresh the calender
@@ -232,8 +235,9 @@
                     $('#chkIsFullDay').change();
                     $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('YYYY/MM/DD HH:mm A') : '');
                     $('#txtDescription').val(selectedEvent.description);
-                    $('#ddThemeColor').val(selectedEvent.color);
+                    $('#ddThemeColor').val(selectedEvent.color);     
                 }
+                
                 $('#myModal').modal('hide');
                 $('#myModalSave').modal();
             }
