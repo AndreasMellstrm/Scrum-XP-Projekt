@@ -123,17 +123,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             );
             Ctx.SaveChanges();
-            var EmailRecipients = (from U in Ctx.Users
-                                   where U.Notifications == "Blog"
-                                   || U.Notifications == "BlogEvent"
-                                   where U.Id != user.Id
-                                   select U).ToList();
             string subject = "Nytt inlägg från " + user.FirstName + ".";
             string emailText = "Inlägg med rubrik: " + model.Title + " finns nu att läsa.";
-            foreach (var appUser in EmailRecipients) {
-                var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210", appUser.Email);
-                emailHelper.SendEMail(appUser.Email, subject, emailText);
-            }
+            var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210");
+            emailHelper.SendEmailFormalBlog(subject, emailText, user.Id);
             return RedirectToAction("Index", "FormalBlog");
         }
 

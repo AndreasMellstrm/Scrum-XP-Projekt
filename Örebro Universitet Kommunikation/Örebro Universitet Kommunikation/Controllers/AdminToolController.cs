@@ -197,12 +197,44 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult _EditUserPartial(string userId) {
             var user = UserManager.FindById(userId);
             return PartialView(new _EditUserPartialViewModel {
+                userId = user.Id,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 Position = user.Position,
                 ErrorMessage = ""
+            });
+        }
+
+        public async Task<ActionResult> SaveUserChanges(_EditUserPartialViewModel model) {
+            if (model.Password == null || model.Password == "") {
+                var user = UserManager.FindById(model.userId);
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Position = model.Position;
+                var ErrorMessage = "";
+            }
+            else {
+                var user = UserManager.FindById(model.userId);
+                await UserManager.ResetPasswordAsync(user.Id, await UserManager.GeneratePasswordResetTokenAsync(user.Id), model.Password);
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Position = model.Position;
+                var ErrorMessage = "";
+            }
+            var result = await Ctx.SaveChangesAsync();
+            if (result > 0) {
+                return RedirectToAction("EditUser","AdminTool", new _EditUserPartialViewModel {
+                    ErrorMessage = "Användaren har redigerats"
+                });
+            }
+            return RedirectToAction("EditUser", "AdminTool", new _EditUserPartialViewModel {
+                ErrorMessage = "Användaren har redigerats"
             });
         }
     }

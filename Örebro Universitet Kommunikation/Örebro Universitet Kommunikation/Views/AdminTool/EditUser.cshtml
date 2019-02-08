@@ -26,14 +26,13 @@
         @Scripts.Render("~/bundles/jqueryval")
         @Scripts.Render("~/bundles/jquery")
         <script>
-      
-		function ShowUserForm () {
-            $.get('@Url.Action("_EditUserPartial", "AdminTool", new { userId = "0222695a-b48c-41c7-bc4c-b705b42490e0" })', {}, function (response) {
+            $("#userlist").prepend("<option value='' disabled selected>Välj en användare...</option>");
+            function ShowUserForm() {
+                var userId = $("#userlist").val();
+            $.get('@Url.Action("_EditUserPartial", "AdminTool")',{ userId: userId }, function (response) {
 				$("#userForm").html(response);
-			});
-		}
-            
-        
+                });
+		    }
         </script>
     }
 }

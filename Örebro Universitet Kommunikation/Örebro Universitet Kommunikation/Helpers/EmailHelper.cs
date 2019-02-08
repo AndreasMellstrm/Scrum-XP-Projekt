@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Örebro_Universitet_Kommunikation.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,12 +16,14 @@ namespace Örebro_Universitet_Kommunikation.Helpers {
         private string senderAddress;
         private string clientAddress;
         private string netPassword;
-        public EmailHelper(string sender, string Password, string client) {
+        public ApplicationDbContext Ctx { get; set; }
+
+        public EmailHelper(string sender, string Password) {
             senderAddress = sender;
             netPassword = Password;
-            clientAddress = client;
+            Ctx = new ApplicationDbContext();
         }
-        public void SendEMail(string recipient, string subject, string message) {
+        public void SendEmail(string recipient, string subject, string message) {
             try {
                     var senderEmail = new MailAddress("orukommunikation@gmail.com", "Örebro Universitet-ish");
                     var receiverEmail = new MailAddress(recipient, "Receiver");
@@ -43,6 +46,28 @@ namespace Örebro_Universitet_Kommunikation.Helpers {
                     }
             }
             catch (Exception) {
+            }
+        }
+
+        public void SendEmailFormalBlog(string subject, string message, string userId) {
+            var users = (from u in Ctx.Users
+                         where u.Notifications == "BlogEvent"
+                         || u.Notifications == "Blog"
+                         where u.Id != userId
+                         select u).ToList();
+            foreach(var u in users) {
+                SendEmail(u.Email, subject, message);
+            }
+        }
+
+        public void SendEmailMeeting(string subject, string message, string userId) {
+            var users = (from u in Ctx.Users
+                         where u.Notifications == "BlogEvent"
+                         || u.Notifications == "Event"
+                         where u.Id != userId
+                         select u).ToList();
+            foreach(var u in users) {
+                SendEmail(u.Email, subject, message);
             }
         }
     }
