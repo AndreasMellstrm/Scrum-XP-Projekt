@@ -32,14 +32,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
         public List<ProjectModel> GetAllProjects() {
-            List<ProjectModel> ProjectList = (from p in Ctx.Projects
-                                              select p).ToList();
+            List<ProjectModel> ProjectList = Ctx.Projects.ToList();
             return ProjectList;
         }
 
         public List<ApplicationUser> GetAllUsers() {
-            List<ApplicationUser> UserList = (from u in Ctx.Users
-                                              select u).ToList();
+            List<ApplicationUser> UserList = Ctx.Users.ToList();
             return UserList;
         }
         
@@ -73,6 +71,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Position = model.Position,
+                    PhoneNumber = model.PhoneNumber,
                     Admin = model.Admin
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -185,6 +184,25 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 ProjectList = GetAllProjects(),
                 UserList = GetAllUsers(),
                 ErrorMessage = "Användaren kunde inte tilldelas projektet " + projects[0].ProjectName
+            });
+        }
+
+        public ActionResult EditUser() {
+            return View(new EditUserViewModel {
+                UserList = GetAllUsers(),
+                UserId = User.Identity.GetUserId()
+            });
+        }
+
+        public ActionResult _EditUserPartial(string userId) {
+            var user = UserManager.FindById(userId);
+            return PartialView(new _EditUserPartialViewModel {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                Position = user.Position,
+                ErrorMessage = ""
             });
         }
     }

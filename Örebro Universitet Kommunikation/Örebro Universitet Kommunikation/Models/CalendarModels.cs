@@ -16,6 +16,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string ThemeColor { get; set; }
         public bool IsFullDay { get; set; }
         public string CreatorId { get; set; }
+        public virtual ICollection<ApplicationUser> Users { get; set; }
     }
 
     

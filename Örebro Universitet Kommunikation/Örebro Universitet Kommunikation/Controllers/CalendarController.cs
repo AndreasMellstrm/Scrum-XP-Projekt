@@ -1,4 +1,6 @@
-﻿using Örebro_Universitet_Kommunikation.Models;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Örebro_Universitet_Kommunikation.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -95,7 +97,65 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             }
             return new JsonResult { Data = new { status = status } };
         }
+        public ActionResult CreateTempEvent() {
+            var listUsers = Ctx.Users.ToList();
+            List<SelectListItem> ListUsers = new List<SelectListItem>();
+            foreach (var u in listUsers) {
+                var UserItem = new SelectListItem {
+                    Value = u.Id,
+                    Text = u.FirstName + " " + u.LastName + " (" + u.Email + ")"
+                };
+                ListUsers.Add(UserItem);
+            }
 
-
+            return View(new CreateTempEventViewModel { NewList = ListUsers });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTempEvent(CreateTempEventViewModel m) {
+            var CurrentUserId = User.Identity.GetUserId();
+            // Create Event
+            Ctx.TempEvents.Add(new TempEventModel {
+                CreatorId = CurrentUserId,
+                Description = m.Content,
+                Title = m.Title
+            });
+            Ctx.SaveChanges();
+            var TempEvent = Ctx.TempEvents.ToList().Last();
+            // Create EventUsers
+            foreach (var u in m.ListToSend) {
+                Ctx.TempEventUsers.Add(new TempEventUserModel {
+                    TempEventId = TempEvent.Id,
+                    UserId = u
+                });
+            }
+            // Create EvenSuggestion
+            if (m.Suggestion1 != null) {
+                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                    Suggestion = m.Suggestion1,
+                    TempEvenId = TempEvent.Id
+                });
+            }
+            if (m.Suggestion2 != null) {
+                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                    Suggestion = m.Suggestion2,
+                    TempEvenId = TempEvent.Id
+                });
+            }
+            if (m.Suggestion3 != null) {
+                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                    Suggestion = m.Suggestion3,
+                    TempEvenId = TempEvent.Id
+                });
+            }
+            if (m.Suggestion4 != null) {
+                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                    Suggestion = m.Suggestion4,
+                    TempEvenId = TempEvent.Id
+                });
+            }
+            Ctx.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

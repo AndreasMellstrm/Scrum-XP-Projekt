@@ -1,0 +1,47 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.CreateTempEventViewModel
+@{
+    ViewBag.Title = "CreateTempEvent";
+}
+
+@using (Html.BeginForm("CreateTempEvent", "Calendar", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <h2>Skapa ett möte</h2>
+    <p class="lead">Här kan du bjuda in folk till möten. Ange några förslag på tider och välj de personer du vill skall närvara.</p>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control", @placeholder = "Skriv en rubrik" } })
+                @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Suggestion1, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.Suggestion1, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ge ett förslag på tid/datum", @required = "required" } })
+                @Html.EditorFor(m => m.Suggestion2, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ge ett förslag på tid/datum" } })
+                @Html.EditorFor(m => m.Suggestion3, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ge ett förslag på tid/datum" } })
+                @Html.EditorFor(m => m.Suggestion4, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ge ett förslag på tid/datum" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Content, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.Content, new { @class = "form-control", @placeholder = "Kort beskrivning om mötet.", @required = "required" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.NewList, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ListBoxFor(m => m.ListToSend, new SelectList(Model.NewList, "Value", "Text"), new { @class = "form-control", @required = "required" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" class="btn btn-primary" value="Skapa" />
+            </div>
+        </div>
+    </div>
+}

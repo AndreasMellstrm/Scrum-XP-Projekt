@@ -1,0 +1,40 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.EditUserViewModel
+
+@{
+    ViewBag.Title = "EditUser";
+}
+
+<h2>Redigera användarkonto</h2>
+
+@using (Html.BeginForm("EditUser", "AdminTool", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+    @Html.AntiForgeryToken()
+    <h4>Redigera ett användarkonto.</h4>
+    <hr />
+
+    <div class="col-md-10">
+        @{SelectList selectlist = new SelectList(Model.UserList, "Id", "Email");}
+        @Html.Label("Välj en användare")
+        @Html.DropDownListFor(m => m.UserId, selectlist, new { onchange="ShowUserForm()", @id = "userlist", @class = "form-control" })
+    </div>
+    <br />
+    <br />
+    <div id="userForm" class="form-group">
+
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jquery")
+        <script>
+      
+		function ShowUserForm () {
+            $.get('@Url.Action("_EditUserPartial", "AdminTool", new { userId = "0222695a-b48c-41c7-bc4c-b705b42490e0" })', {}, function (response) {
+				$("#userForm").html(response);
+			});
+		}
+            
+        
+        </script>
+    }
+}
+

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [DefaultValue("None")]
         public string Notifications { get; set; }
         public virtual ProjectModel Project { get; set; }
+        public virtual ICollection<CalendarEvent> Events { get; set; }
         
 
 
@@ -38,6 +40,10 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<EducationBlogCommentsModel> EducationBlogComments { get; set; }
         public DbSet<ResearchBlogCommentsModel> ResearchBlogComments { get; set; }
+        public DbSet<TempEventModel> TempEvents { get; set; }
+        public DbSet<TempEventSuggestionModel> TempEventSuggestions { get; set; }
+        public DbSet<TempEventTimeModel> TempEventTimes { get; set; }
+        public DbSet<TempEventUserModel> TempEventUsers { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
 

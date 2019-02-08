@@ -26,9 +26,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             List<EducationBlogItem> educationList = new List<EducationBlogItem>();
             foreach(var e in EducationBlog) {
                 var user = await UserManager.FindByIdAsync(e.CreatorId);
+                var comments = Ctx.EducationBlogComments.Where(b => b.BlogId == e.Id);
                 var item = new EducationBlogItem {
                     AttachedFile = e.AttachedFile,
                     Content = e.Content,
+                    Comments = comments.Count(),
                     Date = e.Time,
                     Id = e.Id,
                     CreatorId = e.CreatorId,
