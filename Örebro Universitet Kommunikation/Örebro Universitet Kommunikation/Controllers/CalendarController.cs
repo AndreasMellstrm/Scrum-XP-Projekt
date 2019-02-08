@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Threading;
 
 namespace Örebro_Universitet_Kommunikation.Controllers
 {
@@ -34,20 +35,25 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             return View();
         }
 
+        
         public ActionResult GetEvents() {
-            using (ApplicationDbContext dc = new ApplicationDbContext()) {
-                var events = dc.CalendarEvents.ToList();
-                return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            using (Ctx) {
+                var events = Ctx.CalendarEvents.ToList();
+                var result = new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                
+                return result;
             }
         }
         [HttpPost]
         public async Task<JsonResult> SaveEvent(CalendarEvent e) {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
+
             var currentUserId = currentUser.Id;
             var CurrentUserAdmin = currentUser.Admin;
             var events = Ctx.CalendarEvents.ToList();
 
+            
             foreach (var item in events)
             {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
@@ -57,7 +63,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     CanDelete = true;
                 }
             }
-
+            
 
 
             var status = false;
