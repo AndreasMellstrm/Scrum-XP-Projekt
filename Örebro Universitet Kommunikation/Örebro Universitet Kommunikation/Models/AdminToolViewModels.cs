@@ -88,13 +88,13 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [RegularExpression("([a-öA-Ö0-9/s.&'-]+)", ErrorMessage = "Vänligen använd endast giltiga tecken")]
         [Display(Name = "Namn")]
         public string ProjectName { get; set; }
-        
+
         public string ErrorMessage { get; set; }
 
     }
 
     public class AsignUserToProjectViewModel {
-        
+
         public List<ProjectModel> ProjectList { get; set; }
         public List<ApplicationUser> UserList { get; set; }
         public int ProjectId { get; set; }
@@ -109,6 +109,8 @@ namespace Örebro_Universitet_Kommunikation.Models {
     }
 
     public class _EditUserPartialViewModel {
+
+        public string userId { get; set; }
 
         [Required]
         [EmailAddress]

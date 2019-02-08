@@ -9,6 +9,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [Key]
         public int Id { get; set; }
         public string UserId { get; set; }
-        public int TempTimeId { get; set; }
+        public int TempEventId { get; set; }
+        public int SuggestionId { get; set; }
     }
 }
