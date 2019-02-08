@@ -129,5 +129,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             Ctx.SaveChanges();
             return RedirectToAction("Index");
         }
+        public  ActionResult InviteTempEvent()
+        {
+            var CurrentUserId = User.Identity.GetUserId();
+            var TempInviteList = ()
+
+            return View();
+        }
     }
 }
