@@ -92,12 +92,23 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
         [HttpPost]
         public JsonResult DeleteEvent(int eventID) {
-            var status = false;
-            using (ApplicationDbContext dc = new ApplicationDbContext()) {
-                var v = dc.CalendarEvents.Where(a => a.EventId == eventID).FirstOrDefault();
-                if (v != null) {
-                    dc.CalendarEvents.Remove(v);
-                    dc.SaveChanges();
+            UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+
+            var currentUserId = currentUser.Id;
+            var CurrentUserAdmin = currentUser.Admin;
+            var events = (from e in Ctx.CalendarEvents
+                          where e.EventId == eventID
+                          select e).ToList();
+            var creatorId = events[0].CreatorId;
+
+            bool status = false;
+
+            using (Ctx) {
+                var v = Ctx.CalendarEvents.Where(a => a.EventId == eventID).FirstOrDefault();
+                if (v != null && (currentUserId == creatorId || CurrentUserAdmin)) {
+                    Ctx.CalendarEvents.Remove(v);
+                    Ctx.SaveChanges();
                     status = true;
                 }
             }
