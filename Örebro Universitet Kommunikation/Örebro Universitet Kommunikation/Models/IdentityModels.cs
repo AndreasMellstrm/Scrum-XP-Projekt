@@ -46,9 +46,9 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<TempEventUserModel> TempEventUsers { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
+            Configuration.ProxyCreationEnabled = false;
 
 
-            
         }
 
         public static ApplicationDbContext Create() {
