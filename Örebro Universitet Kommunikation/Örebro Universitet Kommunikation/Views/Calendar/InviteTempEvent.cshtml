@@ -15,7 +15,7 @@
             <h4>Skapare</h4>
             <div>
                 <p>
-                   @Model.Creator
+                    @Model.Creator
                 </p>
             </div>
         </div>
@@ -66,8 +66,11 @@
                 </p>
             </div>
         </div>
-
-
+        @Html.HiddenFor(m => m.SId1)
+        @Html.HiddenFor(m => m.SId2)
+        @Html.HiddenFor(m => m.SId3)
+        @Html.HiddenFor(m => m.SId4)
+        @Html.HiddenFor(m => m.TempEventId)
         <div class="form-group">
             <div class="col-md-10">
                 <input type="submit" class="btn btn-primary" value="Skapa" />

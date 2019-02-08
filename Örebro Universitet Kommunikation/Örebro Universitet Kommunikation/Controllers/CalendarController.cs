@@ -171,20 +171,28 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             string Sg2 = null;
             string Sg3 = null;
             string Sg4 = null;
-            if(EventSuggestions.Count() != 0) { 
+            int SI1 = 0;
+            int SI2 = 0;
+            int SI3 = 0;
+            int SI4 = 0;
+            if (EventSuggestions.Count() != 0) { 
                 var Sg1obj = EventSuggestions.ElementAt(0);
                 Sg1 = Sg1obj.Suggestion;
+                SI1 = Sg1obj.Id;
                 if(EventSuggestions.Count() > 1) {
                     var Sg2obj = EventSuggestions.ElementAt(1);
                     Sg2 = Sg2obj.Suggestion;
+                    SI2 = Sg2obj.Id;
                 }
                 if (EventSuggestions.Count() > 2) {
                     var Sg3obj = EventSuggestions.ElementAt(2);
                     Sg3 = Sg3obj.Suggestion;
+                    SI3 = Sg3obj.Id;
                 }
                 if (EventSuggestions.Count() > 3) {
                     var Sg4obj = EventSuggestions.ElementAt(3);
                     Sg4 = Sg4obj.Suggestion;
+                    SI4 = Sg4obj.Id;
                 }
             }
             var EventInfo = Ctx.TempEvents.FirstOrDefault(e => e.Id == TEI);
@@ -193,8 +201,53 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
 
             return View(new ShowTempEventViewModel {Suggestion1 = Sg1, Suggestion2 = Sg2,
-                Suggestion3 = Sg3, Suggestion4 = Sg4,
-                Creator = CreatorName, Title = EventInfo.Title, Content = EventInfo.Description});
+                Suggestion3 = Sg3, Suggestion4 = Sg4, SId1 = SI1, SId2 = SI2, SId3 = SI3, SId4 = SI4,
+                Creator = CreatorName, Title = EventInfo.Title, Content = EventInfo.Description, TempEventId = TEI});
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult InviteTempEvent(ShowTempEventViewModel m)
+        {
+            var CurrentUserId = User.Identity.GetUserId();
+            if (m.s1)
+            {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel
+                {
+                    TempEventId = m.TempEventId,
+                    SuggestionId = m.SId1,
+                    UserId = CurrentUserId
+                });
+            }
+            if (m.s2)
+            {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel
+                {
+                    TempEventId = m.TempEventId,
+                    SuggestionId = m.SId2,
+                    UserId = CurrentUserId
+                });
+            }
+            if (m.s3)
+            {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel
+                {
+                    TempEventId = m.TempEventId,
+                    SuggestionId = m.SId3,
+                    UserId = CurrentUserId
+                });
+            }
+            if (m.s4)
+            {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel
+                {
+                    TempEventId = m.TempEventId,
+                    SuggestionId = m.SId4,
+                    UserId = CurrentUserId
+                });
+            }
+            Ctx.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
