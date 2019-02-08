@@ -187,11 +187,26 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
         }
 
-        public ActionResult EditUser() {
-            return View(new EditUserViewModel {
-                UserList = GetAllUsers(),
-                UserId = User.Identity.GetUserId()
-            });
+        public ActionResult EditUser(string UserId = "0") {
+            if (UserId.Equals("0")) {
+                return View(new EditUserViewModel {
+                    UserList = GetAllUsers(),
+                    ErrorMessage = ""
+                });
+            }
+            else {
+                var user = UserManager.FindById(UserId);
+                return View(new EditUserViewModel {
+                    UserList = GetAllUsers(),
+                    UserId = UserId,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    Position = user.Position,
+                    ErrorMessage = ""
+                });
+            }
         }
 
         public ActionResult _EditUserPartial(string userId) {
@@ -207,34 +222,41 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
         }
 
-        public async Task<ActionResult> SaveUserChanges(_EditUserPartialViewModel model) {
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditUser(EditUserViewModel model) {
+            var user = UserManager.FindById(model.UserId);
+            var userWithMail = (from u in Ctx.Users
+                               where u.Email == model.Email
+                               select u).ToList();
             if (model.Password == null || model.Password == "") {
-                var user = UserManager.FindById(model.userId);
-                user.Email = model.Email;
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
-                var ErrorMessage = "";
             }
             else {
-                var user = UserManager.FindById(model.userId);
-                await UserManager.ResetPasswordAsync(user.Id, await UserManager.GeneratePasswordResetTokenAsync(user.Id), model.Password);
-                user.Email = model.Email;
+                await UserManager.RemovePasswordAsync(user.Id);
+                await UserManager.AddPasswordAsync(user.Id, model.Password);
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
-                var ErrorMessage = "";
             }
-            var result = await Ctx.SaveChangesAsync();
+            int result = 0;
+            if (userWithMail.Count == 0 || userWithMail[0] == user) {
+                user.Email = model.Email;
+                result = await Ctx.SaveChangesAsync();
+            }
             if (result > 0) {
-                return RedirectToAction("EditUser","AdminTool", new _EditUserPartialViewModel {
+                return View(new EditUserViewModel {
+                    UserList = GetAllUsers(),
                     ErrorMessage = "Användaren har redigerats"
                 });
             }
-            return RedirectToAction("EditUser", "AdminTool", new _EditUserPartialViewModel {
-                ErrorMessage = "Användaren har redigerats"
+            return View(new EditUserViewModel {
+                UserList = GetAllUsers(),
+                ErrorMessage = "Det gick inte att redigera användaren"
             });
         }
     }
