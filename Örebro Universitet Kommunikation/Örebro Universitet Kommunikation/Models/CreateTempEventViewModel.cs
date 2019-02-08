@@ -52,4 +52,16 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public bool s5 { get; set; }
 
     }
+    public class ShowResultEventViewModel {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string S1Name { get; set; }
+        public string S2Name { get; set; }
+        public string S3Name { get; set; }
+        public string S4Name { get; set; }
+        public int S1Result { get; set; }
+        public int S2Result { get; set; }
+        public int S3Result { get; set; }
+        public int S4Result { get; set; }
     }
+}

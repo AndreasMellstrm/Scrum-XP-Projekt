@@ -384,6 +384,7 @@
     <Content Include="Views\AdminTool\EditUser.cshtml" />
     <Content Include="Views\AdminTool\_EditUserPartial.cshtml" />
     <Content Include="Views\Calendar\InviteTempEvent.cshtml" />
+    <Content Include="Views\Calendar\ShowEventResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

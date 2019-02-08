@@ -249,5 +249,57 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
             return RedirectToAction("Index");
         }
+        public ActionResult ShowEventResult(int EventId) {
+            var currentUserId = User.Identity.GetUserId();
+            var currentEvent = Ctx.TempEvents.FirstOrDefault(e => e.Id == EventId);
+            var suggestions = Ctx.TempEventSuggestions.Where(s => s.TempEvenId == EventId).ToList();
+            string Sg1name = null;
+            string Sg2name = null;
+            string Sg3name = null;
+            string Sg4name = null;
+            int Sg1result = 0;
+            int Sg2result = 0;
+            int Sg3result = 0;
+            int Sg4result = 0;
+            if (currentEvent.CreatorId == currentUserId) {
+                if (suggestions.Count() != 0) {
+                    var Sg1obj = suggestions.ElementAt(0);
+                    var Sg1sug = Sg1obj.Id;
+                    Sg1name = Sg1obj.Suggestion;
+                    Sg1result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg1sug).Count();
+                    if (suggestions.Count() > 1) {
+                        var Sg2obj = suggestions.ElementAt(1);
+                        var Sg2sug = Sg2obj.Id;
+                        Sg2name = Sg2obj.Suggestion;
+                        Sg2result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg2sug).Count();
+                    }
+                    if (suggestions.Count() > 2) {
+                        var Sg3obj = suggestions.ElementAt(2);
+                        var Sg3sug = Sg3obj.Id;
+                        Sg3name = Sg3obj.Suggestion;
+                        Sg3result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg3sug).Count();
+                    }
+                    if (suggestions.Count() > 3) {
+                        var Sg4obj = suggestions.ElementAt(3);
+                        var Sg4sug = Sg4obj.Id;
+                        Sg4name = Sg4obj.Suggestion;
+                        Sg4result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg4sug).Count();
+                    }
+                }
+                return View(new ShowResultEventViewModel {
+                    Description = currentEvent.Description,
+                    Title = currentEvent.Title,
+                    S1Name = Sg1name,
+                    S1Result = Sg1result,
+                    S2Name = Sg2name,
+                    S2Result = Sg2result,
+                    S3Name = Sg3name,
+                    S3Result = Sg3result,
+                    S4Name = Sg4name,
+                    S4Result = Sg4result
+                });
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

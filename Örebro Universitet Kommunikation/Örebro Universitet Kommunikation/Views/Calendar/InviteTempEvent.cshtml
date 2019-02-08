@@ -41,26 +41,22 @@
             @*@Html.LabelFor(m => m.Suggestion1, new { @class = "control-label col-md-2" })*@
             <div class="col-md-10">
                 <p>
-                    @if (Model.Suggestion1 != null)
-                    {
+                    @if (Model.Suggestion1 != null) {
                         @Html.CheckBoxFor(m => m.s1)@Html.Label(Model.Suggestion1)
                     }
                 </p>
                 <p>
-                    @if (Model.Suggestion2 != null)
-                    {
+                    @if (Model.Suggestion2 != null) {
                         @Html.CheckBoxFor(m => m.s2)@Html.Label(Model.Suggestion2)
                     }
                 </p>
                 <p>
-                    @if (Model.Suggestion3 != null)
-                    {
+                    @if (Model.Suggestion3 != null) {
                         @Html.CheckBoxFor(m => m.s3)@Html.Label(Model.Suggestion3)
                     }
                 </p>
                 <p>
-                    @if (Model.Suggestion4 != null)
-                    {
+                    @if (Model.Suggestion4 != null) {
                         @Html.CheckBoxFor(m => m.s4)@Html.Label(Model.Suggestion4)
                     }
                 </p>
