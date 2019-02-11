@@ -114,11 +114,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var listUsers = Ctx.Users.ToList();
             List<SelectListItem> ListUsers = new List<SelectListItem>();
             foreach (var u in listUsers) {
-                var UserItem = new SelectListItem {
-                    Value = u.Id,
-                    Text = u.FirstName + " " + u.LastName + " (" + u.Email + ")"
-                };
-                ListUsers.Add(UserItem);
+                if (u.Id != User.Identity.GetUserId()) {
+                    var UserItem = new SelectListItem {
+                        Value = u.Id,
+                        Text = u.FirstName + " " + u.LastName + " (" + u.Email + ")"
+                    };
+                    ListUsers.Add(UserItem);
+                }
             }
 
             return View(new CreateTempEventViewModel { NewList = ListUsers });
@@ -304,10 +306,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     S3Name = Sg3name,
                     S3Result = Sg3result,
                     S4Name = Sg4name,
-                    S4Result = Sg4result
+                    S4Result = Sg4result,
+                    EventId = EventId
                 });
             }
             return RedirectToAction("Index");
+        }
+        public ActionResult ListTempEvents() {
+            var currentId = User.Identity.GetUserId();
+            var TempEvent = Ctx.TempEvents.Where(e => e.CreatorId == currentId).ToList();
+
+            return View(new ListTempEventViewModel { TempEventList = TempEvent });
         }
 
         public ActionResult AcceptEvent(int eventId) {

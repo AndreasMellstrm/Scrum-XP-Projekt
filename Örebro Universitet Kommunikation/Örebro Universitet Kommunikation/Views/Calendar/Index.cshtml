@@ -17,15 +17,15 @@
                 <h4 class="modal-title"><span id="eventTitle"></span></h4>
             </div>
             <div class="modal-body">
-                
-                
+
+
                 <button id="btnDelete" class="btn btn-default btn-sm pull-right">
                     <span class="glyphicon glyphicon-remove"></span> Remove
                 </button>
 
                 <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px;">
                     <span class="glyphicon glyphicon-pencil"></span> Edit
-                </button>} 
+                </button>}
                 <p id="pDetails"></p>
             </div>
             <div class="modal-footer">
@@ -60,7 +60,7 @@
                     </div>
                     <div class="form-group">
                         <div class="checkbox">
-                            <label><input type="checkbox" id="chkIsFullDay" checked="checked" />  Is Full Day event</label>
+                           <label class="ToHide" ><input type="checkbox"  id="chkIsFullDay" checked="checked" />  Is Full Day event</label>
                         </div>
                     </div>
                     <div class="form-group" id="divEndDate" style="display:none">
@@ -93,7 +93,8 @@
         </div>
     </div>
 </div>
-
+@Html.ActionLink("Boka möte", "CreateTempEvent", "Calendar", new { @class = "btn btn-primary" })
+@Html.ActionLink("Skapade möten", "ListTempEvents", "Calendar", new { @class = "btn btn-primary" })
 
 
 
@@ -111,7 +112,7 @@
             var selectedEvent = [];
             GenerateCalender();
             FetchEventAndRenderCalendar();
-            function FetchEventAndRenderCalendar()  {
+            function FetchEventAndRenderCalendar() {
                 events = [];
                 $.ajax({
                     type: "GET",
@@ -237,9 +238,9 @@
                     $('#chkIsFullDay').change();
                     $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('YYYY/MM/DD HH:mm A') : '');
                     $('#txtDescription').val(selectedEvent.description);
-                    $('#ddThemeColor').val(selectedEvent.color);     
+                    $('#ddThemeColor').val(selectedEvent.color);
                 }
-                
+
                 $('#myModal').modal('hide');
                 $('#myModalSave').modal();
             }
