@@ -110,7 +110,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             return new JsonResult { Data = new { status = status } };
         }
-        public ActionResult CreateTempEvent() {
+
+        public List<SelectListItem> GetAllUsersSelectList() {
             var listUsers = Ctx.Users.ToList();
             List<SelectListItem> ListUsers = new List<SelectListItem>();
             foreach (var u in listUsers) {
@@ -122,55 +123,75 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     ListUsers.Add(UserItem);
                 }
             }
+            return ListUsers;
+        }
 
-            return View(new CreateTempEventViewModel { NewList = ListUsers });
+        public ActionResult CreateTempEvent() {
+
+
+            return View(new CreateTempEventViewModel {
+                NewList = GetAllUsersSelectList(),
+                ErrorMessage = ""
+            });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateTempEvent(CreateTempEventViewModel m) {
-            var CurrentUserId = User.Identity.GetUserId();
-            // Create Event
-            Ctx.TempEvents.Add(new TempEventModel {
-                CreatorId = CurrentUserId,
-                Description = m.Content,
-                Title = m.Title
+            if (ModelState.IsValid) {
+                var CurrentUserId = User.Identity.GetUserId();
+                // Create Event
+                Ctx.TempEvents.Add(new TempEventModel {
+                    CreatorId = CurrentUserId,
+                    Description = m.Content,
+                    Title = m.Title
+                });
+                Ctx.SaveChanges();
+                var TempEvent = Ctx.TempEvents.ToList().Last();
+                // Create EventUsers
+                foreach (var u in m.ListToSend) {
+                    Ctx.TempEventUsers.Add(new TempEventUserModel {
+                        TempEventId = TempEvent.Id,
+                        UserId = u
+                    });
+                }
+                // Create EvenSuggestion
+                if (m.Suggestion1 != null) {
+                    Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                        Suggestion = m.Suggestion1,
+                        TempEvenId = TempEvent.Id
+                    });
+                }
+                if (m.Suggestion2 != null) {
+                    Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                        Suggestion = m.Suggestion2,
+                        TempEvenId = TempEvent.Id
+                    });
+                }
+                if (m.Suggestion3 != null) {
+                    Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                        Suggestion = m.Suggestion3,
+                        TempEvenId = TempEvent.Id
+                    });
+                }
+                if (m.Suggestion4 != null) {
+                    Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
+                        Suggestion = m.Suggestion4,
+                        TempEvenId = TempEvent.Id
+                    });
+                }
+                var result = Ctx.SaveChanges();
+                if (result > 0) {
+                    ModelState.Clear();
+                    return View(new CreateTempEventViewModel {
+                        ErrorMessage = "Preliminärt event är nu skapat",
+                        NewList = GetAllUsersSelectList()
+                    });
+                }
+            }
+            return View(new CreateTempEventViewModel {
+                ErrorMessage = "Det gick inte att skapa det preliminära eventet",
+                NewList = GetAllUsersSelectList()
             });
-            Ctx.SaveChanges();
-            var TempEvent = Ctx.TempEvents.ToList().Last();
-            // Create EventUsers
-            foreach (var u in m.ListToSend) {
-                Ctx.TempEventUsers.Add(new TempEventUserModel {
-                    TempEventId = TempEvent.Id,
-                    UserId = u
-                });
-            }
-            // Create EvenSuggestion
-            if (m.Suggestion1 != null) {
-                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
-                    Suggestion = m.Suggestion1,
-                    TempEvenId = TempEvent.Id
-                });
-            }
-            if (m.Suggestion2 != null) {
-                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
-                    Suggestion = m.Suggestion2,
-                    TempEvenId = TempEvent.Id
-                });
-            }
-            if (m.Suggestion3 != null) {
-                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
-                    Suggestion = m.Suggestion3,
-                    TempEvenId = TempEvent.Id
-                });
-            }
-            if (m.Suggestion4 != null) {
-                Ctx.TempEventSuggestions.Add(new TempEventSuggestionModel {
-                    Suggestion = m.Suggestion4,
-                    TempEvenId = TempEvent.Id
-                });
-            }
-            Ctx.SaveChanges();
-            return RedirectToAction("Index");
         }
         public ActionResult InviteTempEvent(int TEI) {
             var CurrentUserId = User.Identity.GetUserId();
