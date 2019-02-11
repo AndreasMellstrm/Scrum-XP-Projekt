@@ -8,5 +8,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
 
         public List<CalendarEvent> MeetingRequests { get; set; }
         public ApplicationUser User { get; set; }
+        public List<TempEventModel> TempEvents { get; set; }
     }
 }

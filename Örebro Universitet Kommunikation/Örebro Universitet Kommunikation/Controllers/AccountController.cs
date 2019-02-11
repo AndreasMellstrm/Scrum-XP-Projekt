@@ -64,14 +64,24 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                                        where e.UserId == user.Id
                                        && e.CanCome == false
                                        select e).ToList();
+                var tempEventList = (from e in Ctx.TempEventUsers
+                                  where e.UserId == user.Id
+                                  select e).ToList();
+                var tempEvents = new List<TempEventModel>();
                 var meetings = new List<CalendarEvent>();
                 foreach(var mR in meetingRequests) {
                     var meeting = Ctx.CalendarEvents.Find(mR.EventId);
                     meetings.Add(meeting);
                 }
+
+                foreach (var te in tempEventList) {
+                    var tempEvent = Ctx.TempEvents.Find(te.TempEventId);
+                    tempEvents.Add(tempEvent);
+                }
                 return PartialView(new MeetingRequestViewModel {
                     MeetingRequests = meetings,
-                    User = user
+                    User = user,
+                    TempEvents = tempEvents
                 });
             }
             return PartialView();
