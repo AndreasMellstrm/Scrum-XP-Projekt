@@ -16,4 +16,4 @@
     <p>@Model.S4Name (@Model.S4Result)</p>
 }
 
-@Html.ActionLink("Skapa mötet", "Create", "Calendar", new { EventId = Model.EventId }, new { @class = "btn btn-primary" })
+@Html.ActionLink("Skapa mötet", "CreateEvent", "Calendar", new { EventId = Model.EventId }, new { @class = "btn btn-primary" })

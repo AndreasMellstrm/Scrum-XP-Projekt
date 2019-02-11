@@ -20,6 +20,12 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public virtual ICollection<ApplicationUserCalendarEvents> EventRelationships { get; set; }
 
     }
+    public class CreateEventViewModel {
+        public int EventId { get; set; }
+        public string EventTitle { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+    }
 
     
 }

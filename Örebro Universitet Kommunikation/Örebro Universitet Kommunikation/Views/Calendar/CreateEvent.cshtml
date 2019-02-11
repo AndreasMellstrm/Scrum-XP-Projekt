@@ -1,0 +1,46 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.CreateEventViewModel
+
+<h2>Skapa event</h2>
+<p>@Model.EventTitle</p>
+@using (Html.BeginForm("CreateEvent", "Calendar", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.EventId)
+<div class="form-group">
+    <label>Starttid:</label>
+    <div class="input-group date" id="dtp1">
+        <input type="text" id="Start" name="Start" class="form-control" />
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+    </div>
+</div>
+    <div class="form-group" id="divEndDate" @*style="display:none "*@>
+        <label>Sluttid:</label>
+        <div class="input-group date" id="dtp2">
+            <input type="text" id="End" name="End" class="form-control" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Skapa" />
+    </div>
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#dtp1,#dtp2').datetimepicker({
+                format: 'YYYY/MM/DD HH:mm'
+            });
+        })
+    </script>
+}
