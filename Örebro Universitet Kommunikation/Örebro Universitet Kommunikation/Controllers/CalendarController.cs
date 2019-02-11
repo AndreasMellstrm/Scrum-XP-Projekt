@@ -13,34 +13,31 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading;
 
-namespace Örebro_Universitet_Kommunikation.Controllers
-{
+namespace Örebro_Universitet_Kommunikation.Controllers {
 
-    public class CalendarController : Controller
-    {
+    public class CalendarController : Controller {
         public ApplicationDbContext Ctx { get; set; }
         public UserManager<ApplicationUser> UserManager { get; set; }
 
         // GET: 
         public CalendarController() {
-        Ctx = new ApplicationDbContext();
-        UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
+            Ctx = new ApplicationDbContext();
+            UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
 
-        
 
 
-        public ActionResult Index()
-        {
+
+        public ActionResult Index() {
             return View();
         }
 
-        
+
         public ActionResult GetEvents() {
             using (Ctx) {
                 var events = Ctx.CalendarEvents.ToList();
                 var result = new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                
+
                 return result;
             }
         }
@@ -53,17 +50,15 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var CurrentUserAdmin = currentUser.Admin;
             var events = Ctx.CalendarEvents.ToList();
 
-            
-            foreach (var item in events)
-            {
+
+            foreach (var item in events) {
                 var user = await UserManager.FindByIdAsync(item.CreatorId);
                 bool CanDelete = false;
-                if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin)
-                {
+                if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
                 }
             }
-            
+
 
 
             var status = false;
@@ -80,7 +75,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                         v.IsFullDay = e.IsFullDay;
                         v.ThemeColor = e.ThemeColor;
                     }
-                } else {
+                }
+                else {
                     e.CreatorId = currentUserId;
                     dc.CalendarEvents.Add(e);
                 }
@@ -174,8 +170,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             Ctx.SaveChanges();
             return RedirectToAction("Index");
         }
-        public  ActionResult InviteTempEvent(int TEI)
-        {
+        public ActionResult InviteTempEvent(int TEI) {
             var CurrentUserId = User.Identity.GetUserId();
             var EventSuggestions = Ctx.TempEventSuggestions.Where(s => s.TempEvenId == TEI).ToList();
             string Sg1 = null;
@@ -186,11 +181,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             int SI2 = 0;
             int SI3 = 0;
             int SI4 = 0;
-            if (EventSuggestions.Count() != 0) { 
+            if (EventSuggestions.Count() != 0) {
                 var Sg1obj = EventSuggestions.ElementAt(0);
                 Sg1 = Sg1obj.Suggestion;
                 SI1 = Sg1obj.Id;
-                if(EventSuggestions.Count() > 1) {
+                if (EventSuggestions.Count() > 1) {
                     var Sg2obj = EventSuggestions.ElementAt(1);
                     Sg2 = Sg2obj.Suggestion;
                     SI2 = Sg2obj.Id;
@@ -211,46 +206,48 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var CreatorName = Creator.FirstName + " " + Creator.LastName + " (" + Creator.Email + ")";
 
 
-            return View(new ShowTempEventViewModel {Suggestion1 = Sg1, Suggestion2 = Sg2,
-                Suggestion3 = Sg3, Suggestion4 = Sg4, SId1 = SI1, SId2 = SI2, SId3 = SI3, SId4 = SI4,
-                Creator = CreatorName, Title = EventInfo.Title, Content = EventInfo.Description, TempEventId = TEI});
+            return View(new ShowTempEventViewModel {
+                Suggestion1 = Sg1,
+                Suggestion2 = Sg2,
+                Suggestion3 = Sg3,
+                Suggestion4 = Sg4,
+                SId1 = SI1,
+                SId2 = SI2,
+                SId3 = SI3,
+                SId4 = SI4,
+                Creator = CreatorName,
+                Title = EventInfo.Title,
+                Content = EventInfo.Description,
+                TempEventId = TEI
+            });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult InviteTempEvent(ShowTempEventViewModel m)
-        {
+        public ActionResult InviteTempEvent(ShowTempEventViewModel m) {
             var CurrentUserId = User.Identity.GetUserId();
-            if (m.s1)
-            {
-                Ctx.TempEventTimes.Add(new TempEventTimeModel
-                {
+            if (m.s1) {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel {
                     TempEventId = m.TempEventId,
                     SuggestionId = m.SId1,
                     UserId = CurrentUserId
                 });
             }
-            if (m.s2)
-            {
-                Ctx.TempEventTimes.Add(new TempEventTimeModel
-                {
+            if (m.s2) {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel {
                     TempEventId = m.TempEventId,
                     SuggestionId = m.SId2,
                     UserId = CurrentUserId
                 });
             }
-            if (m.s3)
-            {
-                Ctx.TempEventTimes.Add(new TempEventTimeModel
-                {
+            if (m.s3) {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel {
                     TempEventId = m.TempEventId,
                     SuggestionId = m.SId3,
                     UserId = CurrentUserId
                 });
             }
-            if (m.s4)
-            {
-                Ctx.TempEventTimes.Add(new TempEventTimeModel
-                {
+            if (m.s4) {
+                Ctx.TempEventTimes.Add(new TempEventTimeModel {
                     TempEventId = m.TempEventId,
                     SuggestionId = m.SId4,
                     UserId = CurrentUserId
@@ -311,6 +308,28 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 });
             }
             return RedirectToAction("Index");
+        }
+
+        public ActionResult AcceptEvent(int eventId) {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var events = (from e in Ctx.ApplicationUserCalendarEvents
+                          where e.UserId == currentUser.Id
+                          && e.EventId == eventId
+                          select e).ToList();
+            events[0].CanCome = true;
+            Ctx.SaveChanges();
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
+        public ActionResult DeclineEvent(int eventId) {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var events = (from e in Ctx.ApplicationUserCalendarEvents
+                          where e.UserId == currentUser.Id
+                          && e.EventId == eventId
+                          select e).ToList();
+            Ctx.ApplicationUserCalendarEvents.Remove(events[0]);
+            Ctx.SaveChanges();
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
         }
     }
 }

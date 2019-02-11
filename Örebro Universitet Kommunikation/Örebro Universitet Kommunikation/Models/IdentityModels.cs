@@ -19,8 +19,10 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [DefaultValue("None")]
         public string Notifications { get; set; }
         public virtual ProjectModel Project { get; set; }
-        
-        
+        public virtual ICollection<ApplicationUserCalendarEvents> EventRelationships { get; set; }
+
+
+
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {
@@ -48,12 +50,29 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<ApplicationUserCalendarEvents> ApplicationUserCalendarEvents { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
-            Configuration.ProxyCreationEnabled = false;
+            //Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = false;
+
+
 
 
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ApplicationUserCalendarEvents>().HasKey(c => new { c.EventId, c.UserId });
 
-        public static ApplicationDbContext Create() {
+            modelBuilder.Entity<ApplicationUser>()
+               .HasMany(c => c.EventRelationships)
+               .WithRequired(cc => cc.User)
+               .HasForeignKey(c => c.UserId);
+
+            modelBuilder.Entity<CalendarEvent>()
+               .HasMany(c => c.EventRelationships)
+               .WithRequired(cc => cc.Event)
+               .HasForeignKey(c => c.EventId);
+        }
+
+            public static ApplicationDbContext Create() {
             return new ApplicationDbContext();
         }
     }

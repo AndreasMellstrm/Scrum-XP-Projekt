@@ -10,12 +10,16 @@ namespace Örebro_Universitet_Kommunikation.Models {
 
         [Key, Column(Order = 0)]
         public string UserId { get; set; }
+
         [Key, Column(Order = 1)]
         public int EventId { get; set; }
+
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
+
         [ForeignKey("EventId")]
         public virtual CalendarEvent Event { get; set; }
+
         public bool CanCome { get; set; }
 
     }
