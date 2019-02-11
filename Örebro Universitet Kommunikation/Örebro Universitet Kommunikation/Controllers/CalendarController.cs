@@ -30,7 +30,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
 
         public ActionResult Index() {
-            return View();
+            return View(UserManager.FindById(User.Identity.GetUserId()));
         }
 
 

@@ -1,4 +1,4 @@
-﻿@model Örebro_Universitet_Kommunikation.Models.CalendarEvent
+﻿@model Örebro_Universitet_Kommunikation.Models.ApplicationUser
 
 
 
@@ -18,7 +18,7 @@
             </div>
             <div class="modal-body">
 
-
+                @if (Model.Admin) { 
                 <button id="btnDelete" class="btn btn-default btn-sm pull-right">
                     <span class="glyphicon glyphicon-remove"></span> Remove
                 </button>
@@ -26,6 +26,7 @@
                 <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px;">
                     <span class="glyphicon glyphicon-pencil"></span> Edit
                 </button>
+                }
                 <p id="pDetails"></p>
             </div>
             <div class="modal-footer">
