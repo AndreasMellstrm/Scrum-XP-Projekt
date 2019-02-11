@@ -1,4 +1,4 @@
-﻿@model Örebro_Universitet_Kommunikation.Models.CalendarEvent
+﻿@model Örebro_Universitet_Kommunikation.Models.ApplicationUser
 
 
 
@@ -16,7 +16,7 @@
             </div>
             <div class="modal-body">
 
-
+                @if (Model.Admin) { 
                 <button id="btnDelete" class="btn btn-default btn-sm pull-right">
                     <span class="glyphicon glyphicon-remove"></span> Remove
                 </button>
@@ -24,6 +24,7 @@
                 <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px;">
                     <span class="glyphicon glyphicon-pencil"></span> Edit
                 </button>
+                }
                 <p id="pDetails"></p>
             </div>
             <div class="modal-footer">
@@ -144,7 +145,7 @@
                 $('#calender').fullCalendar({
                     contentHeight: 400,
                     defaultDate: new Date(),
-                    timeFormat: 'h(:mm)a',
+                    timeFormat: 'HH:mm',
                     header: {
                         left: 'prev,next today',
                         center: 'title',
@@ -163,7 +164,7 @@
                         }
                         $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
                         $description.append($('<p/>').html('<b>Skapat av: </b>' + calEvent.creatorName));
-                        $description.append($('<p/>').html('<b>Inbjudna: </b>'));
+                        $description.append($('<p/>').html('<b>Deltagare: </b>'));
                         $.each(calEvent.users, function (i, val) {
                             $description.append($('<p/>').html(val))
                         });
