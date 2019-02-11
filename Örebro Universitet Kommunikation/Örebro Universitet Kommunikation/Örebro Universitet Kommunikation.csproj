@@ -373,7 +373,6 @@
     <Content Include="Views\FormalBlog\_SearchAndFilterPartial.cshtml" />
     <Content Include="Views\Calendar\Index.cshtml" />
     <Content Include="Views\AdminTool\CreateProject.cshtml" />
-    <Content Include="Views\ResearchBlog\ShowResearchBKP.cshtml" />
     <Content Include="Views\ResearchBlog\ShowResearch.cshtml" />
     <Content Include="Views\ResearchBlog\Index.cshtml" />
     <Content Include="Views\AdminTool\AsignUserToProject.cshtml" />
