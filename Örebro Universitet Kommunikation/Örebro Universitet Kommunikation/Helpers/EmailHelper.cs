@@ -25,25 +25,25 @@ namespace Örebro_Universitet_Kommunikation.Helpers {
         }
         public void SendEmail(string recipient, string subject, string message) {
             try {
-                    var senderEmail = new MailAddress("orukommunikation@gmail.com", "Örebro Universitet-ish");
-                    var receiverEmail = new MailAddress(recipient, "Receiver");
-                    var password = "Kakan1210";
-                    var sub = subject;
-                    var body = message;
-                    var smtp = new SmtpClient {
-                        Host = "smtp.gmail.com",
-                        Port = 587,
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential(senderEmail.Address, password)
-                    };
-                    using (var mess = new MailMessage(senderEmail, receiverEmail) {
-                        Subject = subject,
-                        Body = body
-                    }) {
-                        smtp.Send(mess);
-                    }
+                var senderEmail = new MailAddress("orukommunikation@gmail.com", "Örebro Universitet-ish");
+                var receiverEmail = new MailAddress(recipient, "Receiver");
+                var password = "Kakan1210";
+                var sub = subject;
+                var body = message;
+                var smtp = new SmtpClient {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(senderEmail.Address, password)
+                };
+                using (var mess = new MailMessage(senderEmail, receiverEmail) {
+                    Subject = subject,
+                    Body = body
+                }) {
+                    smtp.Send(mess);
+                }
             }
             catch (Exception) {
             }
@@ -55,8 +55,10 @@ namespace Örebro_Universitet_Kommunikation.Helpers {
                          || u.Notifications == "Blog"
                          where u.Id != userId
                          select u).ToList();
-            foreach(var u in users) {
-                SendEmail(u.Email, subject, message);
+            if (users.Count > 0) {
+                foreach (var u in users) {
+                    SendEmail(u.Email, subject, message);
+                }
             }
         }
 
@@ -64,10 +66,10 @@ namespace Örebro_Universitet_Kommunikation.Helpers {
             var users = (from u in Ctx.Users
                          where u.Notifications == "BlogEvent"
                          || u.Notifications == "Event"
-                         where u.Id != userId
+                         where u.Id == userId
                          select u).ToList();
-            foreach(var u in users) {
-                SendEmail(u.Email, subject, message);
+            if (users.Count > 0) {
+                SendEmail(users[0].Email, subject, message);
             }
         }
     }

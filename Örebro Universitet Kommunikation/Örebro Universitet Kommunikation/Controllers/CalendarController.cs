@@ -37,7 +37,34 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult GetEvents() {
             using (Ctx) {
                 var events = Ctx.CalendarEvents.ToList();
-                var result = new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                List<CalenderItemViewModel> list = new List<CalenderItemViewModel>(); 
+                foreach(var e in events) {
+                    var connections = (from c in Ctx.ApplicationUserCalendarEvents
+                                 where c.EventId == e.EventId
+                                 && c.CanCome == true
+                                 select c).ToList();
+                    List<string> users = new List<string>(); 
+                    foreach(var u in connections) {
+                        var user = UserManager.FindById(u.UserId);
+                        var name = user.FirstName + " " + user.LastName + " (" + user.Email + ")";
+                        users.Add(name);
+                    }
+                    var creator = UserManager.FindById(e.CreatorId);
+                    string creatorName = creator.FirstName + " " + creator.LastName + " (" + creator.Email + ")";
+                    var item = new CalenderItemViewModel {
+                        Title = e.Title,
+                        ThemeColor = e.ThemeColor,
+                        Start = e.Start,
+                        End = e.End,
+                        IsFullDay = e.IsFullDay,
+                        EventId = e.EventId,
+                        Desc = e.Desc,
+                        CreatorName = creatorName,
+                        Users = users.ToArray()
+                    };
+                    list.Add(item);
+                }
+                var result = new JsonResult { Data = list, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
 
                 return result;
             }
@@ -349,7 +376,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult CreateEvent(CreateEventViewModel m) {
             var currentEvent = Ctx.TempEvents.FirstOrDefault(e => e.Id == m.EventId);
-            var userList = Ctx.TempEventUsers.Where(e => e.TempEventId == m.EventId);
+            var userList = Ctx.TempEventUsers.Where(e => e.TempEventId == m.EventId).ToList();
 
             Ctx.CalendarEvents.Add(new CalendarEvent {
                 CreatorId = currentEvent.CreatorId,
