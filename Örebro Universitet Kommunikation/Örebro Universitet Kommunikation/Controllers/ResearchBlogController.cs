@@ -31,7 +31,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             foreach (var p in researchProjects) {
                 var listOfBlogs = Ctx.ResearchBlogs.Where(b => b.ProjectId == p.ProjectId);
-                if(p.ProjectId == currentUser.Project.ProjectId) {
+                if(p.ProjectId == currentUser.ProjectId) {
                     isMember = true;
                 }
                 else {
@@ -52,8 +52,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == ResearchProject);
             bool canCreate = false;
-            if(currentUser.Project != null) { 
-                if(ResearchProject == currentUser.Project.ProjectId) {
+            if(currentUser.ProjectId != 0) { 
+                if(ResearchProject == currentUser.ProjectId) {
                     canCreate = true;
                 }
             }
@@ -99,7 +99,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             Ctx.ResearchBlogs.Add(new ResearchBlogModel
             {
                 AttachedFile = fileString,
-                ProjectId = user.Project.ProjectId,
+                ProjectId = user.ProjectId,
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,
                 Content = model.Content,
@@ -119,7 +119,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             //    var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210", appUser.Email);
             //    emailHelper.SendEMail(appUser.Email, subject, emailText);
             //}
-            return RedirectToAction("ShowResearch", new { ResearchProject = user.Project.ProjectId });
+            return RedirectToAction("ShowResearch", new { ResearchProject = user.ProjectId });
           
         }
         public string FileUpload(HttpPostedFileBase File)
@@ -171,7 +171,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
                 List<ResearchComment> Comments = new List<ResearchComment>();
                 var currentUser = UserManager.FindById(User.Identity.GetUserId());
-                var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == currentUser.Project.ProjectId);
+                var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == currentUser.ProjectId);
 
                 foreach (var c in CommentList)
                 {
