@@ -11,7 +11,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public List<SelectListItem> NewList { get; set; }
         public List<String> ListToSend { get; set; }
         [Required]
-        [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
         [Display(Name = "Ämne")]
         public string Title { get; set; }
         [Required]
@@ -63,5 +62,9 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public int S2Result { get; set; }
         public int S3Result { get; set; }
         public int S4Result { get; set; }
+        public int EventId { get; set; }
+    }
+    public class ListTempEventViewModel {
+        public List<TempEventModel> TempEventList { get; set; }
     }
 }

@@ -1,0 +1,13 @@
+﻿@model Örebro_Universitet_Kommunikation.Models.ListTempEventViewModel
+
+<h2>Dina skapade möten</h2>
+<div class="list-group">
+    @foreach (var p in Model.TempEventList) {
+        <a href="@Url.Action("ShowEventResult", "Calendar", new { EventId = p.Id })" class="list-group-item">
+            @p.Title
+            @*<span class="badge badge-secondary"></span>*@
+        </a>
+    }
+</div>
+
+
