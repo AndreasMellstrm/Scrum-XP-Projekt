@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading;
+using Örebro_Universitet_Kommunikation.Helpers;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
 
@@ -317,6 +318,50 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var TempEvent = Ctx.TempEvents.Where(e => e.CreatorId == currentId).ToList();
 
             return View(new ListTempEventViewModel { TempEventList = TempEvent });
+        }
+        public ActionResult CreateEvent(int EventId) {
+            var currentEvent = Ctx.TempEvents.FirstOrDefault(e => e.Id == EventId);
+            
+            return View(new CreateEventViewModel { EventId = EventId, EventTitle = currentEvent.Title });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateEvent(CreateEventViewModel m) {
+            var currentEvent = Ctx.TempEvents.FirstOrDefault(e => e.Id == m.EventId);
+            var userList = Ctx.TempEventUsers.Where(e => e.TempEventId == m.EventId);
+
+            Ctx.CalendarEvents.Add(new CalendarEvent {
+                CreatorId = currentEvent.CreatorId,
+                Start = m.Start,
+                End = m.End,
+                Title = currentEvent.Title,
+                Desc = currentEvent.Description
+            });
+            Ctx.SaveChanges();
+            var eventId = Ctx.CalendarEvents.ToList().Last();
+            foreach(var u in userList) {
+                var item = new ApplicationUserCalendarEvents {
+                    EventId = eventId.EventId,
+                    UserId = u.UserId,
+                    CanCome = false
+                };
+                var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210");
+                emailHelper.SendEmailMeeting("Nytt möte", "", u.UserId);
+                Ctx.ApplicationUserCalendarEvents.Add(item);
+                Ctx.TempEventUsers.Remove(u);
+            }
+            var suggestions = Ctx.TempEventSuggestions.Where(s => s.TempEvenId == m.EventId);
+            foreach(var s in suggestions) { 
+                Ctx.TempEventSuggestions.Remove(s);
+            }
+            var result = Ctx.TempEventTimes.Where(t => t.TempEventId == m.EventId);
+            foreach(var r in result) {
+                Ctx.TempEventTimes.Remove(r);
+            }
+            Ctx.TempEvents.Remove(currentEvent);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -387,6 +387,7 @@
     <Content Include="Views\Calendar\InviteTempEvent.cshtml" />
     <Content Include="Views\Calendar\ShowEventResult.cshtml" />
     <Content Include="Views\Calendar\ListTempEvents.cshtml" />
+    <Content Include="Views\Calendar\CreateEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

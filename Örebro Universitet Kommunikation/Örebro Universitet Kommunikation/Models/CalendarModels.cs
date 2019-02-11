@@ -19,6 +19,12 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string CreatorId { get; set; }
        
     }
+    public class CreateEventViewModel {
+        public int EventId { get; set; }
+        public string EventTitle { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+    }
 
     
 }
