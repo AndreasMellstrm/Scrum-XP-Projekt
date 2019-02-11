@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -15,13 +16,16 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
     public class AccountController : Controller {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext Ctx { get; set; }
 
         public AccountController() {
+            Ctx = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager) {
             UserManager = userManager;
             SignInManager = signInManager;
+            Ctx = new ApplicationDbContext();
         }
 
         public ApplicationSignInManager SignInManager {
@@ -56,7 +60,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult _LoginPartial() {
             if (Request.IsAuthenticated) {
                 ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-                return PartialView(user);
+                var meetingRequests = (from e in Ctx.ApplicationUserCalendarEvents
+                                       where e.UserId == user.Id
+                                       && e.CanCome == false
+                                       select e).ToList();
+                var meetings = new List<CalendarEvent>();
+                foreach(var mR in meetingRequests) {
+                    var meeting = Ctx.CalendarEvents.Find(mR.EventId);
+                    meetings.Add(meeting);
+                }
+                return PartialView(new MeetingRequestViewModel {
+                    MeetingRequests = meetings,
+                    User = user
+                });
             }
             return PartialView();
         }

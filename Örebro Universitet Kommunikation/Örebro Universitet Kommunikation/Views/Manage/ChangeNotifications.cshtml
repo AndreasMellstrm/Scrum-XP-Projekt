@@ -14,9 +14,13 @@
         @Html.Label("Notifikationer", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.RadioButtonFor(m => m.Notifications, "BlogEvent")&nbsp;@Html.Label("Blogginlägg & evenemang")
+            <br />
             @Html.RadioButtonFor(m => m.Notifications, "Blog")&nbsp;@Html.Label("Blogginlägg")
+            <br />
             @Html.RadioButtonFor(m => m.Notifications, "Event")&nbsp;@Html.Label("Evenemang")
+            <br />
             @Html.RadioButtonFor(m => m.Notifications, "None")&nbsp;@Html.Label("Inga notifikationer")
+            <br />
         </div>
     </div>
     <div class="form-group">

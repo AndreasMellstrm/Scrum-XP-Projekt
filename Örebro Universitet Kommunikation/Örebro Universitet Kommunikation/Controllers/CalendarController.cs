@@ -363,5 +363,27 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return RedirectToAction("Index");
         }
+
+        public ActionResult AcceptEvent(int eventId) {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var events = (from e in Ctx.ApplicationUserCalendarEvents
+                          where e.UserId == currentUser.Id
+                          && e.EventId == eventId
+                          select e).ToList();
+            events[0].CanCome = true;
+            Ctx.SaveChanges();
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
+        public ActionResult DeclineEvent(int eventId) {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var events = (from e in Ctx.ApplicationUserCalendarEvents
+                          where e.UserId == currentUser.Id
+                          && e.EventId == eventId
+                          select e).ToList();
+            Ctx.ApplicationUserCalendarEvents.Remove(events[0]);
+            Ctx.SaveChanges();
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
     }
 }
