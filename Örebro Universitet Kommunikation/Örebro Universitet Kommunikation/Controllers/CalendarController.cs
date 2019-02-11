@@ -15,7 +15,7 @@ using System.Threading;
 using Örebro_Universitet_Kommunikation.Helpers;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
-
+    [Authorize]
     public class CalendarController : Controller {
         public ApplicationDbContext Ctx { get; set; }
         public UserManager<ApplicationUser> UserManager { get; set; }
