@@ -31,3 +31,7 @@ textarea {
     height: 75px;
 }
 
+.ToHide{
+    display: none;
+}
+
