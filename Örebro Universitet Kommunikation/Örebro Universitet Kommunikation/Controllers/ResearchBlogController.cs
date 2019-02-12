@@ -167,14 +167,24 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var BlogEntry = Ctx.ResearchBlogs.FirstOrDefault(b => b.Id == BlogId);
             if (BlogEntry != null)
             {
+                bool canDelete = false;
                 var CommentList = Ctx.ResearchBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
                 List<ResearchComment> Comments = new List<ResearchComment>();
                 var currentUser = UserManager.FindById(User.Identity.GetUserId());
+                bool isAdmin = currentUser.Admin;
                 var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == currentUser.ProjectId);
 
                 foreach (var c in CommentList)
                 {
+                    if (isAdmin || currentUser.Id == c.CreatorId || BlogEntry.CreatorId == currentUser.Id)
+                    {
+                        canDelete = true;
+                    }
+                    else
+                    {
+                        canDelete = false;
+                    }
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
 
                     var CommentItem = new ResearchComment
@@ -183,7 +193,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                         Time = c.Time,
                         Email = User.Email,
                         FirstName = User.FirstName,
-                        LastName = User.LastName
+                        LastName = User.LastName,
+                        CanDelete = canDelete,
+                        Id = c.BlogId
 
                     };
                     Comments.Add(CommentItem);
@@ -205,6 +217,15 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 });
             }
             return RedirectToAction("Index", "ResearchBlog");
+        }
+        public ActionResult DeleteComment(int EntryId, int BlogId)
+        {
+            ResearchBlogCommentsModel researchComments = Ctx.ResearchBlogComments.Find(EntryId);
+
+            Ctx.ResearchBlogComments.Remove(researchComments);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowComments", new { BlogId });
         }
     }
 }

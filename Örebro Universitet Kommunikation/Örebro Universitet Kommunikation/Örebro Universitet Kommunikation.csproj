@@ -394,6 +394,7 @@
     <Content Include="Views\InformalBlog\Index.cshtml" />
     <Content Include="Views\InformalBlog\CreateInformalEntry.cshtml" />
     <Content Include="Views\InformalBlog\_SearchAndFilterInformalPartial.cshtml" />
+    <Content Include="Views\InformalBlog\EditInformalEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

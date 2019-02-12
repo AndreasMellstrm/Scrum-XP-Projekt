@@ -28,7 +28,7 @@
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-folder-open"></i> @item.Category </span></li>
                         <li>|</li>
-                        <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "FormalBlog", new { BlogId = item.Id }, null)</span></li>
+                        <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "InformalBlog", new { BlogId = item.Id }, null)</span></li>
                         @if (item.AttachedFile != null)
                         {
                             <li>|</li>
@@ -37,7 +37,7 @@
                         @if (item.CanDelete)
                         {
                             <li>|</li>
-                            <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditEntry", "FormalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                            <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditInformalEntry", "InformalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
                             <li>|</li>
                             <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteInformalEntry", "InformalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
                         }

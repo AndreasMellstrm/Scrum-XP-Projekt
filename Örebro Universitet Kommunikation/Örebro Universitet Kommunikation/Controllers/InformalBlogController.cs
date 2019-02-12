@@ -132,6 +132,48 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             //emailHelper.SendEmailFormalBlog(subject, emailText, user.Id);
             return RedirectToAction("Index", "InformalBlog");
         }
+        [HttpGet]
+        public ActionResult EditInformalEntry(int EntryId) {
+            var BlogEntry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
+
+                CategoryListName.Add(c.CategoryName);
+            }
+            var InformalBlogItem = new EditInformalEntryViewModel() {
+                Id = BlogEntry.Id,
+                AttachedFile = "",      //Kanske inte funkar yao
+                Category = BlogEntry.Category,
+                Content = BlogEntry.Content,
+                Title = BlogEntry.Title,
+                CategoryItems = CategoryListName
+
+            };
+            return View(InformalBlogItem);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditInformal(EditInformalEntryViewModel model, int Id) {
+            if (ModelState.IsValid) {
+                var entry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == Id);
+                //var Filestring = FileUpload(File);
+
+
+                //entry.AttachedFile = Filestring;
+                entry.Category = model.Category;
+
+
+                entry.Content = model.Content;
+                entry.Title = model.Title;
+
+                Ctx.SaveChanges();
+            }
+
+
+            return RedirectToAction("Index", "InformalBlog");
+        }
 
 
         public ActionResult DeleteInformalEntry(int EntryId, string CreatorId)
