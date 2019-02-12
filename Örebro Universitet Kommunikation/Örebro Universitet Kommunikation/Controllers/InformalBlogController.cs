@@ -98,7 +98,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         }
         public ActionResult CreateInformalEntry()
         {
-            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
             List<string> CategoryListName = new List<string>();
             foreach (var c in CategoryList)
             {
