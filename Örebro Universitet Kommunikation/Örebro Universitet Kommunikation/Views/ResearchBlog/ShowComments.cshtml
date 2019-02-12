@@ -17,9 +17,11 @@
         <h6>@Model.CreatorFirstName @Model.CreatorLastName <i>(@Model.CreatorMail)</i></h6>
         <p>@Model.Content</p>
         <ul class="list-inline list-unstyled">
-            <li><span><i class="glyphicon glyphicon-calendar"></i>@Model.Date</span></li>
-            <li>|</li>
-            @if (Model.AttachedFile != null) {
+            <li><span><i class="glyphicon glyphicon-calendar"></i> @Model.Date</span></li>
+
+            @if (Model.AttachedFile != null)
+            {
+                <li>|</li>
                 <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@Model.AttachedFile"> Ladda ned fil </a></li>
             }
         </ul>
