@@ -1,7 +1,4 @@
 ﻿@model Örebro_Universitet_Kommunikation.Models.CreateTempEventViewModel
-@{
-    ViewBag.Title = "CreateTempEvent";
-}
 
 @using (Html.BeginForm("CreateTempEvent", "Calendar", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
     @Html.AntiForgeryToken()
