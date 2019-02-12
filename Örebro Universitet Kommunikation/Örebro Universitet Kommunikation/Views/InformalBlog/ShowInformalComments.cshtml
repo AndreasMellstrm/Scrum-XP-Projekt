@@ -3,20 +3,25 @@
 
 @using (Html.BeginForm("WriteInformalComment", "InformalBlog", FormMethod.Post)) {
     @Html.AntiForgeryToken()
-    <div class="jumbotron">
-        <h1 class"display-4">@Model.Title</h1>
-        <h6>@Model.CreatorFirstName @Model.CreatorLastName <i>(@Model.CreaterMail)</i></h6>
-        <p>@Model.Content</p>
-        <ul class="list-inline list-unstyled">
-            <li><span><i class="glyphicon glyphicon-calendar"></i>@Model.Date</span></li>
-            <li>|</li>
-            <li><span><i class="glyphicon glyphicon-folder-open"></i> @Model.Category </span></li>
-            <li>|</li>
-            @if (Model.AttachedFile != null) {
-                <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@Model.AttachedFile"> Ladda ned fil </a></li>
-            }
-        </ul>
-    </div>
+<div class="jumbotron">
+    <h1 class"display-4">@Model.Title</h1>
+    <h6>@Model.CreatorFirstName @Model.CreatorLastName <i>(@Model.CreaterMail)</i></h6>
+    <p>@Model.Content</p>
+    @if (Model.AttachedFile != null)
+    {
+        <img src="@Model.AttachedFile" style="width:auto; max-height:150px " class="img-thumbnail" />
+
+
+    }
+    <hr />
+    <ul class="list-inline list-unstyled">
+        <li><span><i class="glyphicon glyphicon-calendar"></i>@Model.Date</span></li>
+        <li>|</li>
+        <li><span><i class="glyphicon glyphicon-folder-open"></i> @Model.Category </span></li>
+        <li>|</li>
+     
+    </ul>
+</div>
     if (Model.InformalComments.Any()) {
         foreach (var c in Model.InformalComments) {
             <div class="well">

@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Örebro_Universitet_Kommunikation.Controllers
 {
+    [Authorize]
     public class InformalBlogController : Controller
     {
         public ApplicationDbContext Ctx { get; set; }
