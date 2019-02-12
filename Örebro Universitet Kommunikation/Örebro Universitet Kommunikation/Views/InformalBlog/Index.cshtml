@@ -29,6 +29,8 @@
                         <li><span><i class="glyphicon glyphicon-folder-open"></i> @item.Category </span></li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "InformalBlog", new { BlogId = item.Id }, null)</span></li>
+                        
+                        <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowInformalComments", "InformalBlog", new { BlogId = item.Id }, null)</span></li>
                         @if (item.AttachedFile != null)
                         {
                             <li>|</li>

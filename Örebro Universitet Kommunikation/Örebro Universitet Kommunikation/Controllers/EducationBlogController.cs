@@ -108,7 +108,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowComments", new { newComment.BlogId });
+            return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
         }
         public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == BlogId);
