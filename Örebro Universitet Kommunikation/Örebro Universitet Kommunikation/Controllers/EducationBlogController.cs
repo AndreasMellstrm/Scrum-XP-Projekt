@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Örebro_Universitet_Kommunikation.Controllers
-{
+namespace Örebro_Universitet_Kommunikation.Controllers {
     [Authorize]
-    public class EducationBlogController : Controller
-    {
+    public class EducationBlogController : Controller {
         public ApplicationDbContext Ctx { get; set; }
         public UserManager<ApplicationUser> UserManager { get; set; }
         public EducationBlogController() {
@@ -21,12 +19,15 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
         // GET: EducationBlog
-        public async Task<ActionResult> Index()
-        {
+        public async Task<ActionResult> Index() {
             var EducationBlog = Ctx.EducationBlogs.OrderByDescending(e => e.Time);
             List<EducationBlogItem> educationList = new List<EducationBlogItem>();
-            foreach(var e in EducationBlog) {
+            foreach (var e in EducationBlog) {
                 var user = await UserManager.FindByIdAsync(e.CreatorId);
+                var creatorMail = user.Email;
+                if (user.IsInactive) {
+                    creatorMail = "Inaktiverad användare";
+                }
                 var comments = Ctx.EducationBlogComments.Where(b => b.BlogId == e.Id);
                 var item = new EducationBlogItem {
                     AttachedFile = e.AttachedFile,
@@ -38,11 +39,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     Title = e.Title,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
-                    CreatorMail = user.Email
+                    CreatorMail = creatorMail
                 };
                 educationList.Add(item);
             }
-            return View(new EducationBlogViewModel { EducationBlogList = educationList});
+            return View(new EducationBlogViewModel { EducationBlogList = educationList });
         }
         public ActionResult CreateEntry() {
             return View();
@@ -97,11 +98,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 return null;
             }
         }
-        public ActionResult WriteComment(EducationBlogCommentsViewModel newComment)
-        {
+        public ActionResult WriteComment(EducationBlogCommentsViewModel newComment) {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
-            Ctx.EducationBlogComments.Add(new EducationBlogCommentsModel
-            {
+            Ctx.EducationBlogComments.Add(new EducationBlogCommentsModel {
                 BlogId = newComment.BlogId,
                 Content = newComment.CommentContent,
                 Time = DateTime.Now,
@@ -111,14 +110,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
             return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
         }
-        public async Task<ActionResult> ShowComments(int BlogId)
-        {
+        public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == BlogId);
             if (BlogEntry != null)
             {
                 bool canDelete = false;
                 var CommentList = Ctx.EducationBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
+                var BloggUserMail = BloggUser.Email;
+                if (BloggUser.IsInactive) {
+                    BloggUserMail = "Inaktiverad användare";
+                }
                 bool isAdmin = BloggUser.Admin;
                 List<EducationComment> Comments = new List<EducationComment>();
                 foreach (var c in CommentList)
@@ -131,13 +133,16 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     {
                         canDelete = false;
                     }
+                foreach (var c in CommentList) {
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
-
-                    var CommentItem = new EducationComment
-                    {
+                    var creatorMail = User.Email;
+                    if (User.IsInactive) {
+                        creatorMail = "Inaktiverad användare";
+                    }
+                    var CommentItem = new EducationComment {
                         Content = c.Content,
                         Time = c.Time,
-                        Email = User.Email,
+                        Email = creatorMail,
                         FirstName = User.FirstName,
                         LastName = User.LastName,
                         CanDelete = canDelete,
@@ -146,16 +151,15 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     };
                     Comments.Add(CommentItem);
                 }
-                return View(new EducationBlogCommentsViewModel
-                {
+                return View(new EducationBlogCommentsViewModel {
                     AttachedFile = BlogEntry.AttachedFile,
                     BlogId = BlogEntry.Id,
-                    
+
                     Comments = Comments,
                     Content = BlogEntry.Content,
                     Date = BlogEntry.Time,
                     Title = BlogEntry.Title,
-                    CreatorMail = BloggUser.Email,
+                    CreatorMail = BloggUserMail,
                     CreatorFirstName = BloggUser.FirstName,
                     CreatorLastName = BloggUser.LastName
 
