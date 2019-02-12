@@ -10,11 +10,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Örebro_Universitet_Kommunikation.Controllers
-{
+namespace Örebro_Universitet_Kommunikation.Controllers {
     [Authorize]
-    public class ResearchBlogController : Controller
-    {
+    public class ResearchBlogController : Controller {
         public ApplicationDbContext Ctx { get; set; }
         public UserManager<ApplicationUser> UserManager { get; set; }
         public ResearchBlogController() {
@@ -23,15 +21,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         }
 
         // GET: ResearchBlog
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             var researchProjects = Ctx.Projects;
             List<ProjectItem> researchList = new List<ProjectItem>();
             var isMember = false;
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             foreach (var p in researchProjects) {
                 var listOfBlogs = Ctx.ResearchBlogs.Where(b => b.ProjectId == p.ProjectId);
-                if(p.ProjectId == currentUser.ProjectId) {
+                if (p.ProjectId == currentUser.ProjectId) {
                     isMember = true;
                 }
                 else {
@@ -52,8 +49,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == ResearchProject);
             bool canCreate = false;
-            if(currentUser.ProjectId != 0) { 
-                if(ResearchProject == currentUser.ProjectId) {
+            if (currentUser.ProjectId != 0) {
+                if (ResearchProject == currentUser.ProjectId) {
                     canCreate = true;
                 }
             }
@@ -62,9 +59,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var ResearchList = Ctx.ResearchBlogs.Where(c => c.ProjectId == ResearchProject);
             foreach (var r in ResearchList) {
                 var user = await UserManager.FindByIdAsync(r.CreatorId);
-                    
-                if(currentUser.Id == r.CreatorId || currentUser.Admin) {
+
+                if (currentUser.Id == r.CreatorId || currentUser.Admin) {
                     canEdit = true;
+                }
+                string CreatorMail = user.Email;
+                if (user.IsInactive) {
+                    CreatorMail = "Inaktiverad användare";
                 }
                 var blogItem = new ResearchBlogItem {
                     Id = r.Id,
@@ -72,7 +73,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     AttachedFile = r.AttachedFile,
                     CanDelete = canEdit,
                     Content = r.Content,
-                    CreaterMail = user.Email,
+                    CreaterMail = CreatorMail,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
                     Date = r.BlogEntryTime,
@@ -84,20 +85,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
             return View(new ResearchBlogViewModel { ResearchBlogList = researchList, ResearchName = currentProject.ProjectName, CanCreateEntry = canCreate });
         }
-        
-        public ActionResult CreateEntry()
-        {
+
+        public ActionResult CreateEntry() {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEntry(CreateResearchViewModel model, HttpPostedFileBase File)
-        {
+        public ActionResult CreateEntry(CreateResearchViewModel model, HttpPostedFileBase File) {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var fileString = FileUpload(File);
-            Ctx.ResearchBlogs.Add(new ResearchBlogModel
-            {
+            Ctx.ResearchBlogs.Add(new ResearchBlogModel {
                 AttachedFile = fileString,
                 ProjectId = user.ProjectId ?? default(int),
                 BlogEntryTime = DateTime.Now,
@@ -120,14 +118,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             //    emailHelper.SendEMail(appUser.Email, subject, emailText);
             //}
             return RedirectToAction("ShowResearch", new { ResearchProject = user.ProjectId });
-          
+
         }
-        public string FileUpload(HttpPostedFileBase File)
-        {
+        public string FileUpload(HttpPostedFileBase File) {
 
             //Vi kollar att det finns en fil att spara
-            if (File != null && File.ContentLength > 0)
-            {
+            if (File != null && File.ContentLength > 0) {
                 //Hämtar filnamnet utan filändelse
                 var NoExtension = Path.GetFileNameWithoutExtension(File.FileName);
                 //Hämtar filändelsen
@@ -143,16 +139,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
                 return NameOfPath;
             }
-            else
-            {
+            else {
                 return null;
             }
         }
-        public ActionResult WriteComment(ResearchBlogCommentsViewModel newComment)
-        {
+        public ActionResult WriteComment(ResearchBlogCommentsViewModel newComment) {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
-            Ctx.ResearchBlogComments.Add(new ResearchBlogCommentsModel
-            {
+            Ctx.ResearchBlogComments.Add(new ResearchBlogCommentsModel {
                 BlogId = newComment.BlogId,
                 Content = newComment.CommentContent,
                 Time = DateTime.Now,
@@ -160,10 +153,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             });
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowComments", new { newComment.BlogId });
+            return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
         }
-        public async Task<ActionResult> ShowComments(int BlogId)
-        {
+        public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.ResearchBlogs.FirstOrDefault(b => b.Id == BlogId);
             if (BlogEntry != null)
             {
@@ -172,8 +164,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
                 List<ResearchComment> Comments = new List<ResearchComment>();
                 var currentUser = UserManager.FindById(User.Identity.GetUserId());
+                var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == BlogEntry.ProjectId);
                 bool isAdmin = currentUser.Admin;
-                var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == currentUser.ProjectId);
 
                 foreach (var c in CommentList)
                 {
@@ -185,13 +177,16 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     {
                         canDelete = false;
                     }
+                foreach (var c in CommentList) {
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
-
-                    var CommentItem = new ResearchComment
-                    {
+                    string CreaterMail = User.Email;
+                    if (User.IsInactive) {
+                        CreaterMail = "Inaktiverad användare";
+                    }
+                    var CommentItem = new ResearchComment {
                         Content = c.Content,
                         Time = c.Time,
-                        Email = User.Email,
+                        Email = CreaterMail,
                         FirstName = User.FirstName,
                         LastName = User.LastName,
                         CanDelete = canDelete,
@@ -200,8 +195,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     };
                     Comments.Add(CommentItem);
                 }
-                return View(new ResearchBlogCommentsViewModel
-                {
+                string CreatorMail = BloggUser.Email;
+                if (BloggUser.IsInactive) {
+                    CreatorMail = "Inaktiverad användare";
+                }
+                return View(new ResearchBlogCommentsViewModel {
                     AttachedFile = BlogEntry.AttachedFile,
                     BlogId = BlogEntry.Id,
 
@@ -209,7 +207,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     Content = BlogEntry.Content,
                     Date = BlogEntry.BlogEntryTime,
                     Title = BlogEntry.Title,
-                    CreatorMail = BloggUser.Email,
+                    CreatorMail = CreatorMail,
                     CreatorFirstName = BloggUser.FirstName,
                     CreatorLastName = BloggUser.LastName,
                     ProjectName = currentProject.ProjectName,
@@ -225,7 +223,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             Ctx.ResearchBlogComments.Remove(researchComments);
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowComments", new { BlogId });
+            return RedirectToAction("ShowInformalComments", new { BlogId });
         }
     }
 }

@@ -3,7 +3,7 @@
 /**/
     ViewBag.Title = "ShowComments";
 }
-@using (Html.BeginForm("WriteComment", "FormalBlog", FormMethod.Post)) {
+@using (Html.BeginForm("WriteInformalComment", "FormalBlog", FormMethod.Post)) {
 @Html.AntiForgeryToken()
 <div class="jumbotron">
     <h1 class"display-4">@Model.Title</h1>
