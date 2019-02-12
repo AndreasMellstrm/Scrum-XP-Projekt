@@ -18,8 +18,9 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Position { get; set; }
         [DefaultValue("None")]
         public string Notifications { get; set; }
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
         public virtual ICollection<ApplicationUserCalendarEvents> EventRelationships { get; set; }
+        public bool IsInactive { get; set; }
 
 
 
@@ -48,6 +49,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<TempEventTimeModel> TempEventTimes { get; set; }
         public DbSet<TempEventUserModel> TempEventUsers { get; set; }
         public DbSet<ApplicationUserCalendarEvents> ApplicationUserCalendarEvents { get; set; }
+        public DbSet<InformalBlogModel> InformalBlogEntries { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
             //Configuration.ProxyCreationEnabled = false;
