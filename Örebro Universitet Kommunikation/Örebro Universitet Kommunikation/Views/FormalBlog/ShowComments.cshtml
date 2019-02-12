@@ -27,6 +27,11 @@ foreach (var c in Model.Comments) {
             <h4 class="media-heading">@c.FirstName @c.LastName (@c.Email)</h4>
             <p>@c.Content</p>
             <span><i class="glyphicon glyphicon-calendar"></i> @c.Time</span>
+            @if (c.CanDelete)
+            {
+                
+                <span> | <i class="glyphicon glyphicon-remove"></i> @Html.ActionLink("Ta bort", "DeleteComment", "FormalBlog", new { EntryId = c.Id, BlogId = Model.BlogId }, null) </span>
+            }
         </div>
     </div>
 </div>

@@ -116,11 +116,21 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == BlogId);
             if (BlogEntry != null)
             {
+                bool canDelete = false;
                 var CommentList = Ctx.EducationBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
+                bool isAdmin = BloggUser.Admin;
                 List<EducationComment> Comments = new List<EducationComment>();
                 foreach (var c in CommentList)
                 {
+                    if (isAdmin || BloggUser.Id == c.CreatorId || BlogEntry.CreatorId == BloggUser.Id)
+                    {
+                        canDelete = true;
+                    }
+                    else
+                    {
+                        canDelete = false;
+                    }
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
 
                     var CommentItem = new EducationComment
@@ -129,7 +139,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                         Time = c.Time,
                         Email = User.Email,
                         FirstName = User.FirstName,
-                        LastName = User.LastName
+                        LastName = User.LastName,
+                        CanDelete = canDelete,
+                        Id = c.BlogId
 
                     };
                     Comments.Add(CommentItem);
@@ -150,6 +162,15 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 });
             }
             return RedirectToAction("Index", "EducationBlog");
+        }
+        public ActionResult DeleteComment(int EntryId, int BlogId)
+        {
+            EducationBlogCommentsModel educationComments = Ctx.EducationBlogComments.Find(EntryId);
+
+            Ctx.EducationBlogComments.Remove(educationComments);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowComments", new { BlogId });
         }
     }
 
