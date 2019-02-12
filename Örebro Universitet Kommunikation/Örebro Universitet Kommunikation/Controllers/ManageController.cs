@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -300,6 +301,63 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
 
             base.Dispose(disposing);
+        }
+
+        public ActionResult BlockCategories(string CategoryType) {
+            var CategoryList = Ctx.Categories.ToList();
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var BlockedCategoriesFormal = new List<CategoryModel>();
+            var CategoriesFormal = new List<CategoryModel>();
+            var BlockedCategoriesInFormal = new List<CategoryModel>();
+            var CategoriesInFormal = new List<CategoryModel>();
+            var CategoryTypes = new List<SelectListItem>();
+            var SelectListItem1 = new SelectListItem { Value = "Formal", Text = "Formal" };
+            var SelectListItem2 = new SelectListItem { Value = "Informal", Text = "Informal" };
+            CategoryTypes.Add(SelectListItem1);
+            CategoryTypes.Add(SelectListItem2);
+
+            foreach (var c in CategoryList) {
+                    var Blocks = (from bc in Ctx.BlockedCategories
+                                  where bc.UserId == user.Id
+                                  && bc.CategoryName == c.CategoryName
+                                  && bc.CategoryType == CategoryType
+                                  select bc).ToList();
+                    if (Blocks.Count > 0 || Blocks != null) {
+                        BlockedCategoriesFormal.Add(c);
+                    }
+                    else {
+                        CategoriesFormal.Add(c);
+                    }
+            }
+
+            foreach (var c in CategoryList) {
+                var Blocks = (from bc in Ctx.BlockedCategories
+                              where bc.UserId == user.Id
+                              && bc.CategoryName == c.CategoryName
+                              && bc.CategoryType == CategoryType
+                              select bc).ToList();
+                if (Blocks.Count > 0 || Blocks != null) {
+                    BlockedCategoriesInFormal.Add(c);
+                }
+                else {
+                    CategoriesInFormal.Add(c);
+                }
+            }
+
+            return View(new BlockCategoriesViewModel {
+                BlockedCategoriesFormal = BlockedCategoriesFormal,
+                CategoriesFormal = CategoriesFormal,
+                BlockedCategoriesInformal = BlockedCategoriesInFormal,
+                CategoriesInformal = CategoriesInFormal,
+                CategoryTypes = CategoryTypes,
+                User = user
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void BlockCategories (BlockCategoriesViewModel model) {
+
         }
 
         #region Helpers

@@ -20,6 +20,8 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Notifications { get; set; }
         public int? ProjectId { get; set; }
         public virtual ICollection<ApplicationUserCalendarEvents> EventRelationships { get; set; }
+        public virtual ICollection<BlockedCategory> BlockedCategories { get; set; }
+
         public bool IsInactive { get; set; }
 
 
@@ -51,6 +53,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<TempEventUserModel> TempEventUsers { get; set; }
         public DbSet<ApplicationUserCalendarEvents> ApplicationUserCalendarEvents { get; set; }
         public DbSet<InformalBlogModel> InformalBlogEntries { get; set; }
+        public DbSet<BlockedCategory> BlockedCategories { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false) {
             //Configuration.ProxyCreationEnabled = false;
@@ -73,6 +76,19 @@ namespace Örebro_Universitet_Kommunikation.Models {
                .HasMany(c => c.EventRelationships)
                .WithRequired(cc => cc.Event)
                .HasForeignKey(c => c.EventId);
+
+            modelBuilder.Entity<BlockedCategory>().HasKey(c => new { c.CategoryName, c.CategoryType, c.UserId });
+
+            modelBuilder.Entity<ApplicationUser>()
+               .HasMany(c => c.BlockedCategories)
+               .WithRequired(cc => cc.User)
+               .HasForeignKey(c => c.UserId);
+
+            modelBuilder.Entity<CategoryModel>()
+               .HasMany(c => c.BlockedCategories)
+               .WithRequired(cc => cc.Category)
+               .HasForeignKey(c => new { c.CategoryType, c.CategoryName });
+
         }
 
             public static ApplicationDbContext Create() {

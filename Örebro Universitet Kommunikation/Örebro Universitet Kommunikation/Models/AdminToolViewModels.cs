@@ -201,4 +201,5 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public bool IsInactive { get; set; }
 
     }
+
 }
