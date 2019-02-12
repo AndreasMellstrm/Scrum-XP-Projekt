@@ -146,6 +146,9 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public bool Admin { get; set; }
 
         public string ErrorMessage { get; set; }
+        [Required]
+        [Display(Name ="Inaktiviverad")]
+        public bool IsInactive { get; set; }
     }
 
     public class _EditUserPartialViewModel {
@@ -193,7 +196,9 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public bool Admin { get; set; }
 
         public string ErrorMessage { get; set; }
-
+        [Required]
+        [Display(Name = "Inaktiviverad")]
+        public bool IsInactive { get; set; }
 
     }
 }

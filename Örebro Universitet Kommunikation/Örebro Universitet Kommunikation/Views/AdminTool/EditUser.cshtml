@@ -33,66 +33,73 @@
     if (Model.UserId != null) {
         visible = "";
     }
-    <div id="userForm" class="form-group @visible">
+        <div id="userForm" class="form-group @visible">
 
 
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        @Html.TextBoxFor(m => m.UserId, new { @class = "hidden" })
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @placeholder = Model.Email, @class = "form-control" })
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.UserId, new { @class = "hidden" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Email, new { @placeholder = Model.Email, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.FirstName, new { @placeholder = Model.FirstName, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.LastName, new { @placeholder = Model.LastName, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @placeholder = Model.PhoneNumber, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Position, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Position, new { @placeholder = Model.Position, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Administratörsbehörigheter", new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(m => m.Admin, "True")&nbsp;@Html.Label("Ja")
+                    @Html.RadioButtonFor(m => m.Admin, "False")&nbsp;@Html.Label("Nej")
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Inaktivera användaren", new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(m => m.IsInactive, "True")&nbsp;@Html.Label("Ja")
+                    @Html.RadioButtonFor(m => m.IsInactive, "False")&nbsp;@Html.Label("Nej")
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-primary" value="Spara ändringar" />
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.FirstName, new { @placeholder = Model.FirstName, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.LastName, new { @placeholder = Model.LastName, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.PhoneNumber, new { @placeholder = Model.PhoneNumber, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Position, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Position, new { @placeholder = Model.Position, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.Label("Administratörsbehörigheter", new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.RadioButtonFor(m => m.Admin, "True")&nbsp;@Html.Label("Ja")
-                @Html.RadioButtonFor(m => m.Admin, "False")&nbsp;@Html.Label("Nej")
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-primary" value="Spara ändringar" />
-            </div>
-        </div>
-    </div>
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
