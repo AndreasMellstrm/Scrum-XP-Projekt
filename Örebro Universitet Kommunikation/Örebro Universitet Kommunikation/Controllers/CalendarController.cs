@@ -37,7 +37,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult GetEvents() {
             using (Ctx) {
                 var events = Ctx.CalendarEvents.ToList();
-                List<CalenderItemViewModel> list = new List<CalenderItemViewModel>(); 
+                List<CalenderItemViewModel> list = new List<CalenderItemViewModel>();
+                var canDelete = false;
+                var currentUser = UserManager.FindById(User.Identity.GetUserId());
                 foreach(var e in events) {
                     var connections = (from c in Ctx.ApplicationUserCalendarEvents
                                  where c.EventId == e.EventId
@@ -54,6 +56,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                         users.Add(name);
                     }
                     var creator = UserManager.FindById(e.CreatorId);
+                    if(creator.Id == currentUser.Id || currentUser.Admin) {
+                        canDelete = true;
+                    }
+                    else {
+                        canDelete = false;
+                    }
                     var creatorMail = creator.Email;
                     if (creator.IsInactive) {
                         creatorMail = "Inaktiverad användare";
@@ -68,7 +76,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                         EventId = e.EventId,
                         Desc = e.Desc,
                         CreatorName = creatorName,
-                        Users = users.ToArray()
+                        Users = users.ToArray(),
+                        CanDelete = canDelete
                     };
                     list.Add(item);
                 }
@@ -121,7 +130,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
             return new JsonResult { Data = new { status = status } };
         }
+        public ActionResult Delete(int EventId) {
+            var remove = Ctx.CalendarEvents.Find(EventId);
+            Ctx.CalendarEvents.Remove(remove);
+            Ctx.SaveChanges();
 
+            return RedirectToAction("Index");
+        }
         [HttpPost]
         public JsonResult DeleteEvent(int eventID) {
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
