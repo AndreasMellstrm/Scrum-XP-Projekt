@@ -160,7 +160,9 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
         public ActionResult AsignUserToProject() {
             return View(new AsignUserToProjectViewModel{
-                UserList = GetAllUsers(),
+                UserList = (from u in Ctx.Users
+                            where u.IsInactive == false
+                            select u).ToList(),
                 ProjectList = GetAllProjects(),
                 ErrorMessage = ""
                     });
@@ -205,7 +207,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
                     Position = user.Position,
-                    ErrorMessage = ""
+                    ErrorMessage = "",
+                    IsInactive = user.IsInactive
                 });
             }
         }
@@ -219,7 +222,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 Position = user.Position,
-                ErrorMessage = ""
+                ErrorMessage = "",
+                IsInactive = user.IsInactive
             });
         }
 
@@ -235,6 +239,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
+                user.IsInactive = model.IsInactive;
             }
             else {
                 await UserManager.RemovePasswordAsync(user.Id);
@@ -243,6 +248,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
+                user.IsInactive = model.IsInactive;
             }
             int result = 0;
             if (userWithMail.Count == 0 || userWithMail[0] == user) {

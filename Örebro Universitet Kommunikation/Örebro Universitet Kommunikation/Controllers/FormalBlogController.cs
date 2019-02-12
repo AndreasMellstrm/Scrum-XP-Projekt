@@ -72,7 +72,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
                 }
-
+                string CreatorMail = user.Email;
+                if (user.IsInactive) {
+                    CreatorMail = "Inaktiverad användare";
+                }
                 var blogItem = new FormalBlogItem {
                     Id = item.Id,
                     CreatorId = item.CreatorId,
@@ -84,7 +87,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Content = item.Content,
                     Category = item.Category,
                     Title = item.Title,
-                    CanDelete = CanDelete
+                    CanDelete = CanDelete,
+                    CreaterMail = CreatorMail
                 };
 
                 FormalBlogItemList.Add(blogItem);
@@ -233,16 +237,24 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 List<Comment> Comments = new List<Comment>();
                 foreach (var c in CommentList) {
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
+                    string CreaterMail = User.Email;
+                    if (User.IsInactive) {
+                        CreaterMail = "Inaktiverad användare";
+                    }
 
                     var CommentItem = new Comment {
                         Content = c.Content,
                         Time = c.Time,
-                        Email = User.Email,
+                        Email = CreaterMail,
                         FirstName = User.FirstName,
                         LastName = User.LastName
 
                     };
                     Comments.Add(CommentItem);
+                }
+                string CreatorMail = BloggUser.Email;
+                if (BloggUser.IsInactive) {
+                    CreatorMail = "Inaktiverad användare";
                 }
                 return View(new FormalBlogCommentsViewModel {
                     AttachedFile = BlogEntry.AttachedFile,
@@ -252,7 +264,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Content = BlogEntry.Content,
                     Date = BlogEntry.BlogEntryTime,
                     Title = BlogEntry.Title,
-                    CreaterMail = BloggUser.Email,
+                    CreaterMail = CreatorMail,
                     CreatorFirstName = BloggUser.FirstName,
                     CreatorLastName = BloggUser.LastName
 
