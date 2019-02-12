@@ -269,6 +269,7 @@
     <Compile Include="Models\FormalBlogViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InformalBlogModel.cs" />
+    <Compile Include="Models\InformalBlogViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingRequestViewModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
@@ -391,6 +392,8 @@
     <Content Include="Views\Calendar\ListTempEvents.cshtml" />
     <Content Include="Views\Calendar\CreateEvent.cshtml" />
     <Content Include="Views\InformalBlog\Index.cshtml" />
+    <Content Include="Views\InformalBlog\CreateInformalEntry.cshtml" />
+    <Content Include="Views\InformalBlog\_SearchAndFilterInformalPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

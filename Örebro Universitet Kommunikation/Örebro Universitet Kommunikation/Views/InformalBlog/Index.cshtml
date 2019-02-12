@@ -1,7 +1,51 @@
-﻿
+﻿@model Örebro_Universitet_Kommunikation.Models.InformalBlogViewModel
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Home Page";
 }
 
-<h2>Index</h2>
+<div class="jumbotron">
+
+    <div class="container">
+        <h2 class="formal-blog-header"> Informell Blogg</h2>
+        <div>
+            @{Html.RenderAction("_SearchAndFilterInformalPartial", "InformalBlog"); }
+        </div>
+    </div>
+
+    @foreach (var item in Model.InformalBlogItems)
+    {
+        <div class="well">
+            <div class="media">
+                <div class="media-body">
+                    <h4 class="media-heading">@item.Title</h4>
+
+                    <p>@item.Content</p>
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-user"></i> @item.CreatorFirstName @item.CreatorLastName <i> @item.CreaterMail</i></span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-folder-open"></i> @item.Category </span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "FormalBlog", new { BlogId = item.Id }, null)</span></li>
+                        @if (item.AttachedFile != null)
+                        {
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>
+                        }
+                        @if (item.CanDelete)
+                        {
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditEntry", "FormalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteEntry", "FormalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
 
