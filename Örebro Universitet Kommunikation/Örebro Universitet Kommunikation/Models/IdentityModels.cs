@@ -18,7 +18,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Position { get; set; }
         [DefaultValue("None")]
         public string Notifications { get; set; }
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
         public virtual ICollection<ApplicationUserCalendarEvents> EventRelationships { get; set; }
 
 
