@@ -282,7 +282,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
         }
 
-        public ActionResult DeleteComment(int EntryId, int BlogId) {
+        public ActionResult DeleteInformalComment(int EntryId, int BlogId) {
             InformalBlogCommentsModel blogComment = Ctx.InformalBlogComments.Find(EntryId);
 
             Ctx.InformalBlogComments.Remove(blogComment);
