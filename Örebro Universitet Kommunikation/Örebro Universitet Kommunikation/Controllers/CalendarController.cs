@@ -46,11 +46,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     List<string> users = new List<string>(); 
                     foreach(var u in connections) {
                         var user = UserManager.FindById(u.UserId);
-                        var name = user.FirstName + " " + user.LastName + " (" + user.Email + ")";
+                        var userEmail = user.Email;
+                        if (user.IsInactive) {
+                            userEmail = "Inaktiverad användare";
+                        }
+                        var name = user.FirstName + " " + user.LastName + " (" + userEmail + ")";
                         users.Add(name);
                     }
                     var creator = UserManager.FindById(e.CreatorId);
-                    string creatorName = creator.FirstName + " " + creator.LastName + " (" + creator.Email + ")";
+                    var creatorMail = creator.Email;
+                    if (creator.IsInactive) {
+                        creatorMail = "Inaktiverad användare";
+                    }
+                    string creatorName = creator.FirstName + " " + creator.LastName + " (" + creatorMail + ")";
                     var item = new CalenderItemViewModel {
                         Title = e.Title,
                         ThemeColor = e.ThemeColor,
@@ -140,8 +148,10 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
         public List<SelectListItem> GetAllUsersSelectList() {
-            var listUsers = Ctx.Users.ToList();
-            List<SelectListItem> ListUsers = new List<SelectListItem>();
+            var listUsers = (from u in Ctx.Users
+                             where u.IsInactive == false
+                             select u).ToList();
+            List < SelectListItem > ListUsers = new List<SelectListItem>();
             foreach (var u in listUsers) {
                 if (u.Id != User.Identity.GetUserId()) {
                     var UserItem = new SelectListItem {

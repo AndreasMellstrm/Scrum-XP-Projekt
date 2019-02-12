@@ -165,7 +165,7 @@
                         $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
                         $description.append($('<p/>').html('<b>Skapat av: </b>' + calEvent.creatorName));
                         $description.append($('<p/>').html('<b>Deltagare: </b>'));
-                        $.each(calEvent.users, function (i, val) {
+                        $.each(calEvent.users, function (i, val) { 
                             $description.append($('<p/>').html(val))
                         });
                         $('#myModal #pDetails').empty().html($description);

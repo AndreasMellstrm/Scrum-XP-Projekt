@@ -295,7 +295,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowComments", new { newComment.BlogId });
+            return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
         }
 
         public ActionResult _SearchAndFilterPartial() {
@@ -317,6 +317,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult _SearchAndFilterPartial(SearchViewModel model) {
             return RedirectToAction("Index", new { model.SearchString, model.Category });
         }
+
+
         public ActionResult DeleteComment(int EntryId, int BlogId)
         {
            FormalBlogCommentsModel blogComment = Ctx.BlogComments.Find(EntryId);

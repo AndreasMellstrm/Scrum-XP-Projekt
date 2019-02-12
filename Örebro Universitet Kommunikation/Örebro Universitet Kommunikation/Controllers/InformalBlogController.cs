@@ -22,14 +22,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
         // GET: InformalBlog
-        public async Task <ActionResult> Index()
+        public async Task <ActionResult> Index(string searchString, string Category)
         {
             Ctx = new ApplicationDbContext();
 
             var items = from m in Ctx.InformalBlogEntries orderby m.BlogEntryTime descending select m;
 
 
-            /*
+            
             if (String.IsNullOrEmpty(searchString))
             {
                 searchString = "";
@@ -49,7 +49,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                         select item;
             }
 
-    */
+    
 
 
             var profileList = Ctx.Users.ToList();
@@ -99,7 +99,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         }
         public ActionResult CreateInformalEntry()
         {
-            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
             List<string> CategoryListName = new List<string>();
             foreach (var c in CategoryList)
             {
@@ -154,10 +154,67 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             //emailHelper.SendEmailFormalBlog(subject, emailText, user.Id);
             return RedirectToAction("Index", "InformalBlog");
         }
+        [HttpGet]
+        public ActionResult EditInformalEntry(int EntryId) {
+            var BlogEntry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList) {
+
+                CategoryListName.Add(c.CategoryName);
+            }
+            var InformalBlogItem = new EditInformalEntryViewModel() {
+                Id = BlogEntry.Id,
+                AttachedFile = "",      //Kanske inte funkar yao
+                Category = BlogEntry.Category,
+                Content = BlogEntry.Content,
+                Title = BlogEntry.Title,
+                CategoryItems = CategoryListName
+
+            };
+            return View(InformalBlogItem);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditInformal(EditInformalEntryViewModel model, int Id) {
+            if (ModelState.IsValid) {
+                var entry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == Id);
+                //var Filestring = FileUpload(File);
+
+
+                //entry.AttachedFile = Filestring;
+                entry.Category = model.Category;
+
+
+                entry.Content = model.Content;
+                entry.Title = model.Title;
+
+                Ctx.SaveChanges();
+            }
+
+
+            return RedirectToAction("Index", "InformalBlog");
+        }
+
+
+        public ActionResult DeleteInformalEntry(int EntryId, string CreatorId)
+        {
+            InformalBlogModel blogEntry = Ctx.InformalBlogEntries.Find(EntryId);
+
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var currentUserId = currentUser.Id;
+
+            // currentUserId.Equals(CreatorId)
+            Ctx.InformalBlogEntries.Remove(blogEntry);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("Index", "InformalBlog");
+        }
 
 
 
-        public ActionResult _SearchAndFilterInformalPartial()
+            public ActionResult _SearchAndFilterInformalPartial()
         {
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
             List<string> CategoryListName = new List<string>();
@@ -178,6 +235,82 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         public ActionResult _SearchAndFilterInformalPartial(SearchViewModel model)
         {
             return RedirectToAction("Index", new { model.SearchString, model.Category });
+        }
+
+        public async Task<ActionResult> ShowInformalComments(int BlogId) {
+            var BlogEntry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == BlogId);
+            if (BlogEntry != null) {
+                bool canDelete = false;
+                var currentUser = UserManager.FindById(User.Identity.GetUserId());
+                bool isAdmin = currentUser.Admin;
+                var CommentList = Ctx.InformalBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
+                var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
+                List<InformalComment> Comments = new List<InformalComment>();
+                foreach (var c in CommentList) {
+
+                    if (isAdmin || currentUser.Id == c.CreatorId || BlogEntry.CreatorId == currentUser.Id) {
+                        canDelete = true;
+                    } else {
+                        canDelete = false;
+                    }
+                    var User = await UserManager.FindByIdAsync(c.CreatorId);
+                    string CreaterMail = User.Email;
+                    if (User.IsInactive) {
+                        CreaterMail = "Inaktiverad användare";
+                    }
+
+                    var CommentItem = new InformalComment {
+                        Content = c.Content,
+                        Time = c.Time,
+                        Email = CreaterMail,
+                        FirstName = User.FirstName,
+                        LastName = User.LastName,
+                        CanDelete = canDelete,
+                        Id = c.Id
+                    };
+                    Comments.Add(CommentItem);
+                }
+                string CreatorMail = BloggUser.Email;
+                if (BloggUser.IsInactive) {
+                    CreatorMail = "Inaktiverad användare";
+                }
+                return View(new InformalBlogCommentsViewModel {
+                    AttachedFile = BlogEntry.AttachedFile,
+                    BlogId = BlogEntry.Id,
+                    Category = BlogEntry.Category,
+                    InformalComments = Comments,
+                    Content = BlogEntry.Content,
+                    Date = BlogEntry.BlogEntryTime,
+                    Title = BlogEntry.Title,
+                    CreaterMail = CreatorMail,
+                    CreatorFirstName = BloggUser.FirstName,
+                    CreatorLastName = BloggUser.LastName
+
+                });
+            }
+            return RedirectToAction("Index", "InformalBlog");
+        }
+
+        public ActionResult WriteInformalComment(InformalBlogCommentsViewModel newComment) {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            Ctx.InformalBlogComments.Add(new InformalBlogCommentsModel {
+                BlogId = newComment.BlogId,
+                Content = newComment.CommentContent,
+                Time = DateTime.Now,
+                CreatorId = currentUser.Id
+            });
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
+        }
+
+        public ActionResult DeleteInformalComment(int EntryId, int BlogId) {
+            InformalBlogCommentsModel blogComment = Ctx.InformalBlogComments.Find(EntryId);
+
+            Ctx.InformalBlogComments.Remove(blogComment);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowInformalComments", new { BlogId });
         }
         public string FileUpload(HttpPostedFileBase File)
         {
