@@ -171,7 +171,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var projects = (from p in Ctx.Projects
                             where p.ProjectId == model.ProjectId
                             select p).ToList();
-            user.Project = projects[0];
+            user.ProjectId = projects[0].ProjectId;
             var result = await Ctx.SaveChangesAsync();
             if(result > 0) {
                 return View(new AsignUserToProjectViewModel {
