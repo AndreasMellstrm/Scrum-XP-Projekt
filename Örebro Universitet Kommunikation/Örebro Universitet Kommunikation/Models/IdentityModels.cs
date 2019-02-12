@@ -38,6 +38,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public DbSet<FormalBlogEntry> FormalBlogEntries { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<FormalBlogCommentsModel> BlogComments { get; set; }
+        public DbSet<InformalBlogCommentsModel> InformalBlogComments { get; set; }
         public DbSet<ResearchBlogModel> ResearchBlogs { get; set; }
         public DbSet<ProjectModel> Projects { get; set; }
         public DbSet<EducationBlogModel> EducationBlogs { get; set; }

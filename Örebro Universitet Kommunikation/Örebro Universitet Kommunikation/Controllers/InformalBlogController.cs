@@ -214,5 +214,72 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         {
             return RedirectToAction("Index", new { model.SearchString, model.Category });
         }
+
+        public async Task<ActionResult> ShowInformalComments(int BlogId) {
+            var BlogEntry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == BlogId);
+            if (BlogEntry != null) {
+                bool canDelete = false;
+                var currentUser = UserManager.FindById(User.Identity.GetUserId());
+                bool isAdmin = currentUser.Admin;
+                var CommentList = Ctx.InformalBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
+                var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
+                List<InformalComment> Comments = new List<InformalComment>();
+                foreach (var c in CommentList) {
+
+                    if (isAdmin || currentUser.Id == c.CreatorId || BlogEntry.CreatorId == currentUser.Id) {
+                        canDelete = true;
+                    } else {
+                        canDelete = false;
+                    }
+                    var User = await UserManager.FindByIdAsync(c.CreatorId);
+                    string CreaterMail = User.Email;
+                    if (User.IsInactive) {
+                        CreaterMail = "Inaktiverad användare";
+                    }
+
+                    var CommentItem = new InformalComment {
+                        Content = c.Content,
+                        Time = c.Time,
+                        Email = CreaterMail,
+                        FirstName = User.FirstName,
+                        LastName = User.LastName,
+                        CanDelete = canDelete,
+                        Id = c.Id
+                    };
+                    Comments.Add(CommentItem);
+                }
+                string CreatorMail = BloggUser.Email;
+                if (BloggUser.IsInactive) {
+                    CreatorMail = "Inaktiverad användare";
+                }
+                return View(new InformalBlogCommentsViewModel {
+                    AttachedFile = BlogEntry.AttachedFile,
+                    BlogId = BlogEntry.Id,
+                    Category = BlogEntry.Category,
+                    InformalComments = Comments,
+                    Content = BlogEntry.Content,
+                    Date = BlogEntry.BlogEntryTime,
+                    Title = BlogEntry.Title,
+                    CreaterMail = CreatorMail,
+                    CreatorFirstName = BloggUser.FirstName,
+                    CreatorLastName = BloggUser.LastName
+
+                });
+            }
+            return RedirectToAction("Index", "InformalBlog");
+        }
+
+        public ActionResult WriteInformalComment(InformalBlogCommentsViewModel newComment) {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            Ctx.InformalBlogComments.Add(new InformalBlogCommentsModel {
+                BlogId = newComment.BlogId,
+                Content = newComment.CommentContent,
+                Time = DateTime.Now,
+                CreatorId = currentUser.Id
+            });
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
+        }
     }
 }
