@@ -99,7 +99,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             Ctx.ResearchBlogs.Add(new ResearchBlogModel
             {
                 AttachedFile = fileString,
-                ProjectId = user.ProjectId,
+                ProjectId = user.ProjectId ?? default(int),
                 BlogEntryTime = DateTime.Now,
                 Title = model.Title,
                 Content = model.Content,

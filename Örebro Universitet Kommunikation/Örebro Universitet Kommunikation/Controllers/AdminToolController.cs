@@ -73,6 +73,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Position = model.Position,
                     PhoneNumber = model.PhoneNumber,
                     Admin = model.Admin
+                    
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) {
