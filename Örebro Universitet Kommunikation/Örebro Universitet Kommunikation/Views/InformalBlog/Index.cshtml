@@ -39,7 +39,7 @@
                             <li>|</li>
                             <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditEntry", "FormalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
                             <li>|</li>
-                            <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteEntry", "FormalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
+                            <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteInformalEntry", "InformalBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
                         }
                     </ul>
                 </div>

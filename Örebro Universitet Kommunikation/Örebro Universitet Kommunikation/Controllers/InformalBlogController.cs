@@ -21,14 +21,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(Ctx));
         }
         // GET: InformalBlog
-        public async Task <ActionResult> Index()
+        public async Task <ActionResult> Index(string searchString, string Category)
         {
             Ctx = new ApplicationDbContext();
 
             var items = from m in Ctx.InformalBlogEntries orderby m.BlogEntryTime descending select m;
 
 
-            /*
+            
             if (String.IsNullOrEmpty(searchString))
             {
                 searchString = "";
@@ -48,7 +48,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                         select item;
             }
 
-    */
+    
 
 
             var profileList = Ctx.Users.ToList();
@@ -134,8 +134,23 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         }
 
 
+        public ActionResult DeleteInformalEntry(int EntryId, string CreatorId)
+        {
+            InformalBlogModel blogEntry = Ctx.InformalBlogEntries.Find(EntryId);
 
-        public ActionResult _SearchAndFilterInformalPartial()
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var currentUserId = currentUser.Id;
+
+            // currentUserId.Equals(CreatorId)
+            Ctx.InformalBlogEntries.Remove(blogEntry);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("Index", "InformalBlog");
+        }
+
+
+
+            public ActionResult _SearchAndFilterInformalPartial()
         {
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
             List<string> CategoryListName = new List<string>();
