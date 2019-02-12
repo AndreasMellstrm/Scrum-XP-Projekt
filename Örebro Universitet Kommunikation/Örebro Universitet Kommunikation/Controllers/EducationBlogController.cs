@@ -108,7 +108,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
+            return RedirectToAction("ShowComments", new { newComment.BlogId });
         }
         public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == BlogId);
@@ -129,50 +129,50 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     else {
                         canDelete = false;
                     }
-                    foreach (var co in CommentList) {
-                        var User = await UserManager.FindByIdAsync(c.CreatorId);
-                        var creatorMail = User.Email;
-                        if (User.IsInactive) {
-                            creatorMail = "Inaktiverad användare";
-                        }
-                        var CommentItem = new EducationComment {
-                            Content = co.Content,
-                            Time = co.Time,
-                            Email = creatorMail,
-                            FirstName = User.FirstName,
-                            LastName = User.LastName,
-                            CanDelete = canDelete,
-                            Id = co.BlogId
-
-                        };
-                        Comments.Add(CommentItem);
-                    }
-                    return View(new EducationBlogCommentsViewModel {
-                        AttachedFile = BlogEntry.AttachedFile,
-                        BlogId = BlogEntry.Id,
-
-                        Comments = Comments,
-                        Content = BlogEntry.Content,
-                        Date = BlogEntry.Time,
-                        Title = BlogEntry.Title,
-                        CreatorMail = BloggUserMail,
-                        CreatorFirstName = BloggUser.FirstName,
-                        CreatorLastName = BloggUser.LastName
-
-                    });
                 }
+                foreach (var co in CommentList) {
+                    var User = await UserManager.FindByIdAsync(co.CreatorId);
+                    var creatorMail = User.Email;
+                    if (User.IsInactive) {
+                        creatorMail = "Inaktiverad användare";
+                    }
+                    var CommentItem = new EducationComment {
+                        Content = co.Content,
+                        Time = co.Time,
+                        Email = creatorMail,
+                        FirstName = User.FirstName,
+                        LastName = User.LastName,
+                        CanDelete = canDelete,
+                        Id = co.BlogId
+
+                    };
+                    Comments.Add(CommentItem);
+                }
+                return View(new EducationBlogCommentsViewModel {
+                    AttachedFile = BlogEntry.AttachedFile,
+                    BlogId = BlogEntry.Id,
+
+                    Comments = Comments,
+                    Content = BlogEntry.Content,
+                    Date = BlogEntry.Time,
+                    Title = BlogEntry.Title,
+                    CreatorMail = BloggUserMail,
+                    CreatorFirstName = BloggUser.FirstName,
+                    CreatorLastName = BloggUser.LastName
+
+                });
             }
-                    return RedirectToAction("Index", "EducationBlog");
-                
-        }
-            public ActionResult DeleteComment(int EntryId, int BlogId) {
-                EducationBlogCommentsModel educationComments = Ctx.EducationBlogComments.Find(EntryId);
-
-                Ctx.EducationBlogComments.Remove(educationComments);
-                Ctx.SaveChanges();
-
-                return RedirectToAction("ShowComments", new { BlogId });
-            }
+            return RedirectToAction("Index", "EducationBlog");
         }
 
+        public ActionResult DeleteComment(int EntryId, int BlogId) {
+            EducationBlogCommentsModel educationComments = Ctx.EducationBlogComments.Find(EntryId);
+
+            Ctx.EducationBlogComments.Remove(educationComments);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowComments", new { BlogId });
+        }
     }
+
+}
