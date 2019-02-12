@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNet.Identity
+@using Örebro_Universitet_Kommunikation.Models
+@model SearchViewModel
+@{ Layout = null;}
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("_SearchAndFilterInformalPartial", "InformalBlog", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div>
+            <div>
+                @Html.TextBoxFor(m => m.SearchString, new { @placeholder = "Sök...", @class = "form-control" })
+            </div>
+            <br />
+            <div>
+                @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryList, "Välj en kategori"), new { @class = "form-control" })
+            </div>
+            <br />
+        </div>
+        <div>
+            <input type="submit" value="Sök & filtrera" class="btn btn-success" />
+            @Html.ActionLink("Skapa nytt inlägg", "CreateInformalEntry", "InformalBlog", new { @class = "btn btn-primary" })
+        </div>
+        <br />
+    }
+}

@@ -96,7 +96,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
             });
         }
-        public ActionResult CreateEntry()
+        public ActionResult CreateInformalEntry()
         {
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
             List<string> CategoryListName = new List<string>();
@@ -131,6 +131,31 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             //var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210");
             //emailHelper.SendEmailFormalBlog(subject, emailText, user.Id);
             return RedirectToAction("Index", "InformalBlog");
+        }
+
+
+
+        public ActionResult _SearchAndFilterInformalPartial()
+        {
+            var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
+            List<string> CategoryListName = new List<string>();
+            foreach (var c in CategoryList)
+            {
+
+                CategoryListName.Add(c.CategoryName);
+            }
+            CategoryListName.Add("Välj en kategori");
+            CategoryListName.Reverse();
+            var Id = User.Identity.GetUserId();
+            return View(new SearchViewModel {
+                CategoryList = CategoryListName
+            });
+        }
+
+        [HttpPost]
+        public ActionResult _SearchAndFilterInformalPartial(SearchViewModel model)
+        {
+            return RedirectToAction("Index", new { model.SearchString, model.Category });
         }
     }
 }
