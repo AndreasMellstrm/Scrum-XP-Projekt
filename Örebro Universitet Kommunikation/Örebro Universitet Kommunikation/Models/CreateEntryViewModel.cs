@@ -18,5 +18,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [Display(Name = "Inlägg")]
         public string Content { get; set; }
         public string Category { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

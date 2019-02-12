@@ -8,7 +8,14 @@
 @using (Html.BeginForm("CreateInformalEntry", "InformalBlog", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-
+    if (Model.ErrorMessage == "")
+    {
+        <label class="hidden" role="alert">@Model.ErrorMessage</label>
+    }
+    else
+    {
+        <label class="alert alert-danger" role="alert">@Model.ErrorMessage</label>
+    }
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -36,7 +43,7 @@
             <div class="col-md-offset-2 col-md-10">
                 <label>
                     <input type="file" name="File" style="display: none;">
-                    <a class="btn btn-info form-control">Ladda upp en fil</a>
+                    <a class="btn btn-info form-control">Ladda upp en bild</a>
                 </label>
             </div>
         </div>
@@ -51,15 +58,15 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-          $("[type=file]").on("change", function(){
-          // Name of file and placeholder
-          var file = this.files[0].name;
-          var dflt = $(this).attr("placeholder");
-          if($(this).val()!=""){
-            $(this).next().text(file);
-          } else {
-            $(this).next().text(dflt);
-          }
+        $("[type=file]").on("change", function () {
+            // Name of file and placeholder
+            var file = this.files[0].name;
+            var dflt = $(this).attr("placeholder");
+            if ($(this).val() != "") {
+                $(this).next().text(file);
+            } else {
+                $(this).next().text(dflt);
+            }
         });
     </script>
 }
