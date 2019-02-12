@@ -111,7 +111,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEntry(CreateEntryViewModel model, string Category)
+        public ActionResult CreateInformalEntry(CreateEntryViewModel model, string Category)
         {
 
             var user = UserManager.FindById(User.Identity.GetUserId());
