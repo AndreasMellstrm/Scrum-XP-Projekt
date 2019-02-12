@@ -133,6 +133,7 @@
                                 end: v.End != null ? moment(v.End) : null,
                                 color: v.ThemeColor,
                                 allDay: v.IsFullDay,
+                                canDelete: v.CanDelete
                             });
                         })
 
@@ -163,16 +164,20 @@
                         selectedEvent = calEvent;
                         $('#myModal #eventTitle').text(calEvent.title);
                         var $description = $('<div/>');
-                        $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("YYYY/MMM/DD HH:mm")));
+                        $description.append($('<p/>').html('<b>Starttid:</b>' + calEvent.start.format("YYYY/MMM/DD HH:mm")));
                         if (calEvent.end != null) {
-                            $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("YYYY/MMM/DD HH:mm")));
+                            $description.append($('<p/>').html('<b>Sluttid:</b>' + calEvent.end.format("YYYY/MMM/DD HH:mm")));
                         }
-                        $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
+                        $description.append($('<p/>').html('<b>Beskrivning: </b>' + calEvent.description));
                         $description.append($('<p/>').html('<b>Skapat av: </b>' + calEvent.creatorName));
                         $description.append($('<p/>').html('<b>Deltagare: </b>'));
                         $.each(calEvent.users, function (i, val) {
                             $description.append($('<p/>').html(val))
                         });
+                        if (calEvent.canDelete) {
+                            //$description.append($('<p/>').html('<button id="btnDelete" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove" ></span> Remove </button><button id="btnEdit" class="btn btn-default btn-sm" style="margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span> Edit</button>'));
+                            $description.append($('<p/>').html('<a href="/Calendar/Delete?EventId=' + calEvent.eventId + '" class="btn btn-danger">Ta bort </a>'));
+                        }
                         $('#myModal #pDetails').empty().html($description);
 
                         $('#myModal').modal();

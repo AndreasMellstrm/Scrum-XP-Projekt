@@ -36,6 +36,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string ThemeColor { get; set; }
         public bool IsFullDay { get; set; }
         public string CreatorName { get; set; }
+        public bool CanDelete { get; set; }
         public string[] Users { get; set; }
     }
 
