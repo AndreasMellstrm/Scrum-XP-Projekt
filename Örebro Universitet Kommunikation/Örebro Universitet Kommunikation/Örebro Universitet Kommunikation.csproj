@@ -269,6 +269,7 @@
     <Compile Include="Models\FormalBlogViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InformalBlogModel.cs" />
+    <Compile Include="Models\InformalBlogViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingRequestViewModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
