@@ -112,8 +112,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
         public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == BlogId);
-            if (BlogEntry != null)
-            {
+            if (BlogEntry != null) {
                 bool canDelete = false;
                 var CommentList = Ctx.EducationBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
@@ -123,59 +122,57 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 }
                 bool isAdmin = BloggUser.Admin;
                 List<EducationComment> Comments = new List<EducationComment>();
-                foreach (var c in CommentList)
-                {
-                    if (isAdmin || BloggUser.Id == c.CreatorId || BlogEntry.CreatorId == BloggUser.Id)
-                    {
+                foreach (var c in CommentList) {
+                    if (isAdmin || BloggUser.Id == c.CreatorId || BlogEntry.CreatorId == BloggUser.Id) {
                         canDelete = true;
                     }
-                    else
-                    {
+                    else {
                         canDelete = false;
                     }
-                foreach (var c in CommentList) {
-                    var User = await UserManager.FindByIdAsync(c.CreatorId);
-                    var creatorMail = User.Email;
-                    if (User.IsInactive) {
-                        creatorMail = "Inaktiverad användare";
+                    foreach (var co in CommentList) {
+                        var User = await UserManager.FindByIdAsync(c.CreatorId);
+                        var creatorMail = User.Email;
+                        if (User.IsInactive) {
+                            creatorMail = "Inaktiverad användare";
+                        }
+                        var CommentItem = new EducationComment {
+                            Content = co.Content,
+                            Time = co.Time,
+                            Email = creatorMail,
+                            FirstName = User.FirstName,
+                            LastName = User.LastName,
+                            CanDelete = canDelete,
+                            Id = co.BlogId
+
+                        };
+                        Comments.Add(CommentItem);
                     }
-                    var CommentItem = new EducationComment {
-                        Content = c.Content,
-                        Time = c.Time,
-                        Email = creatorMail,
-                        FirstName = User.FirstName,
-                        LastName = User.LastName,
-                        CanDelete = canDelete,
-                        Id = c.BlogId
+                    return View(new EducationBlogCommentsViewModel {
+                        AttachedFile = BlogEntry.AttachedFile,
+                        BlogId = BlogEntry.Id,
 
-                    };
-                    Comments.Add(CommentItem);
+                        Comments = Comments,
+                        Content = BlogEntry.Content,
+                        Date = BlogEntry.Time,
+                        Title = BlogEntry.Title,
+                        CreatorMail = BloggUserMail,
+                        CreatorFirstName = BloggUser.FirstName,
+                        CreatorLastName = BloggUser.LastName
+
+                    });
                 }
-                return View(new EducationBlogCommentsViewModel {
-                    AttachedFile = BlogEntry.AttachedFile,
-                    BlogId = BlogEntry.Id,
-
-                    Comments = Comments,
-                    Content = BlogEntry.Content,
-                    Date = BlogEntry.Time,
-                    Title = BlogEntry.Title,
-                    CreatorMail = BloggUserMail,
-                    CreatorFirstName = BloggUser.FirstName,
-                    CreatorLastName = BloggUser.LastName
-
-                });
             }
-            return RedirectToAction("Index", "EducationBlog");
+                    return RedirectToAction("Index", "EducationBlog");
+                
         }
-        public ActionResult DeleteComment(int EntryId, int BlogId)
-        {
-            EducationBlogCommentsModel educationComments = Ctx.EducationBlogComments.Find(EntryId);
+            public ActionResult DeleteComment(int EntryId, int BlogId) {
+                EducationBlogCommentsModel educationComments = Ctx.EducationBlogComments.Find(EntryId);
 
-            Ctx.EducationBlogComments.Remove(educationComments);
-            Ctx.SaveChanges();
+                Ctx.EducationBlogComments.Remove(educationComments);
+                Ctx.SaveChanges();
 
-            return RedirectToAction("ShowComments", new { BlogId });
+                return RedirectToAction("ShowComments", new { BlogId });
+            }
         }
+
     }
-
-}
