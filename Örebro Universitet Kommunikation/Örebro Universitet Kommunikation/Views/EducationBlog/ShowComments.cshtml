@@ -1,8 +1,5 @@
 ﻿@model Örebro_Universitet_Kommunikation.Models.EducationBlogCommentsViewModel
-@{
-    /**/
-    ViewBag.Title = "ShowComments";
-}
+
 @using (Html.BeginForm("WriteComment", "EducationBlog", FormMethod.Post))
 {
     @Html.AntiForgeryToken()

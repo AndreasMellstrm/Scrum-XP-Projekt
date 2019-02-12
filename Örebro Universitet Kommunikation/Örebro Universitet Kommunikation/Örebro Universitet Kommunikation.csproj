@@ -211,6 +211,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\EducationBlogController.cs" />
+    <Compile Include="Controllers\InformalBlogController.cs" />
     <Compile Include="Controllers\NotificationControllers.cs" />
     <Compile Include="Controllers\FormalBlogController.cs" />
     <Compile Include="Controllers\AdminToolController.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="Models\FormalBlogEntry.cs" />
     <Compile Include="Models\FormalBlogViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\InformalBlogModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingRequestViewModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
@@ -373,7 +375,6 @@
     <Content Include="Views\FormalBlog\_SearchAndFilterPartial.cshtml" />
     <Content Include="Views\Calendar\Index.cshtml" />
     <Content Include="Views\AdminTool\CreateProject.cshtml" />
-    <Content Include="Views\ResearchBlog\ShowResearchBKP.cshtml" />
     <Content Include="Views\ResearchBlog\ShowResearch.cshtml" />
     <Content Include="Views\ResearchBlog\Index.cshtml" />
     <Content Include="Views\AdminTool\AsignUserToProject.cshtml" />
@@ -389,6 +390,7 @@
     <Content Include="Views\Calendar\ShowEventResult.cshtml" />
     <Content Include="Views\Calendar\ListTempEvents.cshtml" />
     <Content Include="Views\Calendar\CreateEvent.cshtml" />
+    <Content Include="Views\InformalBlog\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
