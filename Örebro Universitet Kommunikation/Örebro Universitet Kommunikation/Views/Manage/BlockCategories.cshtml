@@ -13,7 +13,7 @@
             @Html.Label("Formell", new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @{SelectList selectlist = new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName");}
-                @Html.DropDownListFor(m => m.CategoriesFormal, selectlist, new { @id = "formalCat", @class = "form-control" })
+                @Html.DropDownListFor(m => m.CategoriesFormal, selectlist, new { @id = "FormalCat", @class = "form-control" })
             </div>
             <br />
             <br />
@@ -29,37 +29,55 @@
     <div class="form-group">
         @Html.Label("Blockerade från formell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.ListBoxFor(m => m.BlockedCategoriesFormal, new SelectList(Model.BlockedCategoriesFormal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+            @Html.ListBoxFor(m => m.BlockedCategoriesFormal, new SelectList(Model.BlockedCategoriesFormal, "CategoryName", "CategoryName"), new { @id = "BlockFormalCat", @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         @Html.Label("Informell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.CategoriesInformal, new SelectList(Model.CategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.CategoriesInformal, new SelectList(Model.CategoriesInformal, "CategoryName", "CategoryName"), new { @id = "InFormalCat", @class = "form-control" })
         </div>
         <br />
         <br />
         <div class="form-group col-md-2">
-            <input type="button" class="btn btn-danger form-control" value="Blockera" onclick="BlockCatInformal()" />
+            <input type="button" class="btn btn-danger form-control" value="Blockera" onclick="BlockCatInFormal()" />
         </div>
         <div class="form-group col-md-2">
-            <input type="button" class="btn btn-success form-control" value="Avblockera" onclick="UnBlockCatInformal()" />
+            <input type="button" class="btn btn-success form-control" value="Avblockera" onclick="UnBlockCatInFormal()" />
         </div>
     </div>
     <div class="form-group">
         @Html.Label("Blockerade från informell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.ListBoxFor(m => m.BlockedCategoriesInformal, new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+            @Html.ListBoxFor(m => m.BlockedCategoriesInformal, new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @id = "BlockInFormalCat", @class = "form-control" })
         </div>
     </div>
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
         @Scripts.Render("~/bundles/jquery")
         <script>
-            $("#userlist").prepend("<option value='' disabled selected>Välj en användare...</option>");
-            function ShowUserForm() {
-                var userId = $("#userlist").val();
-                window.location.href = '/AdminTool/EditUser?userId=' + userId;
+            function BlockCatFormal() {
+                var Category = $("#FormalCat").val();
+                var CategoryType = 'Formal';
+                window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+            }
+
+            function BlockCatInFormal() {
+                var Category = $("#InFormalCat").val();
+                var CategoryType = 'Informal';
+                window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+            }
+
+            function UnBlockCatFormal() {
+                var Category = $("#BlockFormalCat").val();
+                var CategoryType = 'Formal';
+                window.location.href = '/Manage/UnBlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+            }
+
+            function UnBlockCatInFormal() {
+                var Category = $("#BlockInFormalCat").val();
+                var CategoryType = 'Informal';
+                window.location.href = '/Manage/UnBlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
             }
         </script>
     }
