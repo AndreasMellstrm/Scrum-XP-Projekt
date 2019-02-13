@@ -27,16 +27,20 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
         public async Task<ActionResult> Index(string searchString, string Category) {
 
-            Ctx = new ApplicationDbContext();
+            var user = UserManager.FindById(User.Identity.GetUserId());
 
-
-
+            var blockedCategories = (from bc in Ctx.BlockedCategories
+                                     where bc.UserId == user.Id
+                                     && bc.CategoryType == "Formal"
+                                     select bc).ToList();
 
             var items = from m in Ctx.FormalBlogEntries orderby m.BlogEntryTime descending select m;
 
+
+
             if (String.IsNullOrEmpty(searchString)) {
                 searchString = "";
-               
+
 
             }
             if (Category == "Välj en kategori" || Category == null) {
@@ -53,11 +57,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
 
 
+
             var profileList = Ctx.Users.ToList();
 
-            var BlogEntries = items;
-
-
+            var BlogEntries = items.ToList();
+            if (blockedCategories.Count > 0) {
+                foreach (var bc in blockedCategories) {
+                    foreach (var i in items) {
+                        if (bc.CategoryName == i.Category && bc.CategoryType == "Formal") {
+                            BlogEntries.Remove(i);
+                        }
+                    }
+                }
+            }
             List<FormalBlogItem> FormalBlogItemList = new List<FormalBlogItem>();
 
 
@@ -67,7 +79,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var CurrentUserAdmin = currentUser.Admin;
 
             foreach (var item in BlogEntries) {
-                var user = await UserManager.FindByIdAsync(item.CreatorId);
+                user = await UserManager.FindByIdAsync(item.CreatorId);
                 bool CanDelete = false;
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin) {
                     CanDelete = true;
@@ -99,6 +111,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 FormalBlogItems = FormalBlogItemList
 
             });
+
         }
         public ActionResult CreateEntry() {
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
@@ -239,12 +252,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
                 List<Comment> Comments = new List<Comment>();
                 foreach (var c in CommentList) {
-                    
-                    if(isAdmin || currentUser.Id == c.CreatorId || BlogEntry.CreatorId == currentUser.Id) {
+
+                    if (isAdmin || currentUser.Id == c.CreatorId || BlogEntry.CreatorId == currentUser.Id) {
                         canDelete = true;
                     }
-                    else
-                    {
+                    else {
                         canDelete = false;
                     }
                     var User = await UserManager.FindByIdAsync(c.CreatorId);
@@ -319,14 +331,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
 
-        public ActionResult DeleteComment(int EntryId, int BlogId)
-        {
-           FormalBlogCommentsModel blogComment = Ctx.BlogComments.Find(EntryId);
+        public ActionResult DeleteComment(int EntryId, int BlogId) {
+            FormalBlogCommentsModel blogComment = Ctx.BlogComments.Find(EntryId);
 
             Ctx.BlogComments.Remove(blogComment);
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowComments", new { BlogId});
+            return RedirectToAction("ShowComments", new { BlogId });
         }
 
     }
