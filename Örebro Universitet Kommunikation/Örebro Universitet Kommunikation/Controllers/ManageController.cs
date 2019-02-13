@@ -354,9 +354,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult BlockCategories(BlockCategoriesViewModel model, string CategoryType, string Category) {
+        public ActionResult BlockCategory(string CategoryType, string Category) {
             var blockedCategory = new BlockedCategory {
                 CategoryName = Category,
                 CategoryType = CategoryType,
@@ -367,6 +365,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return RedirectToAction("BlockCategories", "Manage");
         }
 
+        public ActionResult UnblockCategory(string CategoryType, string Category) {
+
+            var blockedCategory = (from bc in Ctx.BlockedCategories
+                                   where bc.CategoryName == Category
+                                   && bc.CategoryType == CategoryType
+                                   && bc.UserId == User.Identity.GetUserId()
+                                   select bc).ToList();
+            Ctx.BlockedCategories.Remove(blockedCategory[0]);
+            Ctx.SaveChanges();
+            return RedirectToAction("BlockCategories", "Manage");
+        }
 
         #region Helpers
             // Used for XSRF protection when adding external logins
