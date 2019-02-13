@@ -67,6 +67,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 if (user.IsInactive) {
                     CreatorMail = "Inaktiverad användare";
                 }
+                var comments = Ctx.ResearchBlogComments.Where(b => b.BlogId == r.Id);
                 var blogItem = new ResearchBlogItem {
                     Id = r.Id,
                     CreatorId = r.CreatorId,
@@ -74,6 +75,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     CanDelete = canEdit,
                     Content = r.Content,
                     CreaterMail = CreatorMail,
+                    ResearchComments = comments.Count(),
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
                     Date = r.BlogEntryTime,
