@@ -14,6 +14,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading;
 using Örebro_Universitet_Kommunikation.Helpers;
 
+using Ical.Net;
+using Ical.Net.DataTypes;
+//using Ical.Net.Serialization.iCalendar.Serializers;
+using Ical.Net.Serialization;
+using System.Text;
+
 namespace Örebro_Universitet_Kommunikation.Controllers {
     [Authorize]
     public class CalendarController : Controller {
@@ -460,5 +466,32 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             Ctx.SaveChanges();
             return Redirect(Request.UrlReferrer.AbsoluteUri);
         }
+
+        public ActionResult ExportCal() {
+
+            var cal = new Ical.Net.Calendar();
+            var calEvents = Ctx.CalendarEvents;
+
+            foreach(var item in calEvents) {
+                cal.Events.Add(new Ical.Net.CalendarComponents.CalendarEvent {
+                    Class = "public",
+                    Summary = item.Title,
+                    Created = new CalDateTime(DateTime.Now),
+                    Description = item.Desc,
+                    Start = new CalDateTime(Convert.ToDateTime(item.Start)),
+                    End = new CalDateTime(Convert.ToDateTime(item.End)),
+                    Sequence = 0,
+                    Uid = Guid.NewGuid().ToString(),
+                    Location = "N/A"
+
+                });
+            }
+            var serializer = new CalendarSerializer(new SerializationContext());
+            var serializedCalendar = serializer.SerializeToString(cal);
+            var bytesCalendar = Encoding.UTF8.GetBytes(serializedCalendar);
+
+            return File(bytesCalendar, "text/calendar", "kalender.ics");
+        }
+
     }
 }

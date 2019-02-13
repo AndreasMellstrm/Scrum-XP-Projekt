@@ -5,10 +5,10 @@
 @{
     ViewBag.Title = "Index";
 }
+<br />
+<br />
 <div id="calender"></div>
-<br />
-<button id="exportBtn" class="btn btn-default">Exportera</button>
-<br />
+
 
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -95,8 +95,14 @@
         </div>
     </div>
 </div>
+<br />
 @Html.ActionLink("Boka möte", "CreateTempEvent", "Calendar", new { @class = "btn btn-primary" })
 @Html.ActionLink("Skapade möten", "ListTempEvents", "Calendar", new { @class = "btn btn-primary" })
+<br />
+<br />
+@Html.ActionLink("Exportera kalender", "ExportCal", "Calendar", new { @class = "btn btn-default" })
+<br />
+<br />
 
 
 
@@ -214,7 +220,7 @@
                 })
             }
             $('#exportBtn').click(function () {
-                
+
             })
             $('#btnEdit').click(function () {
                 //Open modal dialog for edit event
