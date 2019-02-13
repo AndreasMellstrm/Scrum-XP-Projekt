@@ -207,6 +207,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 Ctx.SaveChanges();
                 var TempEvent = Ctx.TempEvents.ToList().Last();
                 // Create EventUsers
+
+
                 foreach (var u in m.ListToSend) {
                     var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210");
                     emailHelper.SendEmailMeeting("Nytt preliminärt möte", "Du har blivit inbjuden till ett möte. Gå in och rösta på en tid", u);
