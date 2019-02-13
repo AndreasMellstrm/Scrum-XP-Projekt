@@ -303,7 +303,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             base.Dispose(disposing);
         }
 
-        public ActionResult BlockCategories(string CategoryType) {
+        public ActionResult BlockCategories() {
             var CategoryList = Ctx.Categories.ToList();
             var user = UserManager.FindById(User.Identity.GetUserId());
             var BlockedCategoriesFormal = new List<CategoryModel>();
@@ -317,24 +317,24 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             CategoryTypes.Add(SelectListItem2);
 
             foreach (var c in CategoryList) {
-                    var Blocks = (from bc in Ctx.BlockedCategories
-                                  where bc.UserId == user.Id
-                                  && bc.CategoryName == c.CategoryName
-                                  && bc.CategoryType == CategoryType
-                                  select bc).ToList();
-                    if (Blocks.Count > 0 || Blocks != null) {
-                        BlockedCategoriesFormal.Add(c);
-                    }
-                    else {
-                        CategoriesFormal.Add(c);
-                    }
+                var Blocks = (from bc in Ctx.BlockedCategories
+                              where bc.UserId == user.Id
+                              && bc.CategoryName == c.CategoryName
+                              && bc.CategoryType == c.CategoryType
+                              select bc).ToList();
+                if (Blocks.Count > 0 || Blocks != null) {
+                    BlockedCategoriesFormal.Add(c);
+                }
+                else {
+                    CategoriesFormal.Add(c);
+                }
             }
 
             foreach (var c in CategoryList) {
                 var Blocks = (from bc in Ctx.BlockedCategories
                               where bc.UserId == user.Id
                               && bc.CategoryName == c.CategoryName
-                              && bc.CategoryType == CategoryType
+                              && bc.CategoryType == c.CategoryType
                               select bc).ToList();
                 if (Blocks.Count > 0 || Blocks != null) {
                     BlockedCategoriesInFormal.Add(c);
@@ -356,12 +356,20 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public void BlockCategories (BlockCategoriesViewModel model) {
-
+        public ActionResult BlockCategories(BlockCategoriesViewModel model, string CategoryType, string Category) {
+            var blockedCategory = new BlockedCategory {
+                CategoryName = Category,
+                CategoryType = CategoryType,
+                UserId = User.Identity.GetUserId()
+            };
+            Ctx.BlockedCategories.Add(blockedCategory);
+            var result = Ctx.SaveChanges();
+            return RedirectToAction("BlockCategories", "Manage");
         }
 
+
         #region Helpers
-        // Used for XSRF protection when adding external logins
+            // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager {
