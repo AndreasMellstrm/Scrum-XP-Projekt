@@ -46,7 +46,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message) {
+        public async Task<ActionResult> Index(ManageMessageId? message, string ErrorMessage = "") {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
@@ -58,12 +58,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 : "";
 
             var userId = User.Identity.GetUserId();
+
             var model = new IndexViewModel {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                ErrorMessage = ErrorMessage
             };
             return View(model);
         }
