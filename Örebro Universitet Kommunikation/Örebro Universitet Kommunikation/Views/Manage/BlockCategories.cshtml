@@ -13,7 +13,7 @@
             @Html.Label("Formell", new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @{SelectList selectlist = new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName");}
-                @Html.DropDownListFor(m => m.CategoriesFormal, selectlist, new { @id = "FormalCat", @class = "form-control" })
+                @Html.DropDownList("Välj en kategori",selectlist, new { @id = "FormalCat", @class = "form-control" })
             </div>
             <br />
             <br />
@@ -29,13 +29,13 @@
     <div class="form-group">
         @Html.Label("Blockerade från formell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.BlockedCategoriesFormal, new SelectList(Model.BlockedCategoriesFormal, "CategoryName", "CategoryName"), new { @id = "BlockFormalCat", @class = "form-control", @size = 5 })
+            @Html.DropDownList("Välj en kategori", new SelectList(Model.BlockedCategoriesFormal, "CategoryName", "CategoryName"), new { @id = "BlockFormalCat", @class = "form-control", @size = 5 })
         </div>
     </div>
     <div class="form-group">
         @Html.Label("Informell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.CategoriesInformal, new SelectList(Model.CategoriesInformal, "CategoryName", "CategoryName"), new { @id = "InFormalCat", @class = "form-control" })
+            @Html.DropDownList("Välj en kategori", new SelectList(Model.CategoriesInformal, "CategoryName", "CategoryName"), new { @id = "InFormalCat", @class = "form-control" })
         </div>
         <br />
         <br />
@@ -49,7 +49,7 @@
     <div class="form-group">
         @Html.Label("Blockerade från informell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.BlockedCategoriesInformal, new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @id = "BlockInFormalCat", @class = "form-control", @size = 5, @required = true })
+            @Html.DropDownList("Välj en kategori", new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @id = "BlockInFormalCat", @class = "form-control", @size = 5})
         </div>
     </div>
     @section Scripts {
@@ -59,19 +59,23 @@
             function BlockCatFormal() {
                 var Category = $("#FormalCat").val();
                 var CategoryType = 'Formal';
-                window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+                if(Category != "") {
+                    window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+                }
             }
 
             function BlockCatInFormal() {
                 var Category = $("#InFormalCat").val();
                 var CategoryType = 'Informal';
-                window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+                if (Category != "") {
+                    window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+                }
             }
 
             function UnBlockCatFormal() {
                 var Category = $("#BlockFormalCat").val();
                 var CategoryType = 'Formal';
-                if (Category != "" || Category != null) {
+                if (Category != "") {
                     window.location.href = '/Manage/UnBlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
                 }
                 else {
@@ -82,7 +86,7 @@
             function UnBlockCatInFormal() {
                 var Category = $("#BlockInFormalCat").val();
                 var CategoryType = 'Informal';
-                if (Category != "" || Category != null) {
+                if (Category != "") {
                     window.location.href = '/Manage/UnBlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
                 }
                 else {
