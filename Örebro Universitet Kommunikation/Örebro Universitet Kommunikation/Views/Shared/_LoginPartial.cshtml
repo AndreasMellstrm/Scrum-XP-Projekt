@@ -42,7 +42,7 @@
                     @foreach (var te in Model.TempEvents) {
                         <div class="dropdown-item">
                             <div class="text-left user-item" style="display: inline-block; margin-left: 10px; width: 100px;">
-                                @Html.ActionLink(te.Title, "InviteTempEvent", "Calendar", new { TEI = te.Id }, new { @class = "text-danger" })
+                                @Html.ActionLink(te.Title, "InviteTempEvent", "Calendar", new { TEI = te.Id }, new { @class = "dropdown-item" })
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
