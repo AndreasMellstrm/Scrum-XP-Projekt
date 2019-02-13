@@ -130,7 +130,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             string subject = "Nytt inlägg från " + user.FirstName + ".";
             string emailText = "Inlägg med rubrik: " + model.Title + " finns nu att läsa.";
             var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210");
-            emailHelper.SendEmailFormalBlog(subject, emailText, user.Id);
+            emailHelper.SendEmailFormalBlog(subject, emailText, user.Id, Category, "Formal");
             return RedirectToAction("Index", "FormalBlog");
         }
 
