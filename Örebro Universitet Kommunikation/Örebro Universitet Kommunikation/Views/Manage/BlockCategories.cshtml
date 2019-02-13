@@ -1,7 +1,66 @@
-﻿
+﻿@model Örebro_Universitet_Kommunikation.Models.BlockCategoriesViewModel
 @{
     ViewBag.Title = "BlockCategories";
 }
+@using (Html.BeginForm("BlockCategories", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+    @Html.AntiForgeryToken()
+    <h2>Ändra kategorier att visa i ditt flöde.</h2>
+    <p class="lead">Välj en kategori att blockera från ditt flöde.</p>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Formell", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @{SelectList selectlist = new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName");}
+                @Html.DropDownListFor(m => m.CategoriesFormal, selectlist, new { @id = "formalCat", @class = "form-control" })
+            </div>
+            <br />
+            <br />
+            <div class="form-group col-md-2">
+                <input type="button" class="btn btn-danger form-control" value="Blockera" onclick="BlockCatFormal()" />
+            </div>
+            <div class="form-group col-md-2">
+                <input type="button" class="btn btn-success form-control" value="Avblockera" onclick="UnBlockCatFormal()" />
+            </div>
+        </div>
+    </div>
 
-<h2>BlockCategories</h2>
-
+    <div class="form-group">
+        @Html.Label("Blockerade från formell", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(m => m.BlockedCategoriesFormal, new SelectList(Model.BlockedCategoriesFormal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Informell", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.CategoriesInformal, new SelectList(Model.CategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+        </div>
+        <br />
+        <br />
+        <div class="form-group col-md-2">
+            <input type="button" class="btn btn-danger form-control" value="Blockera" onclick="BlockCatInformal()" />
+        </div>
+        <div class="form-group col-md-2">
+            <input type="button" class="btn btn-success form-control" value="Avblockera" onclick="UnBlockCatInformal()" />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Blockerade från informell", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(m => m.BlockedCategoriesInformal, new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+        </div>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jquery")
+        <script>
+            $("#userlist").prepend("<option value='' disabled selected>Välj en användare...</option>");
+            function ShowUserForm() {
+                var userId = $("#userlist").val();
+                window.location.href = '/AdminTool/EditUser?userId=' + userId;
+            }
+        </script>
+    }
+}
