@@ -13,7 +13,7 @@
             @Html.Label("Formell", new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @{SelectList selectlist = new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName");}
-                @Html.DropDownList("Välj en kategori",selectlist, new { @id = "FormalCat", @class = "form-control" })
+                @Html.DropDownList("Välj en kategori", selectlist, new { @id = "FormalCat", @class = "form-control" })
             </div>
             <br />
             <br />
@@ -49,7 +49,7 @@
     <div class="form-group">
         @Html.Label("Blockerade från informell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("Välj en kategori", new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @id = "BlockInFormalCat", @class = "form-control", @size = 5})
+            @Html.DropDownList("Välj en kategori", new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @id = "BlockInFormalCat", @class = "form-control", @size = 5 })
         </div>
     </div>
     @section Scripts {
@@ -59,23 +59,29 @@
             function BlockCatFormal() {
                 var Category = $("#FormalCat").val();
                 var CategoryType = 'Formal';
-                if(Category != "") {
+                if (Category != null) {
                     window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+                }
+                else {
+                    alert('Ett val i listan krävs');
                 }
             }
 
             function BlockCatInFormal() {
                 var Category = $("#InFormalCat").val();
                 var CategoryType = 'Informal';
-                if (Category != "") {
+                if (Category != null) {
                     window.location.href = '/Manage/BlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
+                }
+                else {
+                    alert('Ett val i listan krävs');
                 }
             }
 
             function UnBlockCatFormal() {
                 var Category = $("#BlockFormalCat").val();
                 var CategoryType = 'Formal';
-                if (Category != "") {
+                if (Category != null) {
                     window.location.href = '/Manage/UnBlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
                 }
                 else {
@@ -86,7 +92,7 @@
             function UnBlockCatInFormal() {
                 var Category = $("#BlockInFormalCat").val();
                 var CategoryType = 'Informal';
-                if (Category != "") {
+                if (Category != null) {
                     window.location.href = '/Manage/UnBlockCategory?CategoryType=' + CategoryType + '&Category=' + Category;
                 }
                 else {
