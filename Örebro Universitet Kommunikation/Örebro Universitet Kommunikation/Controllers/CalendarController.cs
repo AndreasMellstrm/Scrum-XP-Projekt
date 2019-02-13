@@ -292,7 +292,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var Creator = UserManager.FindById(EventInfo.CreatorId);
             var CreatorName = Creator.FirstName + " " + Creator.LastName + " (" + Creator.Email + ")";
 
-
             return View(new ShowTempEventViewModel {
                 Suggestion1 = Sg1,
                 Suggestion2 = Sg2,
