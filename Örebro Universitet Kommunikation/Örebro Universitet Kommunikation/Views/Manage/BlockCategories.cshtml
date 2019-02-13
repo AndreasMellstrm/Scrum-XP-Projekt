@@ -1,7 +1,43 @@
-﻿
+﻿@model Örebro_Universitet_Kommunikation.Models.BlockCategoriesViewModel
 @{
     ViewBag.Title = "BlockCategories";
 }
-
-<h2>BlockCategories</h2>
+@using (Html.BeginForm("BlockCategories", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+    @Html.AntiForgeryToken()
+    <h2>Ändra kategorier att visa i ditt flöde.</h2>
+    <p class="lead">Välj en kategori att blockera från ditt flöde.</p>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Formell", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.CategoriesFormal, new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Blockerade från formell", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(m => m.BlockedCategoriesFormal, new SelectList(Model.BlockedCategoriesFormal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Informell", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.CategoriesInformal, new SelectList(Model.CategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Blockerade från informell", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(m => m.BlockedCategoriesInformal, new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" class="btn btn-primary" value="Skapa" />
+        </div>
+    </div>
+}
 
