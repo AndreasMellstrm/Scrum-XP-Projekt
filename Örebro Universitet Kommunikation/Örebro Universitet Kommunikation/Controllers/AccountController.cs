@@ -73,10 +73,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     var meeting = Ctx.CalendarEvents.Find(mR.EventId);
                     meetings.Add(meeting);
                 }
-
+                var userId = User.Identity.GetUserId();
                 foreach (var te in tempEventList) {
                     var tempEvent = Ctx.TempEvents.Find(te.TempEventId);
-                    tempEvents.Add(tempEvent);
+                    var hasVoted = Ctx.TempEventTimes.Where(t => t.UserId == userId  && t.TempEventId == te.TempEventId).ToList();
+                    if(hasVoted.Count() == 0) {
+                        tempEvents.Add(tempEvent);
+                    }
                 }
                 return PartialView(new MeetingRequestViewModel {
                     MeetingRequests = meetings,

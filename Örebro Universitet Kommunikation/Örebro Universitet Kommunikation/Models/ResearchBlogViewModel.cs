@@ -20,6 +20,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Title { get; set; }
         public string Content { get; set; }
         public bool CanDelete { get; set; }
+        public int ResearchComments { get; set; }
 
     }
 }

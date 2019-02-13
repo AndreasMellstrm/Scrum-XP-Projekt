@@ -74,14 +74,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                 {
                     CanDelete = true;
                 }
-
+                var comments = Ctx.InformalBlogComments.Where(b => b.BlogId == item.Id);
                 var blogItem = new InformalBlogItem {
                     Id = item.Id,
                     CreatorId = item.CreatorId,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
                     AttachedFile = item.AttachedFile,
-                    Comments = 0,
+                    Comments = comments.Count(),
                     Date = item.BlogEntryTime,
                     Content = item.Content,
                     Category = item.Category,

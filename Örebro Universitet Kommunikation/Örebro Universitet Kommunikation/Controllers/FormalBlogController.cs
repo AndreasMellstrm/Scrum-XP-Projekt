@@ -88,13 +88,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 if (user.IsInactive) {
                     CreatorMail = "Inaktiverad användare";
                 }
+                var comments = Ctx.BlogComments.Where(b => b.BlogId == item.Id);
                 var blogItem = new FormalBlogItem {
                     Id = item.Id,
                     CreatorId = item.CreatorId,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
                     AttachedFile = item.AttachedFile,
-                    Comments = 0,
+                    Comments = comments.Count(),
                     Date = item.BlogEntryTime,
                     Content = item.Content,
                     Category = item.Category,
