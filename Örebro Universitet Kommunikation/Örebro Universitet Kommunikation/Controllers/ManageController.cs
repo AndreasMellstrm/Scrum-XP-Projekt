@@ -366,11 +366,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
         public ActionResult UnblockCategory(string CategoryType, string Category) {
-
+            var userId = User.Identity.GetUserId();
             var blockedCategory = (from bc in Ctx.BlockedCategories
                                    where bc.CategoryName == Category
                                    && bc.CategoryType == CategoryType
-                                   && bc.UserId == User.Identity.GetUserId()
+                                   && bc.UserId == userId
                                    select bc).ToList();
             Ctx.BlockedCategories.Remove(blockedCategory[0]);
             Ctx.SaveChanges();
