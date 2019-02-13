@@ -12,10 +12,18 @@
         <div class="form-group">
             @Html.Label("Formell", new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.DropDownListFor(m => m.CategoriesFormal, new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName"), new { @class = "form-control" })
+                @{SelectList selectlist = new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName");}
+                @Html.DropDownListFor(m => m.CategoriesFormal, selectlist, new { @id = "formalCat", @class = "form-control" })
+            </div>
+            <div class="text-left">
+                <input type="button" class="btn btn-danger" value="Blockera" onclick="BlockCatFormal()" />
+            </div>
+            <div class="text-center">
+                <input type="button" class="btn btn-success" value="Avblockera" onclick="UnBlockCatFormal()" />
             </div>
         </div>
     </div>
+
     <div class="form-group">
         @Html.Label("Blockerade från formell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -39,5 +47,15 @@
             <input type="submit" class="btn btn-primary" value="Skapa" />
         </div>
     </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jquery")
+        <script>
+            $("#userlist").prepend("<option value='' disabled selected>Välj en användare...</option>");
+            function ShowUserForm() {
+                var userId = $("#userlist").val();
+                window.location.href = '/AdminTool/EditUser?userId=' + userId;
+            }
+        </script>
+    }
 }
-
