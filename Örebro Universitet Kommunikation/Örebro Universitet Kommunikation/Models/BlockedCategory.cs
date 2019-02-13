@@ -17,9 +17,5 @@ namespace Örebro_Universitet_Kommunikation.Models {
         [Key, Column(Order = 2)]
         public string UserId { get; set; }
 
-        public virtual CategoryModel Category { get; set; }
-
-        public virtual ApplicationUser User { get; set; }
-
     }
 }

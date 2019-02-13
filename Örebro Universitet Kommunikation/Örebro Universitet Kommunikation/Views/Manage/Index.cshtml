@@ -7,10 +7,22 @@
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
+    @if (Model.ErrorMessage == "") {
+    <label class="hidden" role="alert">@Model.ErrorMessage</label>
+    }
+    else if (Model.ErrorMessage.StartsWith("")) {
+    <label class="alert alert-success" role="alert">@Model.ErrorMessage</label>
+    }
+    else {
+    <label class="alert alert-danger" role="alert">@Model.ErrorMessage</label>
+    }
     <h4>Ändra dina kontoinställningar</h4>
     <hr />
     <div class="btn">
         @Html.ActionLink("Ändra notifikationsinställningar", "ChangeNotifications", "Manage", new { @class = "btn btn-primary" })
+    </div>
+    <div class="btn">
+        @Html.ActionLink("Skicka summering", "SendSummary", "Summary", null, new { @class = "btn btn-primary" })
     </div>
     @*<dl class="dl-horizontal">
         <dt>Password:</dt>
@@ -19,8 +31,7 @@
         <div class="btn">
             @Html.ActionLink("Ändra lösenord", "ChangePassword", "Manage", new { @class = "btn btn-primary" })
         </div>
-    }
-    else {
+    } else {
         <div class="btn">
             @Html.ActionLink("Skapa lösenord", "SetPassword", "Manage", new { @class = "btn btn-primary" })
         </div>

@@ -15,7 +15,7 @@
             <li>|</li>
             <li><span><i class="glyphicon glyphicon-calendar"></i> @item.Date</span></li>
             <li>|</li>
-            <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "ResearchBlog", new { BlogId = item.Id }, null)</span></li>
+            <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "ResearchBlog", new { BlogId = item.Id }, null) (@item.ResearchComments)</span></li>
             @if (item.AttachedFile != null) {
                 <li>|</li>
                 <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>

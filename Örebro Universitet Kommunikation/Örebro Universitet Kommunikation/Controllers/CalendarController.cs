@@ -207,6 +207,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 Ctx.SaveChanges();
                 var TempEvent = Ctx.TempEvents.ToList().Last();
                 // Create EventUsers
+
+
                 foreach (var u in m.ListToSend) {
                     var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210");
                     emailHelper.SendEmailMeeting("Nytt preliminärt möte", "Du har blivit inbjuden till ett möte. Gå in och rösta på en tid", u);
@@ -289,7 +291,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var EventInfo = Ctx.TempEvents.FirstOrDefault(e => e.Id == TEI);
             var Creator = UserManager.FindById(EventInfo.CreatorId);
             var CreatorName = Creator.FirstName + " " + Creator.LastName + " (" + Creator.Email + ")";
-
 
             return View(new ShowTempEventViewModel {
                 Suggestion1 = Sg1,

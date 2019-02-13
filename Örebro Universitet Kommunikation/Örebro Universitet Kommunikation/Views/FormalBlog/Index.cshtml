@@ -27,7 +27,7 @@
                     <li>|</li>
                     <li><span><i class="glyphicon glyphicon-folder-open"></i> @item.Category </span></li>
                     <li>|</li>
-                    <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "FormalBlog", new { BlogId = item.Id }, null)</span></li>
+                    <li><span><i class="glyphicon glyphicon-comment"></i> @Html.ActionLink("Kommentarer", "ShowComments", "FormalBlog", new { BlogId = item.Id }, null) (@item.Comments)</span></li>
                     @if (item.AttachedFile != null) {
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>
