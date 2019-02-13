@@ -88,13 +88,14 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 if (user.IsInactive) {
                     CreatorMail = "Inaktiverad användare";
                 }
+                var comments = Ctx.BlogComments.Where(b => b.BlogId == item.Id);
                 var blogItem = new FormalBlogItem {
                     Id = item.Id,
                     CreatorId = item.CreatorId,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
                     AttachedFile = item.AttachedFile,
-                    Comments = 0,
+                    Comments = comments.Count(),
                     Date = item.BlogEntryTime,
                     Content = item.Content,
                     Category = item.Category,
@@ -311,11 +312,18 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
 
         public ActionResult _SearchAndFilterPartial() {
+            var user = UserManager.FindById(User.Identity.GetUserId());
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            var blockedCategories = (from bc in Ctx.BlockedCategories
+                                     where bc.CategoryType == "Formal"
+                                     && bc.UserId == user.Id
+                                     select bc).ToList();
             List<string> CategoryListName = new List<string>();
             foreach (var c in CategoryList) {
-
                 CategoryListName.Add(c.CategoryName);
+            }
+            foreach (var bc in blockedCategories) {
+                CategoryListName.Remove(bc.CategoryName);
             }
             CategoryListName.Add("Välj en kategori");
             CategoryListName.Reverse();
