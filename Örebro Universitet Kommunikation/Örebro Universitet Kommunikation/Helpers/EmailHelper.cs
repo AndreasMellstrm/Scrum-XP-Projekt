@@ -49,15 +49,23 @@ namespace Örebro_Universitet_Kommunikation.Helpers {
             }
         }
 
-        public void SendEmailFormalBlog(string subject, string message, string userId) {
+        public void SendEmailFormalBlog(string subject, string message, string userId, string CategoryName, string CategoryType) {
             var users = (from u in Ctx.Users
                          where u.Notifications == "BlogEvent"
                          || u.Notifications == "Blog"
                          where u.Id != userId
                          select u).ToList();
-            if (users.Count > 0) {
-                foreach (var u in users) {
-                    SendEmail(u.Email, subject, message);
+            var blockedCategories = (from bc in Ctx.BlockedCategories
+                                     where bc.UserId == userId
+                                     && bc.CategoryName == CategoryName
+                                     && bc.CategoryType == CategoryType
+                                     select bc).ToList();
+
+            if (blockedCategories.Count == 0) {
+                if (users.Count > 0) {
+                    foreach (var u in users) {
+                        SendEmail(u.Email, subject, message);
+                    }
                 }
             }
         }
