@@ -121,7 +121,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 }
             }
             catch {
-                ModelState.AddModelError("", "Det här kontot är inaktiverat. Kontakta en administratör.");
+                ModelState.AddModelError("", "Felaktig email eller lösenord.");
                 return View(model);
             }
         }
