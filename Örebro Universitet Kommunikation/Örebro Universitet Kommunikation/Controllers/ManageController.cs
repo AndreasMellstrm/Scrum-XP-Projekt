@@ -320,12 +320,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 var Blocks = (from bc in Ctx.BlockedCategories
                               where bc.UserId == user.Id
                               && bc.CategoryName == c.CategoryName
-                              && bc.CategoryType == c.CategoryType
+                              && bc.CategoryType == "Formal"
                               select bc).ToList();
-                if (Blocks.Count > 0 || Blocks != null) {
+                if (Blocks.Count > 0 && Blocks[0].CategoryType == "Formal") {
                     BlockedCategoriesFormal.Add(c);
                 }
-                else {
+                else if(c.CategoryType == "Formal") {
                     CategoriesFormal.Add(c);
                 }
             }
@@ -334,12 +334,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 var Blocks = (from bc in Ctx.BlockedCategories
                               where bc.UserId == user.Id
                               && bc.CategoryName == c.CategoryName
-                              && bc.CategoryType == c.CategoryType
+                              && bc.CategoryType == "Informal"
                               select bc).ToList();
-                if (Blocks.Count > 0 || Blocks != null) {
+                if (Blocks.Count > 0 && Blocks[0].CategoryType == "Informal") {
                     BlockedCategoriesInFormal.Add(c);
                 }
-                else {
+                else if(c.CategoryType != "Formal") {
                     CategoriesInFormal.Add(c);
                 }
             }
