@@ -49,9 +49,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                     MyEventsList.Add(item);
                 }
             }
-
-
-            
             var FormalBlogEntries = Ctx.FormalBlogEntries.Where(f => f.BlogEntryTime >= sevenDaysAgo);
             string EventItem = "Summering av veckan: \n";
             EventItem = EventItem + "Formella bloginlägg de senaste 7 dagarna: \n";
@@ -62,20 +59,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             foreach(var item in MyEventsList) {
                 EventItem = EventItem + " \n" + item.Title + "\n" + "Beskrivning: " + item.Desc + "\n" + "Start: " + item.Start + "\n" + "Slut: " + item.End + "\n";
             }
-           
-            
-
-            
-            
-
-
-
-
-
-
             var emailHelper = new EmailHelper("orukommunikation@gmail.com", "Kakan1210");
             emailHelper.SendEmail(currentUser.Email.ToString(), "Summering", EventItem);
-            return RedirectToAction("Index", "manage");
+
+            
+            return RedirectToAction("Index", "Manage", new { ErrorMessage = "Summering skickat till " + currentUser.Email + "." });
+            
         }
     }
 }
