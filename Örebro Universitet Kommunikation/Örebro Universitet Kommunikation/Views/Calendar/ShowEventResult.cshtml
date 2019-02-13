@@ -3,17 +3,40 @@
 <h2>Resultat av mötesomröstning</h2>
 @Model.Title <br />
 @Model.Description <br />
-@if (Model.S1Name != null) {
-    <p>@Model.S1Name (@Model.S1Result)</p>
-}
-@if (Model.S2Name != null) {
-    <p>@Model.S2Name (@Model.S2Result)</p>
-}
-@if (Model.S3Name != null) {
-    <p>@Model.S3Name (@Model.S3Result)</p>
-}
-@if (Model.S4Name != null) {
-    <p>@Model.S4Name (@Model.S4Result)</p>
-}
-
+<table class="table">
+    <thead class="bg-info">
+        <tr class="col">
+            Förslag:
+        </tr>
+        <tr class="col">
+            Röster:
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.S1Name != null) {
+            <tr>
+                <td>@Model.S1Name</td>
+                <td>(@Model.S1Result)</td>
+            </tr>
+        }
+        @if (Model.S2Name != null) {
+            <tr>
+                <td>@Model.S2Name</td>
+                <td>(@Model.S2Result)</td>
+            </tr>
+        }
+        @if (Model.S3Name != null) {
+            <tr>
+                <td>@Model.S3Name</td>
+                <td>(@Model.S3Result)</td>
+            </tr>
+        }
+        @if (Model.S4Name != null) {
+            <tr>
+                <td>@Model.S4Name</td>
+                <td>(@Model.S4Result)</td>
+            </tr>
+        }
+    </tbody>
+</table>
 @Html.ActionLink("Skapa mötet", "CreateEvent", "Calendar", new { EventId = Model.EventId }, new { @class = "btn btn-primary" })
