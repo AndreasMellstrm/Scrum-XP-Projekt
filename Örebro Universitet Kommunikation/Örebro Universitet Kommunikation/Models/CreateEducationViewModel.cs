@@ -12,5 +12,16 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string Title { get; set; }
         [Display(Name = "Inlägg")]
         public string Content { get; set; }
+        public string AttachedFile { get; set; }
+    }
+    public class EditEducationViewModel
+    {
+        [Required]
+        [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
+        [Display(Name = "Titel")]
+        public string Title { get; set; }
+        [Display(Name = "Inlägg")]
+        public string Content { get; set; }
+        public string AttachedFile { get; set; }
     }
 }

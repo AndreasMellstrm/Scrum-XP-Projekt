@@ -223,5 +223,85 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             return RedirectToAction("ShowComments", new { BlogId });
         }
+        [HttpGet]
+        public ActionResult EditEntry(int EntryId)
+        {
+            var BlogEntry = Ctx.ResearchBlogs.FirstOrDefault(b => b.Id == EntryId);
+            //var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            //List<string> CategoryListName = new List<string>();
+            //foreach (var c in CategoryList)
+            //{
+
+            //    CategoryListName.Add(c.CategoryName);
+            //}
+            var blogItem1 = new EditResearchBlogViewModel()
+            {
+                Id = BlogEntry.Id,
+                AttachedFile = BlogEntry.AttachedFile,
+                //Category = BlogEntry.Category,
+                Content = BlogEntry.Content,
+                Title = BlogEntry.Title,
+                ProjectId = BlogEntry.ProjectId
+                //CategoryItems = CategoryListName
+
+            };
+            return View(blogItem1);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(EditResearchBlogViewModel model, HttpPostedFileBase File, int Id)
+        {
+            int entryId = 0;
+            if (ModelState.IsValid)
+            {
+                var entry = Ctx.ResearchBlogs.FirstOrDefault(b => b.Id == Id);
+
+                var Filestring = FileUpload(File);
+                if (Filestring != null)
+                {
+                    entry.AttachedFile = Filestring;
+                }
+                else
+                {
+                    entry.AttachedFile = model.AttachedFile;
+                }
+
+                //entry.Category = model.Category;
+                //entry.ProjectId = model.ProjectId;
+
+                entry.Content = model.Content;
+                entry.Title = model.Title;
+                entryId = model.ProjectId;
+                Ctx.SaveChanges();
+            }
+
+
+            return RedirectToAction("ShowResearch", "ResearchBlog", new { ResearchProject = entryId });
+        }
+        public ActionResult DeleteEntry(int EntryId, string CreatorId)
+        {
+            ResearchBlogModel blogEntry = Ctx.ResearchBlogs.Find(EntryId);
+            var pId = blogEntry.ProjectId;
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var currentUserId = currentUser.Id;
+
+            // currentUserId.Equals(CreatorId)
+            Ctx.ResearchBlogs.Remove(blogEntry);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("ShowResearch", "ResearchBlog", new { ResearchProject = pId });
+        }
+        public ActionResult DeleteLink(int EntryId)
+        {
+            var entry = Ctx.ResearchBlogs.FirstOrDefault(b => b.Id == EntryId);
+            var pId = entry.ProjectId;
+            if (ModelState.IsValid)
+            {
+                entry.AttachedFile = null;
+                Ctx.SaveChanges();
+            }
+
+            return RedirectToAction("ShowResearch", "ResearchBlog", new { ResearchProject = pId });
+        }
     }
 }

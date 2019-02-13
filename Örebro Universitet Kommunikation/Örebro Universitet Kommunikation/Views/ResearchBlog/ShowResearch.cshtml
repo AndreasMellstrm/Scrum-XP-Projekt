@@ -20,12 +20,12 @@
                 <li>|</li>
                 <li><span><i class="glyphicon glyphicon-download-alt"></i></span><a href="@item.AttachedFile"> Ladda ned fil </a></li>
             }
-            @*@if (item.CanDelete) {
+            @if (item.CanDelete) {
                     <li>|</li>
                     <li><span><i class="glyphicon glyphicon-wrench"></i></span> @Html.ActionLink("Ändra", "EditEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
                     <li>|</li>
                     <li><span><i class="glyphicon glyphicon-remove"></i></span> @Html.ActionLink("Ta bort", "DeleteEntry", "ResearchBlog", new { EntryId = item.Id, CreatorId = item.CreatorId }, null) </li>
-                }*@
+                }
         </ul>
     </div>
 }

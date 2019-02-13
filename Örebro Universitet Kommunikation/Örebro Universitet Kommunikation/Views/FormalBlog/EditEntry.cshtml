@@ -42,6 +42,7 @@
     @if (Model.AttachedFile != null) {
     <div class="form-group">
         <p>Bifogad fil: <a href="@Model.AttachedFile" target="_blank"> @Model.AttachedFile.Replace("/Content/Files/", "") </a></p>
+        @Html.HiddenFor(a => a.AttachedFile)
     </div>
     }
 

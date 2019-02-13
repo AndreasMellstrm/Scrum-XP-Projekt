@@ -166,7 +166,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             }
             var InformalBlogItem = new EditInformalEntryViewModel() {
                 Id = BlogEntry.Id,
-                AttachedFile = "",      //Kanske inte funkar yao
+                AttachedFile = BlogEntry.AttachedFile,
                 Category = BlogEntry.Category,
                 Content = BlogEntry.Content,
                 Title = BlogEntry.Title,
@@ -178,13 +178,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditInformal(EditInformalEntryViewModel model, int Id) {
+        public ActionResult EditInformal(EditInformalEntryViewModel model, HttpPostedFileBase File, int Id) {
             if (ModelState.IsValid) {
                 var entry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == Id);
-                //var Filestring = FileUpload(File);
+                var Filestring = FileUpload(File);
+                if (Filestring != null)
+                {
+                    entry.AttachedFile = Filestring;
+                }
+                else
+                {
+                    entry.AttachedFile = model.AttachedFile;
+                }
 
-
-                //entry.AttachedFile = Filestring;
                 entry.Category = model.Category;
 
 
@@ -344,6 +350,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers
             {
                 return null;
             }
+        }
+        public ActionResult DeleteLink(int EntryId)
+        {
+            var entry = Ctx.InformalBlogEntries.FirstOrDefault(b => b.Id == EntryId);
+            if (ModelState.IsValid)
+            {
+                entry.AttachedFile = null;
+                Ctx.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "InformalBlog");
         }
     }
 }

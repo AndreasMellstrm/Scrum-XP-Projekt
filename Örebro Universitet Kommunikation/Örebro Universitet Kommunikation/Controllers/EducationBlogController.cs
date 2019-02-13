@@ -22,7 +22,18 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public async Task<ActionResult> Index() {
             var EducationBlog = Ctx.EducationBlogs.OrderByDescending(e => e.Time);
             List<EducationBlogItem> educationList = new List<EducationBlogItem>();
+            bool canDelete = false;
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            bool isAdmin = currentUser.Admin;
             foreach (var e in EducationBlog) {
+                if (isAdmin || currentUser.Id == e.CreatorId)
+                {
+                    canDelete = true;
+                }
+                else
+                {
+                    canDelete = false;
+                }
                 var user = await UserManager.FindByIdAsync(e.CreatorId);
                 var creatorMail = user.Email;
                 if (user.IsInactive) {
@@ -39,7 +50,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Title = e.Title,
                     CreatorFirstName = user.FirstName,
                     CreatorLastName = user.LastName,
-                    CreatorMail = creatorMail
+                    CreatorMail = creatorMail,
+                    CanDelete = canDelete
                 };
                 educationList.Add(item);
             }
@@ -172,6 +184,85 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             Ctx.SaveChanges();
 
             return RedirectToAction("ShowComments", new { BlogId });
+        }
+        [HttpGet]
+        public ActionResult EditEntry(int EntryId)
+        {
+            var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == EntryId);
+            //var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Formal").ToList();
+            //List<string> CategoryListName = new List<string>();
+            //foreach (var c in CategoryList)
+            //{
+
+            //    CategoryListName.Add(c.CategoryName);
+            //}
+            var blogItem1 = new EditResearchBlogViewModel()
+            {
+                Id = BlogEntry.Id,
+                AttachedFile = BlogEntry.AttachedFile,
+                //Category = BlogEntry.Category,
+                Content = BlogEntry.Content,
+                Title = BlogEntry.Title,
+               
+                //CategoryItems = CategoryListName
+
+            };
+            return View(blogItem1);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(EditEducationViewModel model, HttpPostedFileBase File, int Id)
+        {
+           
+            if (ModelState.IsValid)
+            {
+                var entry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == Id);
+
+                var Filestring = FileUpload(File);
+                if (Filestring != null)
+                {
+                    entry.AttachedFile = Filestring;
+                }
+                else
+                {
+                    entry.AttachedFile = model.AttachedFile;
+                }
+
+                //entry.Category = model.Category;
+                //entry.ProjectId = model.ProjectId;
+
+                entry.Content = model.Content;
+                entry.Title = model.Title;
+                
+                Ctx.SaveChanges();
+            }
+
+
+            return RedirectToAction("Index");
+        }
+        public ActionResult DeleteEntry(int EntryId, string CreatorId)
+        {
+            EducationBlogModel blogEntry = Ctx.EducationBlogs.Find(EntryId);
+
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var currentUserId = currentUser.Id;
+
+            // currentUserId.Equals(CreatorId)
+            Ctx.EducationBlogs.Remove(blogEntry);
+            Ctx.SaveChanges();
+
+            return RedirectToAction("Index", "EducationBlog");
+        }
+        public ActionResult DeleteLink(int EntryId)
+        {
+            var entry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == EntryId);
+            if (ModelState.IsValid)
+            {
+                entry.AttachedFile = null;
+                Ctx.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "EducationBlog");
         }
     }
 

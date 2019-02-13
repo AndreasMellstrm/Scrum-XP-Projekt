@@ -412,6 +412,8 @@
     <Content Include="Views\InformalBlog\EditInformalEntry.cshtml" />
     <Content Include="Views\InformalBlog\ShowInformalComments.cshtml" />
     <Content Include="Views\Manage\BlockCategories.cshtml" />
+    <Content Include="Views\ResearchBlog\EditEntry.cshtml" />
+    <Content Include="Views\EducationBlog\EditEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

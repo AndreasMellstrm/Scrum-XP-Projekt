@@ -160,10 +160,17 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         public ActionResult Edit(EditEntryViewModel model, HttpPostedFileBase File, int Id) {
             if (ModelState.IsValid) {
                 var entry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == Id);
+                
                 var Filestring = FileUpload(File);
-
-
-                entry.AttachedFile = Filestring;
+                if(Filestring != null)
+                {
+                    entry.AttachedFile = Filestring;
+                }
+                else
+                {
+                    entry.AttachedFile = model.AttachedFile;
+                }
+                
                 entry.Category = model.Category;
 
 
@@ -223,11 +230,6 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             }
         }
 
-        public ActionResult TempUpload(HttpPostedFileBase File) {
-            var fileString = FileUpload(File);
-            Debug.WriteLine(fileString);
-            return View();
-        }
 
         public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.FormalBlogEntries.FirstOrDefault(b => b.Id == BlogId);
