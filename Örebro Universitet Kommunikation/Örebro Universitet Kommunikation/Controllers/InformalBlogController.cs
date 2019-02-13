@@ -25,7 +25,12 @@ namespace Örebro_Universitet_Kommunikation.Controllers
         // GET: InformalBlog
         public async Task <ActionResult> Index(string searchString, string Category)
         {
-            Ctx = new ApplicationDbContext();
+            var user = UserManager.FindById(User.Identity.GetUserId());
+
+            var blockedCategories = (from bc in Ctx.BlockedCategories
+                                     where bc.UserId == user.Id
+                                     && bc.CategoryType == "Informal"
+                                     select bc).ToList();
 
             var items = from m in Ctx.InformalBlogEntries orderby m.BlogEntryTime descending select m;
 
@@ -50,13 +55,18 @@ namespace Örebro_Universitet_Kommunikation.Controllers
                         select item;
             }
 
-    
-
-
             var profileList = Ctx.Users.ToList();
 
-            var BlogEntries = items;
-
+            var BlogEntries = items.ToList();
+            if (blockedCategories.Count > 0) {
+                foreach (var bc in blockedCategories) {
+                    foreach (var i in items) {
+                        if (bc.CategoryName == i.Category && bc.CategoryType == "Informal") {
+                            BlogEntries.Remove(i);
+                        }
+                    }
+                }
+            }
 
             List<InformalBlogItem> InformalBlogItemList = new List<InformalBlogItem>();
 
@@ -68,7 +78,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
             foreach (var item in BlogEntries)
             {
-                var user = await UserManager.FindByIdAsync(item.CreatorId);
+                user = await UserManager.FindByIdAsync(item.CreatorId);
                 bool CanDelete = false;
                 if (currentUserId.Equals(item.CreatorId) || CurrentUserAdmin)
                 {
