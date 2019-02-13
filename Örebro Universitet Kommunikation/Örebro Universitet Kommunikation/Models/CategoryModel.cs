@@ -12,7 +12,6 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string CategoryName { get; set; }
         [Key, Column(Order = 1)]
         public string CategoryType { get; set; }
-        public virtual ICollection<BlockedCategory> BlockedCategories { get; set; }
 
     }
 }

@@ -46,13 +46,13 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 List<CalenderItemViewModel> list = new List<CalenderItemViewModel>();
                 var canDelete = false;
                 var currentUser = UserManager.FindById(User.Identity.GetUserId());
-                foreach(var e in events) {
+                foreach (var e in events) {
                     var connections = (from c in Ctx.ApplicationUserCalendarEvents
-                                 where c.EventId == e.EventId
-                                 && c.CanCome == true
-                                 select c).ToList();
-                    List<string> users = new List<string>(); 
-                    foreach(var u in connections) {
+                                       where c.EventId == e.EventId
+                                       && c.CanCome == true
+                                       select c).ToList();
+                    List<string> users = new List<string>();
+                    foreach (var u in connections) {
                         var user = UserManager.FindById(u.UserId);
                         var userEmail = user.Email;
                         if (user.IsInactive) {
@@ -62,7 +62,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                         users.Add(name);
                     }
                     var creator = UserManager.FindById(e.CreatorId);
-                    if(creator.Id == currentUser.Id || currentUser.Admin) {
+                    if (creator.Id == currentUser.Id || currentUser.Admin) {
                         canDelete = true;
                     }
                     else {
@@ -172,7 +172,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             var listUsers = (from u in Ctx.Users
                              where u.IsInactive == false
                              select u).ToList();
-            List < SelectListItem > ListUsers = new List<SelectListItem>();
+            List<SelectListItem> ListUsers = new List<SelectListItem>();
             foreach (var u in listUsers) {
                 if (u.Id != User.Identity.GetUserId()) {
                     var UserItem = new SelectListItem {
@@ -275,6 +275,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     var Sg2obj = EventSuggestions.ElementAt(1);
                     Sg2 = Sg2obj.Suggestion;
                     SI2 = Sg2obj.Id;
+
                 }
                 if (EventSuggestions.Count() > 2) {
                     var Sg3obj = EventSuggestions.ElementAt(2);
@@ -351,33 +352,47 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             string Sg2name = null;
             string Sg3name = null;
             string Sg4name = null;
-            int Sg1result = 0;
-            int Sg2result = 0;
-            int Sg3result = 0;
-            int Sg4result = 0;
+            decimal Sg1result = 0;
+            decimal Sg2result = 0;
+            decimal Sg3result = 0;
+            decimal Sg4result = 0;
+            decimal S1p = 0;
+            decimal S2p = 0;
+            decimal S3p = 0;
+            decimal S4p = 0;
+            decimal count = Ctx.TempEventTimes.Where(t => t.TempEventId == EventId).Count();
+            int votes = Ctx.TempEventTimes.Where(t => t.TempEventId == EventId).GroupBy(t => t.UserId).Count();
+            int invites = Ctx.TempEventUsers.Where(t => t.TempEventId == EventId).Count();
             if (currentEvent.CreatorId == currentUserId) {
-                if (suggestions.Count() != 0) {
-                    var Sg1obj = suggestions.ElementAt(0);
-                    var Sg1sug = Sg1obj.Id;
-                    Sg1name = Sg1obj.Suggestion;
-                    Sg1result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg1sug).Count();
-                    if (suggestions.Count() > 1) {
-                        var Sg2obj = suggestions.ElementAt(1);
-                        var Sg2sug = Sg2obj.Id;
-                        Sg2name = Sg2obj.Suggestion;
-                        Sg2result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg2sug).Count();
-                    }
-                    if (suggestions.Count() > 2) {
-                        var Sg3obj = suggestions.ElementAt(2);
-                        var Sg3sug = Sg3obj.Id;
-                        Sg3name = Sg3obj.Suggestion;
-                        Sg3result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg3sug).Count();
-                    }
-                    if (suggestions.Count() > 3) {
-                        var Sg4obj = suggestions.ElementAt(3);
-                        var Sg4sug = Sg4obj.Id;
-                        Sg4name = Sg4obj.Suggestion;
-                        Sg4result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg4sug).Count();
+                if (count != 0) {
+                    if (suggestions.Count() != 0) {
+                        var Sg1obj = suggestions.ElementAt(0);
+                        var Sg1sug = Sg1obj.Id;
+                        Sg1name = Sg1obj.Suggestion;
+                        Sg1result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg1sug).Count();
+                        S1p = (Sg1result / count) * 100;
+                        if (suggestions.Count() > 1) {
+                            var Sg2obj = suggestions.ElementAt(1);
+                            var Sg2sug = Sg2obj.Id;
+                            Sg2name = Sg2obj.Suggestion;
+                            Sg2result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg2sug).Count();
+
+                            S2p = (Sg2result / count) * 100;
+                        }
+                        if (suggestions.Count() > 2) {
+                            var Sg3obj = suggestions.ElementAt(2);
+                            var Sg3sug = Sg3obj.Id;
+                            Sg3name = Sg3obj.Suggestion;
+                            Sg3result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg3sug).Count();
+                            S3p = (Sg3result / count) * 100;
+                        }
+                        if (suggestions.Count() > 3) {
+                            var Sg4obj = suggestions.ElementAt(3);
+                            var Sg4sug = Sg4obj.Id;
+                            Sg4name = Sg4obj.Suggestion;
+                            Sg4result = Ctx.TempEventTimes.Where(s => s.SuggestionId == Sg4sug).Count();
+                            S4p = (Sg4result / count) * 100;
+                        }
                     }
                 }
                 return View(new ShowResultEventViewModel {
@@ -385,13 +400,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                     Title = currentEvent.Title,
                     S1Name = Sg1name,
                     S1Result = Sg1result,
+                    S1Procent = S1p,
                     S2Name = Sg2name,
                     S2Result = Sg2result,
+                    S2Procent = S2p,
                     S3Name = Sg3name,
                     S3Result = Sg3result,
+                    S3Procent = S3p,
                     S4Name = Sg4name,
                     S4Result = Sg4result,
-                    EventId = EventId
+                    S4Procent = S4p,
+                    EventId = EventId,
+                    Invites = invites,
+                    Votes = votes
                 });
             }
             return RedirectToAction("Index");
@@ -404,7 +425,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
         public ActionResult CreateEvent(int EventId) {
             var currentEvent = Ctx.TempEvents.FirstOrDefault(e => e.Id == EventId);
-            
+
             return View(new CreateEventViewModel { EventId = EventId, EventTitle = currentEvent.Title });
         }
         [HttpPost]
@@ -422,7 +443,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
             Ctx.SaveChanges();
             var eventId = Ctx.CalendarEvents.ToList().Last();
-            foreach(var u in userList) {
+            foreach (var u in userList) {
                 var item = new ApplicationUserCalendarEvents {
                     EventId = eventId.EventId,
                     UserId = u.UserId,
@@ -434,11 +455,11 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 Ctx.TempEventUsers.Remove(u);
             }
             var suggestions = Ctx.TempEventSuggestions.Where(s => s.TempEvenId == m.EventId);
-            foreach(var s in suggestions) { 
+            foreach (var s in suggestions) {
                 Ctx.TempEventSuggestions.Remove(s);
             }
             var result = Ctx.TempEventTimes.Where(t => t.TempEventId == m.EventId);
-            foreach(var r in result) {
+            foreach (var r in result) {
                 Ctx.TempEventTimes.Remove(r);
             }
             Ctx.TempEvents.Remove(currentEvent);
