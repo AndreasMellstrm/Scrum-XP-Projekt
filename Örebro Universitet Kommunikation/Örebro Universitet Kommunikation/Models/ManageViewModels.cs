@@ -91,6 +91,8 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public List<CategoryModel> BlockedCategoriesInformal { get; set; }
         public List<SelectListItem> CategoryTypes { get; set; }
         public ApplicationUser User { get; set; }
+        public CategoryModel Category { get; set; }
+        public string CategoryType { get; set; }
 
     }
 }

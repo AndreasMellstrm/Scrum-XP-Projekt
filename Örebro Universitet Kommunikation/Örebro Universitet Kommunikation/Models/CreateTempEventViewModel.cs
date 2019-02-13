@@ -63,11 +63,17 @@ namespace Örebro_Universitet_Kommunikation.Models {
         public string S2Name { get; set; }
         public string S3Name { get; set; }
         public string S4Name { get; set; }
-        public int S1Result { get; set; }
-        public int S2Result { get; set; }
-        public int S3Result { get; set; }
-        public int S4Result { get; set; }
+        public decimal S1Result { get; set; }
+        public decimal S2Result { get; set; }
+        public decimal S3Result { get; set; }
+        public decimal S4Result { get; set; }
+        public decimal S1Procent { get; set; }
+        public decimal S2Procent { get; set; }
+        public decimal S3Procent { get; set; }
+        public decimal S4Procent { get; set; }
         public int EventId { get; set; }
+        public decimal Votes { get; set; }
+        public decimal Invites { get; set; }
     }
     public class ListTempEventViewModel {
         public List<TempEventModel> TempEventList { get; set; }
