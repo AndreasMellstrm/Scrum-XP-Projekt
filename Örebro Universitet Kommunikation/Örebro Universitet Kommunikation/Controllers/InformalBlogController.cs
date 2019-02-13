@@ -217,12 +217,19 @@ namespace Örebro_Universitet_Kommunikation.Controllers
 
             public ActionResult _SearchAndFilterInformalPartial()
         {
+            var user = UserManager.FindById(User.Identity.GetUserId());
             var CategoryList = Ctx.Categories.Where(c => c.CategoryType == "Informal").ToList();
+            var blockedCategories = (from bc in Ctx.BlockedCategories
+                                     where bc.CategoryType == "Informal"
+                                     && bc.UserId == user.Id
+                                     select bc).ToList();
             List<string> CategoryListName = new List<string>();
             foreach (var c in CategoryList)
             {
-
                 CategoryListName.Add(c.CategoryName);
+            }
+            foreach (var bc in blockedCategories) {
+                CategoryListName.Remove(bc.CategoryName);
             }
             CategoryListName.Add("Välj en kategori");
             CategoryListName.Reverse();
