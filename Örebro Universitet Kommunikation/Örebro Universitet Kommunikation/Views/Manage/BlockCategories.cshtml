@@ -15,11 +15,13 @@
                 @{SelectList selectlist = new SelectList(Model.CategoriesFormal, "CategoryName", "CategoryName");}
                 @Html.DropDownListFor(m => m.CategoriesFormal, selectlist, new { @id = "formalCat", @class = "form-control" })
             </div>
-            <div class="text-left">
-                <input type="button" class="btn btn-danger" value="Blockera" onclick="BlockCatFormal()" />
+            <br />
+            <br />
+            <div class="form-group col-md-2">
+                <input type="button" class="btn btn-danger form-control" value="Blockera" onclick="BlockCatFormal()" />
             </div>
-            <div class="text-center">
-                <input type="button" class="btn btn-success" value="Avblockera" onclick="UnBlockCatFormal()" />
+            <div class="form-group col-md-2">
+                <input type="button" class="btn btn-success form-control" value="Avblockera" onclick="UnBlockCatFormal()" />
             </div>
         </div>
     </div>
@@ -35,16 +37,19 @@
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.CategoriesInformal, new SelectList(Model.CategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
         </div>
+        <br />
+        <br />
+        <div class="form-group col-md-2">
+            <input type="button" class="btn btn-danger form-control" value="Blockera" onclick="BlockCatInformal()" />
+        </div>
+        <div class="form-group col-md-2">
+            <input type="button" class="btn btn-success form-control" value="Avblockera" onclick="UnBlockCatInformal()" />
+        </div>
     </div>
     <div class="form-group">
         @Html.Label("Blockerade från informell", new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.ListBoxFor(m => m.BlockedCategoriesInformal, new SelectList(Model.BlockedCategoriesInformal, "CategoryName", "CategoryName"), new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-10">
-            <input type="submit" class="btn btn-primary" value="Skapa" />
         </div>
     </div>
     @section Scripts {
