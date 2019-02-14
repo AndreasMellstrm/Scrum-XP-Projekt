@@ -31,6 +31,7 @@ namespace Örebro_Universitet_Kommunikation.Models
         public string Email { get; set; }
         public bool CanDelete { get; set; }
         public DateTime Time { get; set; }
+        public int BlogId { get; set; }
 
     }
 }

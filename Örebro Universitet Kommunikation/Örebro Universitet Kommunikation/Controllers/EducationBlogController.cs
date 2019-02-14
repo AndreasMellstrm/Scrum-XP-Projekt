@@ -155,7 +155,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                         FirstName = User.FirstName,
                         LastName = User.LastName,
                         CanDelete = canDelete,
-                        Id = co.BlogId
+                        Id = co.Id,
+                        BlogId = co.BlogId
 
                     };
                     Comments.Add(CommentItem);
@@ -177,8 +178,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             return RedirectToAction("Index", "EducationBlog");
         }
 
-        public ActionResult DeleteComment(int EntryId, int BlogId) {
-            EducationBlogCommentsModel educationComments = Ctx.EducationBlogComments.Find(EntryId);
+        public ActionResult DeleteComment(int Id, int BlogId) {
+            EducationBlogCommentsModel educationComments = Ctx.EducationBlogComments.Find(Id);
 
             Ctx.EducationBlogComments.Remove(educationComments);
             Ctx.SaveChanges();
@@ -196,7 +197,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
 
             //    CategoryListName.Add(c.CategoryName);
             //}
-            var blogItem1 = new EditResearchBlogViewModel()
+            var blogItem1 = new EditEducationViewModel()
             {
                 Id = BlogEntry.Id,
                 AttachedFile = BlogEntry.AttachedFile,

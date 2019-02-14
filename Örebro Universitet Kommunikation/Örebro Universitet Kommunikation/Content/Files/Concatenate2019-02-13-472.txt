@@ -1,2 +1,0 @@
-select elev.FORNAMN||' '||elev.EFTERNAMN 
-from elev;

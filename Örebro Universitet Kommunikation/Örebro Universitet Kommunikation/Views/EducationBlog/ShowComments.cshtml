@@ -29,7 +29,7 @@
                         @if (c.CanDelete)
                         {
 
-                            <span> | <i class="glyphicon glyphicon-remove"></i> @Html.ActionLink("Ta bort", "DeleteComment", "EducationBlog", new { EntryId = c.Id, BlogId = Model.BlogId }, null) </span>
+                            <span> | <i class="glyphicon glyphicon-remove"></i> @Html.ActionLink("Ta bort", "DeleteComment", "EducationBlog", new { Id = c.Id, BlogId = Model.BlogId }, null) </span>
                         }
                     </div>
                 </div>

@@ -16,6 +16,7 @@ namespace Örebro_Universitet_Kommunikation.Models {
     }
     public class EditEducationViewModel
     {
+        public int Id { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "Din {0} måste vara minst {2} tecken.", MinimumLength = 6)]
         [Display(Name = "Titel")]

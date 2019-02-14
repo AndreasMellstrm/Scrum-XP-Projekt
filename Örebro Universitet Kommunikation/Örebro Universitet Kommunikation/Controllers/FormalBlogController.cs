@@ -310,7 +310,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
             });
             Ctx.SaveChanges();
 
-            return RedirectToAction("ShowInformalComments", new { newComment.BlogId });
+            return RedirectToAction("ShowComments", new { newComment.BlogId });
         }
 
         public ActionResult _SearchAndFilterPartial() {

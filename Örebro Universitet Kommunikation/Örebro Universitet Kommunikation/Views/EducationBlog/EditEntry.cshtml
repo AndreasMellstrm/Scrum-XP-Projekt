@@ -32,7 +32,7 @@
                 @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.HiddenFor(model => model.ProjectId)
+       
         @*<div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryItems, "Category"), new { @class = "form-control" })
