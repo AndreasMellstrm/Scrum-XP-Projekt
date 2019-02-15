@@ -168,15 +168,16 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 var currentProject = Ctx.Projects.FirstOrDefault(p => p.ProjectId == BlogEntry.ProjectId);
                 bool isAdmin = currentUser.Admin;
 
-                foreach (var c in CommentList) {
-                    if (isAdmin || currentUser.Id == c.CreatorId || BlogEntry.CreatorId == currentUser.Id) {
+              
+                foreach (var co in CommentList) {
+                    if (isAdmin || currentUser.Id == co.CreatorId || BlogEntry.CreatorId == currentUser.Id)
+                    {
                         canDelete = true;
                     }
-                    else {
+                    else
+                    {
                         canDelete = false;
                     }
-                }
-                foreach (var co in CommentList) {
                     var User = await UserManager.FindByIdAsync(co.CreatorId);
                     string CreaterMail = User.Email;
                     if (User.IsInactive) {
@@ -190,7 +191,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                         LastName = User.LastName,
                         CanDelete = canDelete,
                         BlogId = co.BlogId,
-                        Id = co.Id
+                        Id = co.Id,
+                        CreatorId = co.CreatorId
 
                     };
                     Comments.Add(CommentItem);

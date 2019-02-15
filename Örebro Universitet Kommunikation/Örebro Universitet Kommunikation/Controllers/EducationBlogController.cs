@@ -124,25 +124,39 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         }
         public async Task<ActionResult> ShowComments(int BlogId) {
             var BlogEntry = Ctx.EducationBlogs.FirstOrDefault(b => b.Id == BlogId);
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            bool isAdmin = currentUser.Admin;
+            bool canDelete = false;
             if (BlogEntry != null) {
-                bool canDelete = false;
+                
                 var CommentList = Ctx.EducationBlogComments.Where(c => c.BlogId == BlogId).OrderByDescending(c => c.BlogId);
                 var BloggUser = await UserManager.FindByIdAsync(BlogEntry.CreatorId);
                 var BloggUserMail = BloggUser.Email;
                 if (BloggUser.IsInactive) {
                     BloggUserMail = "Inaktiverad användare";
                 }
-                bool isAdmin = BloggUser.Admin;
+                
                 List<EducationComment> Comments = new List<EducationComment>();
-                foreach (var c in CommentList) {
-                    if (isAdmin || BloggUser.Id == c.CreatorId || BlogEntry.CreatorId == BloggUser.Id) {
+                //foreach (var c in CommentList)
+                //{
+                //    if (isAdmin || currentUser.Id == c.CreatorId || BlogEntry.CreatorId == BloggUser.Id)
+                //    {
+                //        canDelete = true;
+                //    }
+                //    else
+                //    {
+                //        canDelete = false;
+                //    }
+                //}
+                foreach (var co in CommentList) {
+                    if (isAdmin || currentUser.Id == co.CreatorId || BlogEntry.CreatorId == currentUser.Id)
+                    {
                         canDelete = true;
                     }
-                    else {
+                    else
+                    {
                         canDelete = false;
                     }
-                }
-                foreach (var co in CommentList) {
                     var User = await UserManager.FindByIdAsync(co.CreatorId);
                     var creatorMail = User.Email;
                     if (User.IsInactive) {
@@ -156,7 +170,8 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                         LastName = User.LastName,
                         CanDelete = canDelete,
                         Id = co.Id,
-                        BlogId = co.BlogId
+                        BlogId = co.BlogId,
+                        CreatorId = co.CreatorId
 
                     };
                     Comments.Add(CommentItem);
