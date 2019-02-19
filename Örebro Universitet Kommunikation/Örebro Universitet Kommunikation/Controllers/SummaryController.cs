@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Örebro_Universitet_Kommunikation.Controllers
 {
+    [Authorize]
     public class SummaryController : Controller{
         ApplicationDbContext Ctx = new ApplicationDbContext();
         public UserManager<ApplicationUser> UserManager { get; set; }

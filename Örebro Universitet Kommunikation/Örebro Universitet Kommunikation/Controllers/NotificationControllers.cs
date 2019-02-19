@@ -8,9 +8,9 @@ using System.Web.Http;
 
 namespace Örebro_Universitet_Kommunikation.Controllers
 {
+    [Authorize]
     public class EmailController
     {
-
         public ApplicationDbContext Ctx { get; set; }
 
         ApplicationUser[] EmailRecipients = new ApplicationUser[] { };
