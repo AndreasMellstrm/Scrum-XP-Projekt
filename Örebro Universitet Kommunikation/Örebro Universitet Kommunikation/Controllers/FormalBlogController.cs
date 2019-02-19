@@ -14,6 +14,7 @@ using System.Web.Mvc.Async;
 using System.Data.Entity;
 
 namespace Örebro_Universitet_Kommunikation.Controllers {
+    [Authorize]
     public class FormalBlogController : Controller {
 
         public ApplicationDbContext Ctx { get; set; }
