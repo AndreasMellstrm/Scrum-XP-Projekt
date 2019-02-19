@@ -4,56 +4,64 @@
     ViewBag.Title = "EditEntry";
 }
 
-<h2>EditEntry</h2>
+<h2>Redigera inlägg</h2>
 
-@using (Html.BeginForm("Edit", "FormalBlog", new { Id = Model.Id }, FormMethod.Post, new {enctype = "multipart/form-data"}))
-{
+@using (Html.BeginForm("Edit", "FormalBlog", new { Id = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" })) {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>FormalBlogEntry</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-horizontal">
+        <h4>Här kan du redigera ditt inlägg</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Title , htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextAreaFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryItems, "Category"), new { @class = "form-control" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.DropDownListFor(m => m.Category, new SelectList(Model.CategoryItems, "Category"), new { @class = "form-control" })
+            </div>
         </div>
-    </div>
 
 
-    @if (Model.AttachedFile != null) {
-    <div class="form-group">
-        <p>Bifogad fil: <a href="@Model.AttachedFile" target="_blank"> @Model.AttachedFile.Replace("/Content/Files/", "") </a></p>
-        @Html.HiddenFor(a => a.AttachedFile)
-    </div>
-    }
+        @if (Model.AttachedFile != null) {
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <p>Bifogad fil: <a href="@Model.AttachedFile" target="_blank"> @Model.AttachedFile.Replace("/Content/Files/", "") </a></p>
+                    @Html.HiddenFor(a => a.AttachedFile)
+                </div>
+            </div>
+        }
+        @if (Model.AttachedFile != null) {
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.ActionLink("Radera fil", "DeleteLink", "FormalBlog", new { EntryId = Model.Id }, null)
+                </div>
+            </div>
+        }
 
 
 
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="file" name="File">
+            </div>
+        </div>
 
-    <input type="file" name="File">
-
-    @if (Model.AttachedFile != null) {
-        @Html.ActionLink("Radera fil", "DeleteLink", "FormalBlog", new { EntryId = Model.Id}, null)
-    }
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -62,7 +70,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Tillbaka", "Index")
-</div>
