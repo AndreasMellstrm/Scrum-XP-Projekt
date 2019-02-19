@@ -231,6 +231,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(EditUserViewModel model) {
             var user = UserManager.FindById(model.UserId);
+            int result = 0;
             var userWithMail = (from u in Ctx.Users
                                where u.Email == model.Email
                                select u).ToList();
@@ -240,18 +241,25 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
                 user.IsInactive = model.IsInactive;
+                result = await Ctx.SaveChangesAsync();
             }
             else {
-                await UserManager.RemovePasswordAsync(user.Id);
-                await UserManager.AddPasswordAsync(user.Id, model.Password);
+                try {
+                    UserManager.RemovePassword(user.Id);
+                    UserManager.AddPassword(user.Id, model.Password);
+                    result = 1;
+                }
+                catch {
+                    result = 0;
+                }
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
                 user.IsInactive = model.IsInactive;
+                result = result + Ctx.SaveChanges();
             }
-            int result = 0;
-            if (userWithMail.Count == 0 || userWithMail[0] == user) {
+            if (userWithMail.Count == 0 || userWithMail[0] != user) {
                 user.Email = model.Email;
                 result = await Ctx.SaveChangesAsync();
             }
