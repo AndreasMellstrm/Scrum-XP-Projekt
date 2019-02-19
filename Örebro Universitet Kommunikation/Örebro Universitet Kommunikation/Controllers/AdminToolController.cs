@@ -241,6 +241,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
                 user.IsInactive = model.IsInactive;
+                user.Admin = model.Admin;
                 result = await Ctx.SaveChangesAsync();
             }
             else {
@@ -257,6 +258,7 @@ namespace Örebro_Universitet_Kommunikation.Controllers {
                 user.PhoneNumber = model.PhoneNumber;
                 user.Position = model.Position;
                 user.IsInactive = model.IsInactive;
+                user.Admin = model.Admin;
                 result = result + Ctx.SaveChanges();
             }
             if (userWithMail.Count == 0 || userWithMail[0] != user) {
