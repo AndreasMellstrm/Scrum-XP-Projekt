@@ -160,9 +160,9 @@
                         selectedEvent = calEvent;
                         $('#myModal #eventTitle').text(calEvent.title);
                         var $description = $('<div/>');
-                        $description.append($('<p/>').html('<b>Starttid:</b>' + calEvent.start.format("YYYY/MMM/DD HH:mm")));
+                        $description.append($('<p/>').html('<b>Starttid:</b> ' + calEvent.start.format("YYYY/MMM/DD HH:mm")));
                         if (calEvent.end != null) {
-                            $description.append($('<p/>').html('<b>Sluttid:</b>' + calEvent.end.format("YYYY/MMM/DD HH:mm")));
+                            $description.append($('<p/>').html('<b>Sluttid:</b> ' + calEvent.end.format("YYYY/MMM/DD HH:mm")));
                         }
                         $description.append($('<p/>').html('<b>Beskrivning: </b>' + calEvent.description));
                         $description.append($('<p/>').html('<b>Skapat av: </b>' + calEvent.creatorName));
